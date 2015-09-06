@@ -123,4 +123,7 @@ class Empresa extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        public static function getListado(){
+            return Empresa::model()->findAll();
+        }
 }
