@@ -53,7 +53,7 @@ class Dispositivo extends CActiveRecord
 		return array(
 			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id_dis'),
 			'detalleDispos1' => array(self::HAS_MANY, 'DetalleDispo', 'mac_dis'),
-			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id_dis'),
+			'histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id_dis'),
 			'histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'mac_dis'),
 		);
 	}

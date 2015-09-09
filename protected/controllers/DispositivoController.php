@@ -218,8 +218,8 @@ class DispositivoController extends Controller {
         Yii::app()->request->redirect($this->createUrl('Dispositivo/admin'));
     }
 
-    public function actionUpdate($id) {
-        var_dump($id);
+    public function actionUpdate() {
+        var_dump($_GET['id_dis']);
         die();
         $model = $this->loadModel($id);
 

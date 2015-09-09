@@ -13,6 +13,7 @@
  * @property string $fecha_baja
  * @property string $coord_lat
  * @property string $coord_lon
+ * @property string $observacion
  *
  * The followings are the available model relations:
  * @property Dispositivo $idDis
@@ -41,10 +42,11 @@ class Histoasignacion extends CActiveRecord
 			array('id_dis, mac_dis, cuit_emp, razonsocial_emp, fecha_alta', 'required'),
 			array('id_dis', 'numerical', 'integerOnly'=>true),
 			array('mac_dis, cuit_emp, razonsocial_emp', 'length', 'max'=>50),
+			array('observacion', 'length', 'max'=>100),
 			array('fecha_modif, fecha_baja, coord_lat, coord_lon', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, mac_dis, cuit_emp, razonsocial_emp, fecha_alta, fecha_modif, fecha_baja, coord_lat, coord_lon', 'safe', 'on'=>'search'),
+			array('id_dis, mac_dis, cuit_emp, razonsocial_emp, fecha_alta, fecha_modif, fecha_baja, coord_lat, coord_lon, observacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,11 +57,10 @@ class Histoasignacion extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
-			'macDis' => array(self::BELONGS_TO, 'Dispositivo', 'mac_dis'),
-			'cuitEmp' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp'),
-			'razonsocialEmp' => array(self::BELONGS_TO, 'Empresa', 'razonsocial_emp'),
+		return array(			
+                        'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis,mac_dis'),
+			'empresa' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp,razonsocial_emp'),
+			//'empresa_razonsocialEmp' => array(self::BELONGS_TO, 'Empresa', 'razonsocial_emp'),
 		);
 	}
 
@@ -78,6 +79,7 @@ class Histoasignacion extends CActiveRecord
 			'fecha_baja' => 'Fecha Baja',
 			'coord_lat' => 'Coord Lat',
 			'coord_lon' => 'Coord Lon',
+			'observacion' => 'Observacion',
 		);
 	}
 
@@ -108,13 +110,61 @@ class Histoasignacion extends CActiveRecord
 		$criteria->compare('fecha_baja',$this->fecha_baja,true);
 		$criteria->compare('coord_lat',$this->coord_lat,true);
 		$criteria->compare('coord_lon',$this->coord_lon,true);
+		$criteria->compare('observacion',$this->observacion,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+        
+        public static function getListado()
+	{
+		return Histoasignacion::model()->findAll();
+	}
+        
+        public static function getDispositivosDispoibles(){
+            //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:
+            $dispositivosNoDispoibles = Histoasignacion::model()->with('dispositivo')->findAll();
+            $dispositivos = Dispositivo::model()->findAll();
+                                   
+            $bandera=false;
+            $dispositivosDisponibles=array();
+            foreach ($dispositivos as $Dispo) {
+                foreach ($dispositivosNoDispoibles as $NoDispo) {
+                    if($Dispo->id_dis==$NoDispo->id_dis && $Dispo->mac==$NoDispo->mac_dis){                        
+                        $bandera=true;
+                    }
+                }
+                if(!$bandera){                    
+                    $dispositivosDisponibles[]=$Dispo;
+                }
+                $bandera=false;
+            }
+            return $dispositivosDisponibles;
+        }
+        
+        public static function getEmpresaDispoibles(){
+            //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:
+            $empresaNoDispoibles = Histoasignacion::model()->with('empresa')->findAll();
+            $empresas = Empresa::model()->findAll();
+                                   
+            $bandera=false;
+            $empresasDisponibles=array();
+            foreach ($empresas as $Dispo) {
+                foreach ($empresaNoDispoibles as $NoDispo) {
+                    if($Dispo->cuit==$NoDispo->cuit_emp && $Dispo->razonsocial==$NoDispo->razonsocial_emp){                        
+                        $bandera=true;
+                    }
+                }
+                if(!$bandera){                    
+                    $empresasDisponibles[]=$Dispo;
+                }
+                $bandera=false;
+            }
+            return $empresasDisponibles;
+        }
 
-	/**
+        /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
