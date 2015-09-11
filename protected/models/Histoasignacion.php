@@ -70,6 +70,7 @@ class Histoasignacion extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+                        'id' => 'Id',
 			'id_dis' => 'Id Dis',
 			'mac_dis' => 'Mac Dis',
 			'cuit_emp' => 'Cuit Emp',
@@ -101,7 +102,8 @@ class Histoasignacion extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dis',$this->id_dis);
+		$criteria->compare('id',$this->id);
+                $criteria->compare('id_dis',$this->id_dis);
 		$criteria->compare('mac_dis',$this->mac_dis,true);
 		$criteria->compare('cuit_emp',$this->cuit_emp,true);
 		$criteria->compare('razonsocial_emp',$this->razonsocial_emp,true);
@@ -122,16 +124,53 @@ class Histoasignacion extends CActiveRecord
 		return Histoasignacion::model()->findAll();
 	}
         
+        public static function getVigentes()
+	{
+            $criterial= new CDbCriteria();
+            $criterial->condition=("fecha_baja='1900-1-1'");	
+            return Histoasignacion::model()->findAll($criterial);
+	}
+        
+        public static function getDispositivosNODisponibles(){
+            $criterial = new CDbCriteria();
+            $criterial->condition=("fecha_baja='1900-1-1'");            
+            return Histoasignacion::model()->with('dispositivo')->findAll($criterial);
+        }
+        
+        public static function getDatosMapa(){
+            //[id_dis coord_lat coord_lon direccion]
+            $criterial = new CDbCriteria();
+            $criterial->condition=("fecha_baja='1900-1-1'");
+            $nodisponibles=Histoasignacion::model()->with('dispositivo')->findAll($criterial);
+            
+            $array_datos_mapa = array(); // [id => direccion]
+            
+            $criterial = new CDbCriteria();            
+            foreach ($nodisponibles as $key=>$value){
+                $criterial->condition=("cuit='" . $value{'cuit_emp'} . "'");                
+                $empresa = new Empresa();
+                $empresa = Empresa::model()->find($criterial);                
+                $array_datos_mapa[]=[$value{'id_dis'}, $value{'coord_lat'}, $value{'coord_lon'}, ($empresa{'calle_dir'} . "" . $empresa{'altura_dir'} . " ")];                                        
+            }
+            
+            return $array_datos_mapa;
+        }
+        
+        
+        
+
         public static function getDispositivosDispoibles(){
             //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:
-            $dispositivosNoDispoibles = Histoasignacion::model()->with('dispositivo')->findAll();
+            $criterial = new CDbCriteria();
+            $criterial->condition=("fecha_baja='1900-1-1'");
+            $dispositivosNoDispoibles = Histoasignacion::model()->with('dispositivo')->findAll($criterial);
             $dispositivos = Dispositivo::model()->findAll();
                                    
             $bandera=false;
             $dispositivosDisponibles=array();
             foreach ($dispositivos as $Dispo) {
                 foreach ($dispositivosNoDispoibles as $NoDispo) {
-                    if($Dispo->id_dis==$NoDispo->id_dis && $Dispo->mac==$NoDispo->mac_dis){                        
+                    if($Dispo->id==$NoDispo->id_dis && $Dispo->mac==$NoDispo->mac_dis){                        
                         $bandera=true;
                     }
                 }
@@ -144,8 +183,13 @@ class Histoasignacion extends CActiveRecord
         }
         
         public static function getEmpresaDispoibles(){
-            //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:
-            $empresaNoDispoibles = Histoasignacion::model()->with('empresa')->findAll();
+            
+            //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:            
+            $criterial = new CDbCriteria();
+            $criterial->condition=("fecha_baja='1900-1-1'");
+            $empresaNoDispoibles = Histoasignacion::model()->with('empresa')->findAll($criterial);
+            
+            
             $empresas = Empresa::model()->findAll();
                                    
             $bandera=false;

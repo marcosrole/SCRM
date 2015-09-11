@@ -8,7 +8,7 @@
  * @property string $razonsocial
  * @property integer $dni_per
  * @property string $tipo_dni_per
- * @property integer $id_dir_dir
+ * @property integer $id_dir
  * @property integer $altura_dir
  * @property string $calle_dir
  *
@@ -44,7 +44,7 @@ class Empresa extends CActiveRecord
 			array('cuit, razonsocial, tipo_dni_per, calle_dir', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cuit, razonsocial, dni_per, tipo_dni_per, id_dir_dir, altura_dir, calle_dir', 'safe', 'on'=>'search'),
+			array('cuit, razonsocial, dni_per, tipo_dni_per, id_dir, altura_dir, calle_dir', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +56,7 @@ class Empresa extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idDirDir' => array(self::BELONGS_TO, 'Direccion', 'id_dir_dir'),
+			'idDirDir' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
 			'alturaDir' => array(self::BELONGS_TO, 'Direccion', 'altura_dir'),
 			'calleDir' => array(self::BELONGS_TO, 'Direccion', 'calle_dir'),
 			'dniPer' => array(self::BELONGS_TO, 'Persona', 'dni_per'),
@@ -76,7 +76,7 @@ class Empresa extends CActiveRecord
 			'razonsocial' => 'Razonsocial',
 			'dni_per' => 'Dni Per',
 			'tipo_dni_per' => 'Tipo Dni Per',
-			'id_dir_dir' => 'Id Dir Dir',
+			'id_dir' => 'Id Dir Dir',
 			'altura_dir' => 'Altura Dir',
 			'calle_dir' => 'Calle Dir',
 		);
@@ -104,7 +104,7 @@ class Empresa extends CActiveRecord
 		$criteria->compare('razonsocial',$this->razonsocial,true);
 		$criteria->compare('dni_per',$this->dni_per);
 		$criteria->compare('tipo_dni_per',$this->tipo_dni_per,true);
-		$criteria->compare('id_dir_dir',$this->id_dir_dir);
+		$criteria->compare('id_dir',$this->id_dir);
 		$criteria->compare('altura_dir',$this->altura_dir);
 		$criteria->compare('calle_dir',$this->calle_dir,true);
 

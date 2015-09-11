@@ -11,7 +11,27 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-
+        
+if(count($array_dispo) == 0){
+    
+    echo '<div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+            ADVERTENCIA: No se pueden mostrar los dispositivos
+            </div>';
+    
+    //Si no hay dispositivos.Muestro el mapa del Pais.
+    Yii::import('ext.gmaps.*');        
+    //Configuracion Basica
+    $gMap = new EGMap();
+    $gMap->setWidth(800);
+    $gMap->setHeight(600);
+    //Posicionamiento Central
+    $gMap->setCenter(-36.359371, -62.632124);
+    $gMap->setZoom(4);       
+    $gMap->renderMap();
+}else{
+        
         Yii::import('ext.gmaps.*');
         
         //Configuracion Basica
@@ -39,12 +59,14 @@ and open the template in the editor.
         // Crear Informacion de ventana de mensaje
             $linea1 = 'Dispositivo: ' . $value[0] . ' ' ;
             $linea2 = 'Coordenadas: ' . $value[1] . ', ' . $value[2] . ' ' ;
-            $linea3 = '<a href= "http://facebook.com/rolemarcos poner" >Mi facebook</a> ';
+            $linea3 = 'Direccion: ' . $value[3] . ' ' ;
+            $linea4 = '<a href= "http://facebook.com/rolemarcos poner" >Mi facebook</a> ';
             
         $info_window_a = new EGMapInfoWindow(
                 "<div> " . $linea1 . " </div> " .
                 "<div> " . $linea2 . " </div> " .
-                "<div> " . $linea3 . " </div> "                
+                "<div> " . $linea3 . " </div> " .
+                "<div> " . $linea4 . " </div> "                
                 );
 
 
@@ -64,7 +86,7 @@ and open the template in the editor.
         $marker->addHtmlInfoWindow($info_window_a); //Set la info de la ventana
 
         $gMap->addMarker($marker);
-}
+        }
            
         
         //Posicionamiento Central
@@ -75,7 +97,8 @@ and open the template in the editor.
         
       $gMap->renderMap();
 
-        
+}
         ?>
+        
     </body>
 </html>

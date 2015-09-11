@@ -13,15 +13,21 @@ $this->widget('booster.widgets.TbExtendedGridView', array(
          'columns' => array(
                 array(
                     'name' => 'mac',
+                    'header' => 'MAC',
                 ),
                 array(
                     'name' => 'modelo',
+                    'header' => 'Modelo',
                 ),
                 array(
                     'name' => 'version',
+                    'header' => 'Version',
+                    'htmlOptions' => array('width' => 10),
                 ),
                 array(
                     'name' => 'funciona',
+                    'header' => 'Funciona',
+                    'htmlOptions' => array('width' => 10),
                 ),  
              
                 array(
@@ -32,10 +38,11 @@ $this->widget('booster.widgets.TbExtendedGridView', array(
                         "delete" => array(
                             'label' => 'Eliminar',                             
                             'click' => 'function(){return confirm("Desea eliminar todos los registro del dispositivo?");}',
-                            'url'=> 'Yii::app()->createUrl("/Dispositivo/Eliminar?id=$data->id_dis")'
+                            'url'=> 'Yii::app()->createUrl("/Dispositivo/Eliminar?id=$data->id")'
                         ),
                         "update" => array(
-                            'label' => 'Modificar',                                                           
+                            'label' => 'Modificar',
+                            'url'=> 'Yii::app()->createUrl("/Dispositivo/Update?id=$data->id")'
                         ),
                     ),
                 ),

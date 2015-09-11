@@ -18,7 +18,7 @@ class DetalleDispoController extends Controller
         $dispositivos = Dispositivo::model()->findAll();         
         
         foreach ($dispositivos as $key => $value) {            
-           $array_dispo[]= $value{'id_dis'};
+           $array_dispo[]= $value{'id'};
         }       
         
         //Verifico que se hayan pasado parametros por la URL
@@ -81,26 +81,26 @@ class DetalleDispoController extends Controller
         $this->render('create', array('model' => $model, 'array_dispo' => $array_dispo));
     }
 
-    public function actionViewbyPk(){
-        $id_dispo=$_GET['id_dispo'];
-               
+    public function actionVerDetalle($id){
+                       
         $model = new DetalleDispo('search');
         $model->unsetAttributes();  // clear any default values
         
         $criteria=new CDbCriteria(array(
-                        'select'=>array('s_db',
-                                        's_dist',
+                        'select'=>array('db',
+                                        'distancia',
                                         'fecha',
                                         'hs',                                        
                                         ),
                         'order'=>'fecha DESC',                       
-                       'condition'=>'id_dispo=:id',
-                       'params'=>array(':id'=> $id_dispo),
+                       'condition'=>'id_dis=:id',
+                       'params'=>array(':id'=> $id),
         ));
         
-        $dataProvider=new CActiveDataProvider('DetalleDispo', array(
-            'criteria'=>$criteria,             
-            ));
+        $detalles = DetalleDispo::model()->findAll($criteria);
+        $dataProvider = DetalleDispo::model()->search();
+        $dataProvider->setData($detalles);
+        
         
 //        
 //        $condition = new CDbCriteria();        
@@ -109,7 +109,7 @@ class DetalleDispoController extends Controller
                 
         $this->render('list',array(
             'dataProvider'=>$dataProvider,
-            'id_dispo' => $id_dispo
+            'id_dis' => $id
                 ));
         
     }

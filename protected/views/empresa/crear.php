@@ -104,7 +104,7 @@ if($datos_guardados){
     <div class="row">
         <?php echo $form->dropDownListGroup(
 			$localidad,
-			'id_loc',
+			'id',
 			array(
 				'wrapperHtmlOptions' => array(
 					'class' => 'col-sm-5',
@@ -115,7 +115,7 @@ if($datos_guardados){
 				)
 			)
 		); ?>
-                <?php echo $form->error($localidad,'id_loc'); ?>
+                <?php echo $form->error($localidad,'id'); ?>
     
     </div>
    

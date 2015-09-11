@@ -35,29 +35,19 @@ class EmpresaController extends Controller
         $direccionAUX = new Direccion;
         $localidad = new Localidad;
         
-        $lista_localidades = array();        
-        $localidades = Localidad::model()->findAll();         
-        
-        foreach ($localidades as $key => $value) {            
-           $lista_localidades2[]= [$value{'id_loc'}=>$value{'nombre'}];
-        }  
-        foreach ($localidades as $key => $value) {            
-           $lista_localidades[]= $value{'nombre'};
-        }  
+        $lista_localidades=  Localidad::model()->getListNombre();
         
         $datos_guardados=false;
         
         if (isset($_POST['Empresa'])) {
-
-            $direccion->altura = $_POST['Direccion']['altura'];
+            try {
+                $direccion->altura = $_POST['Direccion']['altura'];
             $direccion->calle = $_POST['Direccion']['calle'];
             $direccion->piso = $_POST['Direccion']['piso'];
-            $direccion->depto = $_POST['Direccion']['depto'];
-            $localidad_seleccionada = $lista_localidades2[$_POST['Localidad']['id_loc']];
-            foreach ($localidad_seleccionada as $key => $value) {
-                $direccion->id_loc = $key;
-            }
-
+            $direccion->depto = $_POST['Direccion']['depto'];            
+            $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];            
+            $direccion->id_loc = Localidad::model()->getId($localidad_seleccionada)->id;
+            
             if ($direccion->validate()) {
                 $direccion->insert();
                 $direccionAUX = Direccion::getId_dir($direccion{'altura'}, $direccion{'calle'}, $direccion{'piso'}, $direccion{'depto'});
@@ -68,13 +58,13 @@ class EmpresaController extends Controller
                 $persona->cuil = $_POST['Persona']['cuil'];
                 $persona->calle_dir = $_POST['Direccion']['calle'];
                 $persona->altura_dir = $_POST['Direccion']['altura'];
-                $persona->id_dir = $direccionAUX{'id_dir'};
+                $persona->id_dir = $direccionAUX{'id'};
 
                 $empresa->cuit = $_POST['Empresa']['cuit'];
                 $empresa->razonsocial = $_POST['Empresa']['razonsocial'];
                 $empresa->dni_per = $_POST['Persona']['dni'];
                 $empresa->tipo_dni_per = $_POST['Persona']['tipo_dni'];
-                $empresa->id_dir_dir = $direccionAUX{'id_dir'};
+                $empresa->id_dir = $direccionAUX{'id'};
                 $empresa->altura_dir = $_POST['Direccion']['altura'];
                 $empresa->calle_dir = $_POST['Direccion']['calle'];
 
@@ -98,12 +88,16 @@ class EmpresaController extends Controller
                         ));
                         header('Refresh:2;url=' . $this->createUrl('Empresa/crear'));
                     } else { //Elimino "direccion" que se creo recientemente                        
-                        Direccion::model()->deleteByPk($direccionAUX{'id_dir'});
+                        Direccion::model()->deleteByPk($direccionAUX{'id'});
                     }
                 }else { //Elimino "direccion" que se creo recientemente
                     
                 }
             }
+            } catch (Exception $ex) {
+                Yii::app()->user->setFlash('error',$ex->getMessage());
+            }
+            
         }
         $this->render('crear', array(
             'empresa' => $empresa,

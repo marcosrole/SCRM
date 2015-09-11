@@ -12,7 +12,7 @@
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $empresa->search(),
+                    'dataProvider' => $dataProviderEmpresas,
                     'filter' => $empresa,
                     'columns' => array(                        
                         array(
@@ -45,11 +45,11 @@
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $dispositivo->search(),
+                    'dataProvider' => $dataProviderDispositivo,
                     'filter' => $dispositivo,
                     'columns' => array(
                         array(
-                            'name' => 'id_dis',
+                            'name' => 'id',
                             'header'=>'ID',                            
                         ),
                         array(

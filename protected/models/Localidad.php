@@ -61,8 +61,25 @@ class Localidad extends CActiveRecord
 			'cp' => 'Cp',
 		);
 	}
+        public static function getId($nombre){
+            $criterial = new CDbCriteria;
+            $criterial->condition = "nombre='" . $nombre . "'";
+            return Localidad::model()->find($criterial);
+        }
 
-	/**
+        public static function getListNombre(){
+            $lista_localidades = array();        
+            $localidades = Localidad::model()->findAll();                 
+            foreach ($localidades as $key => $value) {            
+                $lista_localidades2[]= [$value{'id'}=>$value{'nombre'}];
+            }  
+            foreach ($localidades as $key => $value) {            
+               $lista_localidades[]= $value{'nombre'};
+            }  
+            return $lista_localidades;
+        }
+
+        /**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
 	 * Typical usecase:

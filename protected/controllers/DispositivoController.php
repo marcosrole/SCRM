@@ -141,7 +141,7 @@ class DispositivoController extends Controller {
         $model = new Dispositivo;
         $model->unsetAttributes();
         if (isset($_POST['Dispositivo'])) {
-            $model->setAttribute('id_dis', rand(1, 1000));
+            $model->setAttribute('id', rand(1, 1000));
             $model->setAttribute('mac', $_POST['Dispositivo']['mac']);
             $model->setAttribute('modelo', $_POST['Dispositivo']['modelo']);
             $model->setAttribute('version', $_POST['Dispositivo']['version']);
@@ -154,8 +154,8 @@ class DispositivoController extends Controller {
                 while ($validacion) {
                     if (Dispositivo::exitsMAC($model->{'mac'})) {
                         $validacion = false;
-                    }elseif (Dispositivo::exitsid($model->{'id_dis'})) {
-                        $model->setAttribute('id_dis', rand(1, 1000));
+                    }elseif (Dispositivo::exitsid($model->{'id'})) {
+                        $model->setAttribute('id', rand(1, 1000));
                     }else $validacion=false;
                 }
                 
@@ -191,18 +191,6 @@ class DispositivoController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     
-    public function actionViewMap(){
-        $dispositivos = new Dispositivo;
-        $dispositivos = Dispositivo::model()->findAll();
-        
-        $array_dispo = array();
-        
-        foreach ($dispositivos as $key => $value) {
-            $array_dispo[] = [$value{'id_dispositivo'}, $value{'coord_lat'},$value{'coord_lon'}, $value{'ubicacion'}];
-        }
-        $this->render('viewmap', array('array_dispo'=>$array_dispo));
-    }
-    
     public function actionList(){
         $lista = Dispositivo::getListado();                
         $this->render('list', array('dispositivos'=>$lista));
@@ -218,20 +206,22 @@ class DispositivoController extends Controller {
         Yii::app()->request->redirect($this->createUrl('Dispositivo/admin'));
     }
 
-    public function actionUpdate() {
-        var_dump($_GET['id_dis']);
-        die();
-        $model = $this->loadModel($id);
-
-        if (isset($_POST['Dispositivo'])) {
-            $model->attributes = $_POST['Dispositivo'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id_dispositivo));
-        }
-
+    public function actionUpdate($id) {  
+        $dispositivo = new Dispositivo();
+        $condition = new CDbCriteria();
+        $condition = "id='" . $id . "' ";
+        $dispositivo = Dispositivo::model()->find($condition);
+                
         $this->render('update', array(
-            'model' => $model,
+            'dispositivo' => new Dispositivo(),
+            'id_dis' => $id,
         ));
+       
+    }
+    
+    public function actionUpdateVersion($version) {        
+        var_dump($version);
+       
     }
 
     /**
@@ -241,14 +231,20 @@ class DispositivoController extends Controller {
      */
     public function actionEliminar($id) {
         
-       $condition = new CDbCriteria();
-       $condition = "id_dis='" . $id . "' ";
-       DetalleDispo::model()->deleteAll($condition);
+        try {
+            $condition = new CDbCriteria();
+            $condition = "id='" . $id . "' ";
+            DetalleDispo::model()->deleteAll($condition);
+
+            $condition = "id='" . $id . "' ";
+            Dispositivo::model()->deleteAll($condition);    
+
+            $this->redirect(array('admin'));
+            
+        } catch (Exception $ex) {
+            Yii::app()->user->setFlash('error',$ex->getMessage());
+        }
        
-       $condition = "id_dis='" . $id . "' ";
-       Dispositivo::model()->deleteAll($condition);    
-       
-       $this->redirect(array('admin'));
        
     }
 
@@ -265,14 +261,9 @@ class DispositivoController extends Controller {
     /**
      * Manages all models.
      */
-    public function actionAdmin() {
-        $model = new Dispositivo('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Dispositivo']))
-            $model->attributes = $_GET['Dispositivo'];
-
+    public function actionAdmin() {        
         $this->render('admin', array(
-            'model' => $model,
+            'model' => new Dispositivo(),
         ));
     }
 

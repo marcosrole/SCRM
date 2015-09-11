@@ -14,8 +14,26 @@
   </style>
 </head>
 
+<?php
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '  <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                ERROR: El sistema no funciona correctamente.
+                </div>';
+        echo '<div class="flash-' . $key . '">' . $message . "</div>\n";        
+    }
+?>
+
+
+
+
+
 <div class="modal-header" style="padding:35px 50px;">    
     <h4><span class="glyphicon glyphicon-pencil"></span> Modificar</h4>
+    
+    
+    
 </div>
 
 
@@ -23,45 +41,17 @@
     <div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     <div class="label_original">
-        <h2>Empresa: <?php echo $empresa_original ?> </h2>            
-    </div>
-    <div class="dato_nuevo">
-        <?php 
-                $this->widget('booster.widgets.TbGridView', array(
-                    'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $dataProviderEmpresas,
-                   // 'filter' => $dataProviderEmpresas,
-                    'columns' => array(                        
-                        array(
-                            'name' => 'cuit',
-                            'header'=>'CUIT',                                                        
-                        ),
-                        array(
-                            'name' => 'razonsocial',
-                            'header'=>'Razon Social'
-                        ),
-                         array(
-                            'id' => 'selecteempresa',
-                            'class' => 'CCheckBoxColumn',
-                            'selectableRows' => 1, //Numero de filas que se pueden seleccionar
-                        ),                        
-                    ),
-                    
-                ));                
-            ?>   
-    </div>
-    <div class="label_original">
         <h2>Dispositivo: <?php echo $dispositivo_original ?> </h2>            
     </div>
     <div class="dato_nuevo">
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
-                    'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $dataProviderDispositivos,
-                    //'filter' => $dispositivo,
+                    'id' => 'empresa-grid-list',
+                    'dataProvider' => $dataProviderDispositivo,
+                    'filter' => $dispositivo,
                     'columns' => array(                        
                         array(
-                            'name' => 'id_dis',
+                            'name' => 'id',
                             'header'=>'ID',                                                        
                         ),
                         array(
@@ -69,7 +59,7 @@
                             'header'=>'MAC'
                         ),
                          array(
-                            'id' => 'selectedispo',
+                            'id' => 'selectedDispositivo',
                             'class' => 'CCheckBoxColumn',
                             'selectableRows' => 1, //Numero de filas que se pueden seleccionar
                         ),                        
@@ -100,10 +90,7 @@
                     'label' => 'Actualizar',
                     'context' => 'success',                    
                     'buttonType'=>'submit', 
-                    'htmlOptions' => array(
-                            'name'=>'ActionButton',
-                            'confirm' => 'Desea realizar los cambios?',
-                    ),
+                    
                     )); 
         ?>        
     </div>

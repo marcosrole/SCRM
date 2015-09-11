@@ -12,6 +12,17 @@
   </style>
 </head>
 
+<?php
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '  <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                ERROR: El sistema no funciona correctamente.
+                </div>';
+        echo '<div class="flash-' . $key . '">' . $message . "</div>\n";        
+    }
+?>
+
 
 <script>
 $(document).ready(function(){
@@ -90,8 +101,8 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
         'title' => 'Update record',
         'autoOpen' => false,
         'modal' => true,
-        'width' => 600,
-        'height' => 400,
+        'width' => 800,
+        'height' => 400,        
     ),
 ));
 
@@ -106,7 +117,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');?>
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $histoasignacion->search(),
+                    'dataProvider' => $dataProvider,
                     'filter' => $histoasignacion,
                     'columns' => array(                        
                         array(
@@ -114,8 +125,34 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');?>
                             'header'=>'Dispositivo',                                                       
                         ),
                         array(
+                            'class' => 'booster.widgets.TbButtonColumn',
+                            'htmlOptions' => array('width' => '10'), //ancho de la columna
+                            'template' => '{update}', // botones a mostrar
+                            'buttons' => array(
+                                    'update' => array(
+                                    'label' => 'Modificar Dispositivo',
+                                    'url'=> 'Yii::app()->createUrl("/histoasignacion/modificarmodaldispositivo",array("id_dis"=>"$data->id_dis","razonsocial"=>"$data->razonsocial_emp"))',                                       
+                                    //'click' => 'function(){$("#parm-frame").attr("src",$(this).attr("href")); $("#parmdialog").dialog("open"); return false;}',
+                                ),
+                                
+                            ),
+                        ),
+                        array(
                             'name' => 'razonsocial_emp',
                             'header'=>'Razon Social'
+                        ),
+                                                array(
+                            'class' => 'booster.widgets.TbButtonColumn',
+                            'htmlOptions' => array('width' => '10'), //ancho de la columna
+                            'template' => '{update}', // botones a mostrar
+                            'buttons' => array(
+                                    'update' => array(
+                                    'label' => 'Modificar empresa',
+                                    'url'=> 'Yii::app()->createUrl("/histoasignacion/modificarmodalempresa",array("id_dis"=>"$data->id_dis","razonsocial"=>"$data->razonsocial_emp"))',                                       
+                                    //'click' => 'function(){$("#parm-frame").attr("src",$(this).attr("href")); $("#parmdialog").dialog("open"); return false;}',
+                                ),
+                                
+                            ),
                         ),
                         array(
                             'name' => 'fecha_alta',
@@ -132,29 +169,19 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');?>
                          array(
                             'class' => 'booster.widgets.TbButtonColumn',
                             'htmlOptions' => array('width' => '10'), //ancho de la columna
-                            'template' => '{delete} {update}', // botones a mostrar
+                            'template' => '{delete}', // botones a mostrar
                             'buttons' => array(
                                 "delete" => array(
-                                    'label' => 'Eliminar',                             
-                                    'click' => 'function(){return confirm("Desea eliminar todos los registro del dispositivo?");}',
-                                    'url'=> 'Yii::app()->createUrl("/Dispositivo/Eliminar?id=$data->id_dis")'
-                                ),
-                                
-                                    'update' => array(
-                                        'label' => 'Updatse record',
-                                        'url'=> 'Yii::app()->createUrl("/histoasignacion/modificarmodal",array("id_dis"=>"$data->id_dis","razonsocial"=>"$data->razonsocial_emp"))',
-                                        //'url' => 'Yii::app()->createUrl("actualizar", array("id"=>$data->id_dis))',
-                                       // 'click' => 'function(){$("#parm-frame").attr("src",$(this).attr("href")); $("#parmdialog").dialog("open"); return false;}',
-                                    ),
-                                
+                                    'label' => 'Dar de baja',                             
+                                    'click' => 'function(){return confirm("Desea dar de baja ésta asignación?");}',
+                                    'url'=> 'Yii::app()->createUrl("/histoasignacion/eliminar",array("id"=>"$data->id_dis","razonsocial"=>"$data->razonsocial_emp"))',                                       
+                                ),                                
                             ),
                         ),                        
                     ),                    
                 ));                
             ?> 
-    </div>
-    
-    
+    </div>    
         <?php $this->endWidget(); ?>
         
     </div>

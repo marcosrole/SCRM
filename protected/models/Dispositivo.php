@@ -4,7 +4,7 @@
  * This is the model class for table "dispositivo".
  *
  * The followings are the available columns in table 'dispositivo':
- * @property integer $id_dis
+ * @property integer $id
  * @property string $mac
  * @property string $modelo
  * @property string $version
@@ -35,11 +35,11 @@ class Dispositivo extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('mac', 'required'),
-			//array('id_dis, funciona', 'numerical', 'integerOnly'=>true),
+			//array('id, funciona', 'numerical', 'integerOnly'=>true),
 			array('mac, modelo, version', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, mac, modelo, version, funciona', 'safe', 'on'=>'search'),
+			array('id, mac, modelo, version, funciona', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,9 +51,9 @@ class Dispositivo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id_dis'),
+			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id'),
 			'detalleDispos1' => array(self::HAS_MANY, 'DetalleDispo', 'mac_dis'),
-			'histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id_dis'),
+			'histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id'),
 			'histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'mac_dis'),
 		);
 	}
@@ -64,7 +64,7 @@ class Dispositivo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dis' => 'Id Dis',
+			'id' => 'Id',
 			'mac' => 'Mac',
 			'modelo' => 'Modelo',
 			'version' => 'Version',
@@ -90,7 +90,7 @@ class Dispositivo extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dis',$this->id_dis);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('mac',$this->mac,true);
 		$criteria->compare('modelo',$this->modelo,true);
 		$criteria->compare('version',$this->version,true);
@@ -116,15 +116,15 @@ class Dispositivo extends CActiveRecord
             return Dispositivo::model()->findAll();
         }
         
-        public static function getid_dis($mac){
+        public static function getid($mac){
             $modelo=Dispositivo::model()->findAllByAttributes(array('mac'=>$mac));
-            $id=$modelo[0]['id_dis'];
+            $id=$modelo[0]['id'];
             return $id;
         }
         
         
-        public static function exits($id_dis, $mac){
-            $existe= Dispositivo::model()->exists("mac='$mac' OR id_dis='$id_dis'");           
+        public static function exits($id, $mac){
+            $existe= Dispositivo::model()->exists("mac='$mac' OR id='$id'");           
             return $existe;
         }
         public static function exitsMAC($mac){
@@ -132,13 +132,13 @@ class Dispositivo extends CActiveRecord
             
             return $existe;
         }
-        public static function exitsid($id_dis){
-            $existe= Dispositivo::model()->exists("id_dis='$id_dis'");
+        public static function exitsid($id){
+            $existe= Dispositivo::model()->exists("id='$id'");
             return $existe;
         }
         
-        public static function deleteDisp($id_dis){
-            Dispositivo::model()->deleteAll(array('id_dis'=>$id_dis));
+        public static function deleteDisp($id){
+            Dispositivo::model()->deleteAll(array('id'=>$id));
             return $existe;
         }
 }

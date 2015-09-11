@@ -92,7 +92,7 @@ class DetalleDispo extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id_det',$this->id_det);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('mac_dis',$this->mac_dis,true);
 		$criteria->compare('db',$this->db);
 		$criteria->compare('distancia',$this->distancia);

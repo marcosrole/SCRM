@@ -1,5 +1,5 @@
 <h1>
-    Detalles del Dispositivo: <?php echo $id_dispo ?>
+    Detalles del Dispositivo: <?php echo $id_dis ?>
 </h1>
 
 <?php
@@ -10,10 +10,10 @@ $this->widget('booster.widgets.TbExtendedGridView', array(
 //    'filter' => $model,
     'columns' => array(
         array(
-            'name' => 's_db',
+            'name' => 'db',
         ),
         array(
-            'name' => 's_dist',
+            'name' => 'distancia',
         ),
         array(
             'name' => 'fecha',
