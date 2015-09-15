@@ -39,7 +39,7 @@ if($datos_guardados){
 
 
     <div class="row">
-        <?php
+        <?php 
         echo $form->textFieldGroup(
                 $empresa, 'cuit', array(
             'wrapperHtmlOptions' => array(
@@ -48,6 +48,7 @@ if($datos_guardados){
                 )
         );
         ?>
+        
         <?php echo $form->error($empresa, 'cuit'); ?>
     </div>
 

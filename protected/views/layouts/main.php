@@ -64,9 +64,9 @@
                         'label' => 'Empresa',
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Crear', 'url' => '#'),
+                                array('label' => 'Añadir', 'url' => Yii::app()->homeUrl . 'empresa/crear'),
                                 array('label' => 'Modificar', 'url' => '#'),
-                                array('label' => 'Ver', 'url' => '#'),
+                                array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
                                 
                                 
 //                            array('label' => 'Another action', 'url' => '#'),
@@ -83,7 +83,7 @@
 //                            ),
                             )
                         ),
-                        array('label'=>'Mapa', 'url'=> Yii::app()->homeUrl . 'histoasignacion/viewmap', 'visible'=>Yii::app()->user->isGuest),
+                        array('label'=>'Mapa', 'url'=> Yii::app()->homeUrl . 'Histoasignacion/viewmap', 'visible'=>Yii::app()->user->isGuest),
 //                        array('label'=>'Login', 'url'=> Yii::app()->homeUrl . 'usuario/loging', 'visible'=>Yii::app()->user->isGuest),
 //                        array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/usuario/logout'), 'visible'=>!Yii::app()->user->isGuest),
 //                         array(
@@ -100,9 +100,9 @@
                             'label' => 'Asignar',
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'histoasignacion/crear'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'histoasignacion/modificar'),
-                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'histoasignacion/historial'),
+                                array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/crear'),
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/modificar'),
+                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),
                                 
                                 
 //                            array('label' => 'Another action', 'url' => '#'),

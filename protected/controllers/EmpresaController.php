@@ -108,5 +108,14 @@ class EmpresaController extends Controller
             'datos_guardados' => $datos_guardados,
         ));
     }
+    
+    public function actionEditable(){
+        die("ssss"); 
+        $this->render('list', array('empresa'=>new Empresa()));
+    }
+    
+    public function actionList(){
+        $this->render('list', array('empresa'=>new Empresa()));
+    }
 
 }

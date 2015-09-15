@@ -13,8 +13,8 @@
  * The followings are the available model relations:
  * @property DetalleDispo[] $detalleDispos
  * @property DetalleDispo[] $detalleDispos1
- * @property Histoasignacion[] $histoasignacions
- * @property Histoasignacion[] $histoasignacions1
+ * @property Histoasignacion[] $Histoasignacions
+ * @property Histoasignacion[] $Histoasignacions1
  */
 class Dispositivo extends CActiveRecord
 {
@@ -53,8 +53,8 @@ class Dispositivo extends CActiveRecord
 		return array(
 			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id'),
 			'detalleDispos1' => array(self::HAS_MANY, 'DetalleDispo', 'mac_dis'),
-			'histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id'),
-			'histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'mac_dis'),
+			'Histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id'),
+			'Histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'mac_dis'),
 		);
 	}
 

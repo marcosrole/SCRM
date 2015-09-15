@@ -18,8 +18,8 @@
  * @property Direccion $calleDir
  * @property Persona $dniPer
  * @property Persona $tipoDniPer
- * @property Histoasignacion[] $histoasignacions
- * @property Histoasignacion[] $histoasignacions1
+ * @property Histoasignacion[] $Histoasignacions
+ * @property Histoasignacion[] $Histoasignacions1
  */
 class Empresa extends CActiveRecord
 {
@@ -61,8 +61,8 @@ class Empresa extends CActiveRecord
 			'calleDir' => array(self::BELONGS_TO, 'Direccion', 'calle_dir'),
 			'dniPer' => array(self::BELONGS_TO, 'Persona', 'dni_per'),
 			'tipoDniPer' => array(self::BELONGS_TO, 'Persona', 'tipo_dni_per'),
-			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'cuit_emp'),
-			'histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'razonsocial_emp'),
+			'Histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'cuit_emp'),
+			'Histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'razonsocial_emp'),
 		);
 	}
 
@@ -126,4 +126,5 @@ class Empresa extends CActiveRecord
         public static function getListado(){
             return Empresa::model()->findAll();
         }
+        
 }
