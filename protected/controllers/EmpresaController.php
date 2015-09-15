@@ -110,7 +110,7 @@ class EmpresaController extends Controller
     }
     
     public function actionEditable(){
-        die("ssss"); 
+        die("entrooooo"); 
         $this->render('list', array('empresa'=>new Empresa()));
     }
     
