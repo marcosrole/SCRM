@@ -15094,3 +15094,140 @@ Stack trace:
 REQUEST_URI=/SCRM/empresa/editablee
 HTTP_REFERER=http://localhost/SCRM/empresa/list
 ---
+2015/09/16 15:04:18 [error] [exception.CException] exception 'CException' with message 'UsuarioController cannot find the requested view "crear".' in C:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('crear', NULL, true)
+#1 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(7): CController->render('crear')
+#2 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCrear()
+#3 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#7 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#8 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#9 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/SCRM/usuario/crear
+---
+2015/09/16 15:23:32 [error] [php] Undefined variable: usario (C:\wamp\www\SCRM\protected\views\usuario\crear.php:39)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(869): UsuarioController->renderFile()
+#1 C:\wamp\www\yii\framework\web\CController.php(782): UsuarioController->renderPartial()
+#2 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(13): UsuarioController->render()
+#3 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCrear()
+#4 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#6 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#7 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#8 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#10 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\views\usuario\crear.php (39)
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (13)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 15:23:50 [error] [php] Undefined variable: lista_localidades (C:\wamp\www\SCRM\protected\views\usuario\crear.php:107)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(869): UsuarioController->renderFile()
+#1 C:\wamp\www\yii\framework\web\CController.php(782): UsuarioController->renderPartial()
+#2 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(13): UsuarioController->render()
+#3 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCrear()
+#4 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#6 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#7 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#8 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#10 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\views\usuario\crear.php (107)
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (13)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 15:24:44 [error] [exception.CException] exception 'CException' with message 'Property "CStringValidator.0" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:173
+Stack trace:
+#0 C:\wamp\www\yii\framework\validators\CValidator.php(177): CComponent->__set('0', 'telefono')
+#1 C:\wamp\www\yii\framework\base\CModel.php(287): CValidator::createValidator('length', Object(Persona), 'tipo_dni, nom_a...', Array)
+#2 C:\wamp\www\yii\framework\base\CModel.php(260): CModel->createValidators()
+#3 C:\wamp\www\yii\framework\base\CModel.php(304): CModel->getValidators('tipo_dni')
+#4 C:\wamp\www\yii\framework\web\helpers\CHtml.php(1513): CModel->isAttributeRequired('tipo_dni')
+#5 C:\wamp\www\yii\framework\web\widgets\CActiveForm.php(600): CHtml::activeLabelEx(Object(Persona), 'tipo_dni', Array)
+#6 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbActiveForm.php(1285): CActiveForm->labelEx(Object(Persona), 'tipo_dni', Array)
+#7 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbActiveForm.php(1152): TbActiveForm->verticalGroup(Array, Object(Persona), 'tipo_dni', Array)
+#8 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbActiveForm.php(627): TbActiveForm->customFieldGroupInternal(Array, Object(Persona), 'tipo_dni', Array)
+#9 C:\wamp\www\SCRM\protected\views\usuario\crear.php(132): TbActiveForm->dropDownListGroup(Object(Persona), 'tipo_dni', Array)
+#10 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#11 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#12 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#13 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('crear', Array, true)
+#14 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(17): CController->render('crear', Array)
+#15 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCrear()
+#16 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#17 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#18 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#20 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#21 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#22 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#23 {main}
+REQUEST_URI=/SCRM/usuario/crear
+HTTP_REFERER=http://localhost/SCRM/Histoasignacion/viewmap
+---
+2015/09/16 15:48:13 [error] [php] Trying to get property of non-object (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 15:53:32 [error] [php] Trying to get property of non-object (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 15:56:58 [error] [php] Missing argument 1 for Direccion::getId_dir(), called in C:\wamp\www\yii\framework\base\CComponent.php on line 111 and defined (C:\wamp\www\SCRM\protected\models\Direccion.php:123)
+Stack trace:
+#0 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(22): Direccion->__get()
+#1 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCrear()
+#2 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#3 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#4 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#6 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#7 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#8 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\models\Direccion.php (123)
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 16:03:55 [error] [php] Undefined index: usuario (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:25)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 16:04:36 [error] [php] Undefined index: usuario (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:25)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)

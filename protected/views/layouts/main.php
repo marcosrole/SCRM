@@ -45,19 +45,7 @@
                                 array('label' => 'Ver', 'url' => Yii::app()->homeUrl . 'Dispositivo/list'),
                                 array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),                                
                                 array('label' => 'Asignar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
-                                
-//                            array('label' => 'Another action', 'url' => '#'),
-//                            array(
-//                                'label' => 'Something else here',
-//                                'url' => '#'
-//                            ),
-//                            '---',
-//                            array('label' => 'NAV HEADER'),
-//                            array('label' => 'Separated link', 'url' => '#'),
-//                            array(
-//                                'label' => 'One more separated link',
-//                                'url' => '#'
-//                            ),
+                             
                             )
                         ),
                         array(
@@ -67,58 +55,33 @@
                                 array('label' => 'Añadir', 'url' => Yii::app()->homeUrl . 'empresa/crear'),
                                 array('label' => 'Modificar', 'url' => '#'),
                                 array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
-                                
-                                
-//                            array('label' => 'Another action', 'url' => '#'),
-//                            array(
-//                                'label' => 'Something else here',
-//                                'url' => '#'
-//                            ),
-//                            '---',
-//                            array('label' => 'NAV HEADER'),
-//                            array('label' => 'Separated link', 'url' => '#'),
-//                            array(
-//                                'label' => 'One more separated link',
-//                                'url' => '#'
-//                            ),
+                             
                             )
                         ),
                         array('label'=>'Mapa', 'url'=> Yii::app()->homeUrl . 'Histoasignacion/viewmap', 'visible'=>Yii::app()->user->isGuest),
-//                        array('label'=>'Login', 'url'=> Yii::app()->homeUrl . 'usuario/loging', 'visible'=>Yii::app()->user->isGuest),
-//                        array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/usuario/logout'), 'visible'=>!Yii::app()->user->isGuest),
-//                         array(
-//                            'label' => 'Login (Admin)',
-//                            'url' => '#',
-//                            'items' => array(
-//                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),
-//                                array('label' => 'Ver', 'url' => Yii::app()->homeUrl . 'usuario/list'),
-//                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'usuario/admin'),
-//                             
-//                            )
-//                        ),
                          array(
                             'label' => 'Asignar',
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/crear'),
                                 array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/modificar'),
-                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),
-                                
-                                
-//                            array('label' => 'Another action', 'url' => '#'),
-//                            array(
-//                                'label' => 'Something else here',
-//                                'url' => '#'
-//                            ),
-//                            '---',
-//                            array('label' => 'NAV HEADER'),
-//                            array('label' => 'Separated link', 'url' => '#'),
-//                            array(
-//                                'label' => 'One more separated link',
-//                                'url' => '#'
-//                            ),
+                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),                                
                             )
                         ),
+                         array(
+                            'label' => 'Usuario',
+                            'url' => '#',
+                            'items' => array(
+                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/crear'),
+                                array('label' => 'Ver', 'url' => Yii::app()->homeUrl . '#',
+                                    'items' => array(
+                                        array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . '#'),
+                                        ),
+                                    ),                                  
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . '#'),
+                            )
+                        ),
+                        
                     ),
                 ),
             ),

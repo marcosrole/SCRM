@@ -7,11 +7,12 @@
  * @property integer $dni
  * @property string $tipo_dni
  * @property string $nom_ape
- * @property integer $sexo
+ * @property string $sexo
  * @property string $cuil
  * @property integer $id_dir
  * @property integer $altura_dir
  * @property string $calle_dir
+ * @property string $telefono
  *
  * The followings are the available model relations:
  * @property Empresa[] $empresas
@@ -19,6 +20,7 @@
  * @property Direccion $idDir
  * @property Direccion $alturaDir
  * @property Direccion $calleDir
+ * @property Usuario[] $usurios
  */
 class Persona extends CActiveRecord
 {
@@ -41,10 +43,12 @@ class Persona extends CActiveRecord
 			array('dni, tipo_dni, nom_ape, altura_dir, calle_dir', 'required'),
 			array('dni, altura_dir', 'numerical', 'integerOnly'=>true),
 			array('tipo_dni, nom_ape, calle_dir', 'length', 'max'=>50),
+                        array('sexo', 'length', 'max'=>2),
+                        array('telefono', 'length', 'max'=>20),
 			array('cuil', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dni, tipo_dni, nom_ape, sexo, cuil, id_dir, altura_dir, calle_dir', 'safe', 'on'=>'search'),
+			array('dni, tipo_dni, nom_ape, sexo, cuil, id_dir, altura_dir, calle_dir, telefono', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,6 +65,7 @@ class Persona extends CActiveRecord
 			'idDir' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
 			'alturaDir' => array(self::BELONGS_TO, 'Direccion', 'altura_dir'),
 			'calleDir' => array(self::BELONGS_TO, 'Direccion', 'calle_dir'),
+                        'usuario' => array(self::HAS_MANY, 'Usuario', 'dni_per'),
 		);
 	}
 
@@ -70,14 +75,15 @@ class Persona extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'dni' => 'Dni',
-			'tipo_dni' => 'Tipo Dni',
-			'nom_ape' => 'Nom Ape',
+			'dni' => 'DNI',
+			'tipo_dni' => 'Tipo DNI',
+			'nom_ape' => 'Nombre y Apellido',
 			'sexo' => 'Sexo',
-			'cuil' => 'Cuil',
+			'cuil' => 'CUIL',
 			'id_dir' => 'Id Dir',
-			'altura_dir' => 'Altura Dir',
-			'calle_dir' => 'Calle Dir',
+			'altura_dir' => 'Altura',
+			'calle_dir' => 'Calle',
+                        'telefono' => 'Telefono',
 		);
 	}
 
@@ -107,6 +113,7 @@ class Persona extends CActiveRecord
 		$criteria->compare('id_dir',$this->id_dir);
 		$criteria->compare('altura_dir',$this->altura_dir);
 		$criteria->compare('calle_dir',$this->calle_dir,true);
+                $criteria->compare('telefono',$this->telefono,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
