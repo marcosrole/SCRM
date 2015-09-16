@@ -38,7 +38,7 @@ class Direccion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_loc, altura, calle, piso, depto', 'required'),
+			array('id_loc, altura, calle', 'required'),
 			array('id_loc, altura', 'numerical', 'integerOnly'=>true),
 			array('calle', 'length', 'max'=>50),
 			// The following rule is used by search().

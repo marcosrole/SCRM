@@ -15231,3 +15231,217 @@ Stack trace:
 REQUEST_URI=/SCRM/usuario/crear
 in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
 in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:31:24 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:34:38 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:36:41 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:37:09 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:37:16 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:10 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:10 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:10 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:42 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:42 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:40:42 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '34360877-0' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:41:27 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:41:27 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:44:48 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:44:48 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:09 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:09 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:28 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:28 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:28 [error] [php] Trying to get property of non-object (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:38 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:38 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:46:38 [error] [php] Trying to get property of non-object (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#1 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#5 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/crear
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:47:38 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:47:38 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:49:46 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:49:46 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:20 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:20 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:20 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`persona`, CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`id_dir`, `altura_dir`, `calle_dir`) REFERENCES `direccion` (`id`, `altura`, `calle`)). The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:41 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:41 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:51:41 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`persona`, CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`id_dir`, `altura_dir`, `calle_dir`) REFERENCES `direccion` (`id`, `altura`, `calle`)). The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:54:36 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:54:36 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:54:36 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`persona`, CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`id_dir`, `altura_dir`, `calle_dir`) REFERENCES `direccion` (`id`, `altura`, `calle`)). The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:56:03 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:56:03 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:56:03 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`persona`, CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`id_dir`, `altura_dir`, `calle_dir`) REFERENCES `direccion` (`id`, `altura`, `calle`)). The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:01 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:01 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:26 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:26 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:28 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 19:58:28 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:03:10 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:03:10 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:03:10 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`persona`, CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`id_dir`, `altura_dir`, `calle_dir`) REFERENCES `direccion` (`id`, `altura`, `calle`)). The SQL statement executed was: INSERT INTO `persona` (`tipo_dni`, `dni`, `nom_ape`, `sexo`, `cuil`, `telefono`, `id_dir`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6).
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (25)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:05:47 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:05:47 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:20:02 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:20:02 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:22:48 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:22:48 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:23:23 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:23:23 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:23:54 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:23:54 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:24:36 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:24:36 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:24:44 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:24:44 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:28:15 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:28:15 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:28:33 [warning] [application] Failed to set unsafe attribute "piso" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
+2015/09/16 20:28:33 [warning] [application] Failed to set unsafe attribute "depto" of "Direccion".
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (16)
+in C:\wamp\www\SCRM\index.php (13)
