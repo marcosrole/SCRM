@@ -21,7 +21,7 @@
                             //'htmlOptions'=>array('width'=>'150'),                            
                             'editable' => array(
                                 'type' => 'number',
-                                'url'=> Yii::app()->createUrl("/empresa/editable"),                                                                                                      
+                                'url'=> Yii::app()->createUrl('empresa/editable'),
                                 'placement' => 'right',
                                 'inputclass' => 'span3',
                                 //'type' => 'select',

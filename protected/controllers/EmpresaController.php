@@ -111,7 +111,7 @@ class EmpresaController extends Controller
     
     public function actionEditable(){
         die("entrooooo"); 
-        $this->render('list', array('empresa'=>new Empresa()));
+        //como tomo los datos que vienen del TBEditableColumn???????
     }
     
     public function actionList(){

@@ -15083,3 +15083,14 @@ Stack trace:
 REQUEST_URI=/SCRM/empresa/editable
 HTTP_REFERER=http://localhost/SCRM/empresa/list
 ---
+2015/09/15 23:06:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "editablee".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('editablee')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('editablee')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('empresa/editabl...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/empresa/editablee
+HTTP_REFERER=http://localhost/SCRM/empresa/list
+---
