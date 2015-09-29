@@ -1,3 +1,31 @@
+ <style>
+            .modal-header, h4, .close {
+                background-color: #19A3FF;
+                color:white !important;
+                text-align: center;
+                font-size: 30px;
+            }
+            .modal-footer {
+                background-color: #19A3FF;
+            }
+        </style>
+
+<?php
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                'error' => array('closeText' => false),                
+            ),
+        ));
+        ?>
 <?php
 /* @var $this DispositivoController */
 /* @var $model Dispositivo */
@@ -8,9 +36,13 @@
 <?php
 $this->widget('booster.widgets.TbExtendedGridView', array(
          'id' => 'dispositivo-grid',
-         'dataProvider' => $model->search(),
-         'filter' => $model,
+         'dataProvider' => $dispositivo->search(),
+         'filter' => $dispositivo,
          'columns' => array(
+                array(
+                    'name' => 'id',
+                    'header' => 'ID',
+                ),
                 array(
                     'name' => 'mac',
                     'header' => 'MAC',
@@ -33,18 +65,28 @@ $this->widget('booster.widgets.TbExtendedGridView', array(
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
                     'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{delete} {update}', // botones a mostrar
+                    'template' => '{delete}{update}', // botones a mostrar
                     'buttons' => array(
-                        "delete" => array(
+                        'delete' => array(
                             'label' => 'Eliminar',                             
                             'click' => 'function(){return confirm("Desea eliminar todos los registro del dispositivo?");}',
                             'url'=> 'Yii::app()->createUrl("/Dispositivo/Eliminar?id=$data->id")'
                         ),
-                        "update" => array(
-                            'label' => 'Modificar',
-                            'url'=> 'Yii::app()->createUrl("/Dispositivo/Update?id=$data->id")'
+                        'update' => array(
+                            'label'=>'Modificar',
+                            'icon'=>'glyphicon glyphicon-pencil',
+                            'url'=>'Yii::app()->createUrl("dispositivo/modificar", array("id"=>$data->id,"mac"=>$data->mac,"modelo"=>$data->modelo,"version"=>$data->version,"funciona"=>$data->funciona))',
+                            'options'=>array(
+                                'class'=>'btn btn-small',
+                                'ajax'=>array(
+                                    'type'=>'POST',
+                                    'url'=>"js:$(this).attr('href')",
+                                    'success'=>'function(data) { $("#viewModal .modal-body p").html(data); $("#viewModal").modal(); }'
+                                ),
+                            ),
                         ),
                     ),
+                    'htmlOptions'=>array('style'=>'width: 120px'),
                 ),
             ),
     )
@@ -67,52 +109,25 @@ $this->widget(
 ?>
 
 
-<?php $this->beginWidget(
-    'booster.widgets.TbModal',
-    array('id' => 'myModal')
-        ); ?>
- 
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h4>Actualizar datos</h4>
-    </div>
- 
-    <div class="modal-body">
-        <p>Formulario de actulizacion</p>
-    </div>
- 
-    <div class="modal-footer">
-        <?php $this->widget(
-            'booster.widgets.TbButton',
-            array(
-                'context' => 'primary',
-                'label' => 'Save changes',
-                'url' => '#',
-                'htmlOptions' => array('data-dismiss' => 'modal'),
-            )
-        ); ?>
-        <?php $this->widget(
-            'booster.widgets.TbButton',
-            array(
-                'label' => 'Close',
-                'url' => '#',
-                'htmlOptions' => array('data-dismiss' => 'modal'),
-            )
-        ); ?>
-    </div>
- 
-<?php $this->endWidget(); ?>
 
-<?php $this->widget(
-    'booster.widgets.TbButton',
-    array(
-        'label' => 'Click me',
-        'context' => 'primary',
-        'htmlOptions' => array(
-            'data-toggle' => 'modal',
-            'data-target' => '#myModal',
-        ),
-    )
-);?>
-          </div>
+            <!-- View Popup  -->
+            <?php $this->beginWidget('booster.widgets.TbModal', array('id'=>'viewModal')); ?>
+                <!-- Popup Header -->
+                <div class="modal-header">
+                <div class="modal-header" style="padding:10px 10px;">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4><span class="glyphicon glyphicon-pencil"></span> Modificar</h4>
+                </div>
+                </div>
+                <!-- Popup Content -->
+                <div class="modal-body">
+                <p>  <?php  ?></p>
+                </div>
+                <!-- Popup Footer -->
+                <div class="modal-footer">
+                <!-- close button -->
+                <!-- close button ends-->
+                </div>
+            <?php $this->endWidget(); ?>
+            <!-- View Popup ends -->          </div>
           

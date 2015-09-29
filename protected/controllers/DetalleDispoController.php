@@ -11,8 +11,9 @@ class DetalleDispoController extends Controller
         Yii::app()->request->redirect($url_anterior);
     }
 
-    public function actionCreate() {        
-        $model = new DetalleDispo;       
+    public function actionCreate() {  
+        try {   
+            $model = new DetalleDispo;       
         //Array con todos los dispositivos (id_dispo)        
         $array_dispo = array();        
         $dispositivos = Dispositivo::model()->findAll();         
@@ -20,12 +21,11 @@ class DetalleDispoController extends Controller
         foreach ($dispositivos as $key => $value) {            
            $array_dispo[]= $value{'id'};
         }       
-        
+        $transaction = Yii::app()->db->beginTransaction();
         //Verifico que se hayan pasado parametros por la URL
-        if (isset($_GET['mac']) && isset($_GET['db']) && isset($_GET['dist']) && isset($_GET['fecha']) && isset($_GET['hs'])) {
-            //Cargo los datos al modelo            
-            $model->setAttribute('mac_dis', $_GET['mac']);
-            $model->setAttribute('id_dis', Dispositivo::getid_dis($_GET['mac']));
+        if (isset($_GET['id']) && isset($_GET['db']) && isset($_GET['dist']) && isset($_GET['fecha']) && isset($_GET['hs'])) {
+            //Cargo los datos al modelo                        
+            $model->setAttribute('id_dis', $_GET['id']);
             $model->setAttribute('db', $_GET['db']);
             $model->setAttribute('distancia', $_GET['dist']);
             $model->setAttribute('fecha', $_GET['fecha']);
@@ -33,20 +33,19 @@ class DetalleDispoController extends Controller
                         
             if ($model->validate()) {
                 if ($model->insert()) { //Si se guardo Correctamente.. insert() devuelve un boolean 
-                    echo "El registro del dispositivo: " . $_GET['mac'] . " se guardo corectamente";
+                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> El registro del dispositivo: " . $_GET['id'] . " se guardo corectamente");                                                
+                    $transaction->commit();
                 }
-            } else
-                echo "ERROR: Datos incorrectos";
+            } else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios");}
         }
         
         //Se pregunta si el formulario ha sido enviado
         if (isset($_POST['DetalleDispo'])) {
             $model->attributes = $_POST['DetalleDispo'];
-            $id_dispo_aux = $_POST['DetalleDispo']['id_dis'];
+            $id_dispo_aux = $_POST['DetalleDispo']['id'];
             $model->id_dis=$array_dispo[$id_dispo_aux];
             
             if ($model->validate()) {
-
                 //----------------------------------------------------------                        
                 //Cambio el formato de la fecha.
                 //SQL: yyyy-mm-dd
@@ -54,28 +53,14 @@ class DetalleDispoController extends Controller
                 $newDate = date("Y-m-d", strtotime($originalDate));
                 $model->setAttribute('fecha', $newDate);
                 //----------------------------------------------------------                                                
-
-                if ($model->save()) { //Si se guardo Correctamente.. insert() devuelve un boolean                            
-                    $user = Yii::app()->getComponent('user');
-                    $user->setFlash('success', "<strong>Guardado!</strong> Se ha almacenado correctamente.");
-                    $this->widget('booster.widgets.TbAlert', array(
-                        'fade' => true,
-                        'closeText' => '&times;', // false equals no close link
-                        'events' => array(),
-                        'htmlOptions' => array(),
-                        'userComponentId' => 'user',
-                        'alerts' => array(// configurations per alert type
-                            // success, info, warning, error or danger
-                            'success' => array('closeText' => '&times;'),
-                        ),
-                    ));
-                    header('Refresh:2;url=' . $this->createUrl('DetalleDispo/create'));
-                } else {
-                    $user = Yii::app()->getComponent('user');
-                    $user->setFlash('wrong', "<strong>Error!</strong> Se haproducido un error.");
-                    header('Refresh:2;url=' . $this->createUrl('DetalleDispo/create'));
-                }
-            }
+                $model->save();
+                $transaction->commit();
+                Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+            }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}
+        }
+            
+        } catch (Exception $ex) {
+            Yii::app()->user->setFlash('error',$ex->getMessage());
         }
         
         $this->render('create', array('model' => $model, 'array_dispo' => $array_dispo));

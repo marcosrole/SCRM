@@ -23,7 +23,7 @@ class DispositivoController extends Controller {
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    public function accessRules() {
+    /*public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
                 'actions' => array('index', 'view','list','prueba',
@@ -44,7 +44,7 @@ class DispositivoController extends Controller {
             ),
         );
     }
-
+*/
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -54,13 +54,57 @@ class DispositivoController extends Controller {
         echo $this->createUrl('dispositivo/create',array('txt'=>'Hola','id'=>'1212'));
     }
           
-
-
     public function actionView($id) {
         
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
+    }
+    
+     public function actionModificar($id,$mac,$modelo,$version,$funciona){
+         
+        if (isset($_POST['Dispositivo'])) {
+            try {
+                $transaction = Yii::app()->db->beginTransaction();
+                $criterial = new CDbCriteria();
+                $criterial->addCondition("id='".$id."'");
+                $dispositivo = Dispositivo::model()->find($criterial);                               
+                $dispositivo->modelo=$_POST['Dispositivo']['modelo'];;
+                $dispositivo->version=$_POST['Dispositivo']['version'];
+                $dispositivo->funciona=$_POST['Dispositivo']['funciona'];                
+                if($dispositivo->validate()){
+                    $dispositivo->save();
+                    $transaction->commit(); 
+                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos actualizados ");                                                
+                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos ");}
+            } catch (Exception $ex) {
+                Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
+            }
+        }
+              
+        $dispositivo = new Dispositivo();
+        
+        if( Yii::app()->request->isAjaxRequest )
+            {
+            $criterial =new CDbCriteria();
+            $criterial->condition="id='" . $id . "' ";
+            $dispositivo= Dispositivo::model()->find($criterial);
+
+            $this->renderPartial('_ModalModificar',array(
+                'dispositivo'=>$dispositivo,
+            ), false, true);
+        }
+        else
+        {
+            $this->render('admin',array(
+                'dispositivo'=>$dispositivo
+            ));
+        }
+    }
+    
+    public function action_ModalModificar()
+    {   
+        $this->render('_ModalModificar');
     }
     
     public function actionAsignar() {
@@ -138,6 +182,8 @@ class DispositivoController extends Controller {
    
     
     public function actionCreate() {
+    try {
+        $transaction = Yii::app()->db->beginTransaction();
         $model = new Dispositivo;
         $model->unsetAttributes();
         if (isset($_POST['Dispositivo'])) {
@@ -148,9 +194,7 @@ class DispositivoController extends Controller {
             $model->setAttribute('funciona', true);
             
             if ($model->validate()) {
-                
                 $validacion=true;
-                
                 while ($validacion) {
                     if (Dispositivo::exitsMAC($model->{'mac'})) {
                         $validacion = false;
@@ -158,28 +202,19 @@ class DispositivoController extends Controller {
                         $model->setAttribute('id', rand(1, 1000));
                     }else $validacion=false;
                 }
-                
                 if (Dispositivo::exitsMAC($model->{'mac'})){
-                    echo 'Existe MAC';
-                    header('Refresh:2;url=' . $this->createUrl('Dispositivo/create'));
+                    {Yii::app()->user->setFlash('info', "<strong>Advertencia!</strong> Ya existe un dispositivo con la misma MAC ");}
                 }elseif ($model->insert()) { //Si se guardo Correctamente.. insert() devuelve un boolean                            
-                    $user = Yii::app()->getComponent('user');
-                    $user->setFlash('success', "<strong>Guardado!</strong> Se ha almacenado correctamente.");
-                    $this->widget('booster.widgets.TbAlert', array(
-                        'fade' => true,
-                        'closeText' => '&times;', // false equals no close link
-                        'events' => array(),
-                        'htmlOptions' => array(),
-                        'userComponentId' => 'user',
-                        'alerts' => array(// configurations per alert type
-                            // success, info, warning, error or danger
-                            'success' => array('closeText' => '&times;'),
-                        ),
-                    ));
-                    header('Refresh:2;url=' . $this->createUrl('Dispositivo/create'));
+                    $transaction->commit();
+                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos guardados ");                                                
+                    Yii::app()->user->setFlash('info', "<strong>Número de Identificación: </strong> <FONT SIZE=6>" . $model{'id'} . "</FONT> ");                                                
                 }
-            }
+            }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos ");}
         }
+        } catch (Exception $ex) {
+             Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
+        }
+        
         $this->render('create', array(
             'model' => $model,
         ));
@@ -218,39 +253,24 @@ class DispositivoController extends Controller {
         ));
        
     }
-    
-    public function actionUpdateVersion($version) {        
-        var_dump($version);
-       
-    }
-
-    /**
-     * Deletes a particular model.
-     * If deletion is successful, the browser will be redirected to the 'admin' page.
-     * @param integer $id the ID of the model to be deleted
-     */
     public function actionEliminar($id) {
-        
         try {
+            $transaction = Yii::app()->db->beginTransaction();
             $condition = new CDbCriteria();
             $condition = "id='" . $id . "' ";
             DetalleDispo::model()->deleteAll($condition);
-
-            $condition = "id='" . $id . "' ";
-            Dispositivo::model()->deleteAll($condition);    
-
-            $this->redirect(array('admin'));
-            
+                $condition = "id='" . $id . "' ";
+                if(Dispositivo::model()->deleteAll($condition)){
+                    $transaction->commit();
+                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos eliminados ");  
+                    $this->redirect(array('admin'));
+                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Al elimiar ");}
+           
         } catch (Exception $ex) {
             Yii::app()->user->setFlash('error',$ex->getMessage());
         }
-       
-       
     }
 
-    /**
-     * Lists all models.
-     */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Dispositivo');
         $this->render('index', array(
@@ -258,22 +278,12 @@ class DispositivoController extends Controller {
         ));
     }
 
-    /**
-     * Manages all models.
-     */
     public function actionAdmin() {        
         $this->render('admin', array(
-            'model' => new Dispositivo(),
+            'dispositivo' => new Dispositivo(),
         ));
     }
 
-    /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     * @param integer $id the ID of the model to be loaded
-     * @return Dispositivo the loaded model
-     * @throws CHttpException
-     */
     public function loadModel($id) {
         $model = Dispositivo::model()->findByPk($id);
         if ($model === null)

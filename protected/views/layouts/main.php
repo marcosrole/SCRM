@@ -36,52 +36,72 @@
                     'items' => array(
 //                    array('label' => 'Home', 'url' => '#', 'active' => true),
 //                    array('label' => 'Link', 'url' => '#'),
-                      
+
                         array(
+//                            'visible' => !Yii::app()->user->isGuest,
                             'label' => 'Dispositivo',
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'Dispositivo/create'),
                                 array('label' => 'Ver', 'url' => Yii::app()->homeUrl . 'Dispositivo/list'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),                                
-                                array('label' => 'Asignar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
-                             
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
                             )
                         ),
                         array(
-                        'label' => 'Empresa',
+//                            'visible' => !Yii::app()->user->isGuest,
+                            'label' => 'Empresa',
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Añadir', 'url' => Yii::app()->homeUrl . 'empresa/crear'),
-                                array('label' => 'Modificar', 'url' => '#'),
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'empresa/modificar'),
                                 array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
-                             
+                                '--------------------------',
+                                array('label' => 'Añadir Sucursal', 'url' => Yii::app()->homeUrl . 'sucursal/crear'),
                             )
                         ),
-                        array('label'=>'Mapa', 'url'=> Yii::app()->homeUrl . 'Histoasignacion/viewmap', 'visible'=>Yii::app()->user->isGuest),
-                         array(
+                        array(
+                            'label' => 'Mapa',
+                            'url' => Yii::app()->homeUrl . 'Histoasignacion/viewmap',
+//                            'visible' => !Yii::app()->user->isGuest
+                        ),
+                        array(
+//                            'visible' => !Yii::app()->user->isGuest,
                             'label' => 'Asignar',
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/crear'),
                                 array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/modificar'),
-                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),                                
+                                array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),
                             )
                         ),
-                         array(
+                        array(
                             'label' => 'Usuario',
+//                            'visible' => !Yii::app()->user->isGuest,
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/crear'),
-                                array('label' => 'Ver', 'url' => Yii::app()->homeUrl . '#',
-                                    'items' => array(
-                                        array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . '#'),
-                                        ),
-                                    ),                                  
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . '#'),
+                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . 'usuario/permisos'),
+                                '----------',
+                                array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/list'),
+//                                array(
+//                                    'label' => 'Ver', 
+//                                    'url' => '#',
+//                                    'items' => array(
+//                                        array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/list'),
+//                                        )
+//                                    ),                                  
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'usuario/adminusuarios'),
                             )
                         ),
-                        
+                        array(
+                            'label' => 'Login',
+                            'url' => Yii::app()->homeUrl,
+                            'visible' => Yii::app()->user->isGuest),
+                        'htmlOptions' => array('class' => 'pull-right'),
+                        array(
+                            'label' => 'Logout (' . Yii::app()->user->name . ')',
+                            'url' => array('/site/logout'),
+                            'visible' => !Yii::app()->user->isGuest),
                     ),
                 ),
             ),

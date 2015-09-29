@@ -1,21 +1,6 @@
 <?php
 
-/**
- * This is the model class for table "detalle_dispo".
- *
- * The followings are the available columns in table 'detalle_dispo':
- * @property integer $id_dis
- * @property integer $id_det
- * @property string $mac_dis
- * @property double $db
- * @property double $distancia
- * @property string $fecha
- * @property string $hs
- *
- * The followings are the available model relations:
- * @property Dispositivo $idDis
- * @property Dispositivo $macDis
- */
+
 class DetalleDispo extends CActiveRecord
 {
 	/**
@@ -34,13 +19,13 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('mac_dis, db, distancia, fecha, hs', 'required'),
-			array('id_dis', 'numerical', 'integerOnly'=>true),
+			array('id_dis, db, distancia, fecha, hs', 'required'),
+			array('id_dis,db,distancia', 'numerical', 'integerOnly'=>true),
 			array('db, distancia', 'numerical'),
-			array('mac_dis', 'length', 'max'=>50),
+			array('', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, id_det, mac_dis, db, distancia, fecha, hs', 'safe', 'on'=>'search'),
+			array('id_dis, id, db, distancia, fecha, hs', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +37,7 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
-			'macDis' => array(self::BELONGS_TO, 'Dispositivo', 'mac_dis'),
+			'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),			
 		);
 	}
 
@@ -63,10 +47,9 @@ class DetalleDispo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dis' => 'Id Dis',
-			'id_det' => 'Id Det',
-			'mac_dis' => 'Mac Dis',
-			'db' => 'Db',
+			'id_dis' => 'ID Dispositivo',
+			'id' => 'ID Detalle Dispositivo',			
+			'db' => 'dB',
 			'distancia' => 'Distancia',
 			'fecha' => 'Fecha',
 			'hs' => 'Hs',
@@ -92,14 +75,16 @@ class DetalleDispo extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id',$this->id);
-		$criteria->compare('mac_dis',$this->mac_dis,true);
+		$criteria->compare('id',$this->id);		
 		$criteria->compare('db',$this->db);
 		$criteria->compare('distancia',$this->distancia);
 		$criteria->compare('fecha',$this->fecha,true);
 		$criteria->compare('hs',$this->hs,true);
 
 		return new CActiveDataProvider($this, array(
+                        'pagination' => array(
+                             'pageSize' => 25,
+                        ),
 			'criteria'=>$criteria,
 		));
 	}

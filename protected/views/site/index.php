@@ -14,16 +14,29 @@ $this->widget(
     $form = $this->beginWidget(
         'booster.widgets.TbActiveForm',
         array(
-            'id' => 'verticalForm',
+            'id' => 'UsuarioForm',
             'htmlOptions' => array('class' => 'well'), // for inset effect
         )
-    );
-    echo $form->textFieldGroup($usuario, 'name');
-    echo $form->passwordFieldGroup($usuario, 'pass');    
-    $this->widget(
-        'booster.widgets.TbButton',
-        array('buttonType' => 'submit', 'label' => 'Login')
-    );
+    ); ?>
+    <?php echo $form->textFieldGroup($usuario, 'name'); ?>
+    
+    <?php echo $form->passwordFieldGroup($usuario, 'pass'); ?>
+    
+    <?php if($error){ ?>
+        <font color="red">
+            Usuario o contraseña incorrecto.
+            <br>
+        </font>           
+    <?php }
+    
+     $this->widget('booster.widgets.TbButton', 
+    array(
+        'label' => 'Entrar',
+        'context' => 'success',
+        'buttonType'=>'submit', 
+        )); 
+
+    
     $this->endWidget();
 
 

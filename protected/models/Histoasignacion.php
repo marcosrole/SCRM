@@ -39,14 +39,13 @@ class Histoasignacion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_dis, mac_dis, cuit_emp, razonsocial_emp, fecha_alta', 'required'),
-			array('id_dis', 'numerical', 'integerOnly'=>true),
-			array('mac_dis, cuit_emp, razonsocial_emp', 'length', 'max'=>50),
-			array('observacion', 'length', 'max'=>100),
-			array('fecha_modif, fecha_baja, coord_lat, coord_lon', 'safe'),
+			array('id_dis, id_suc, fechaAlta', 'required'),
+			array('id_dis, id_suc', 'numerical', 'integerOnly'=>true),			
+			array('observacion', 'length', 'max'=>120),
+                        //array('fechaModif, fechaAlta, fechaBaja', 'date', 'format'=>'yyyy-MM-dd'),			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, mac_dis, cuit_emp, razonsocial_emp, fecha_alta, fecha_modif, fecha_baja, coord_lat, coord_lon, observacion', 'safe', 'on'=>'search'),
+			array('id_dis, id_suc, fechaAlta, fechaModif, fechaBaja, coordLat, coordLon, observacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,8 +57,8 @@ class Histoasignacion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(			
-                        'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis,mac_dis'),
-			'empresa' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp,razonsocial_emp'),
+                        'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
+			'empresa' => array(self::BELONGS_TO, 'Sucursal', 'id_suc'),
 			//'empresa_razonsocialEmp' => array(self::BELONGS_TO, 'Empresa', 'razonsocial_emp'),
 		);
 	}
@@ -70,16 +69,14 @@ class Histoasignacion extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-                        'id' => 'Id',
-			'id_dis' => 'Id Dis',
-			'mac_dis' => 'Mac Dis',
-			'cuit_emp' => 'Cuit Emp',
-			'razonsocial_emp' => 'Razonsocial Emp',
-			'fecha_alta' => 'Fecha Alta',
-			'fecha_modif' => 'Fecha Modif',
-			'fecha_baja' => 'Fecha Baja',
-			'coord_lat' => 'Coord Lat',
-			'coord_lon' => 'Coord Lon',
+                        'id' => 'ID',
+			'id_dis' => 'ID Dispositivo',
+                        'id_suc' => 'ID Sucursal',			
+			'fechaAlta' => 'Fecha Alta',
+			'fechaModif' => 'Fecha Modif',
+			'fechaBaja' => 'Fecha Baja',
+			'coordLat' => 'Coordenada Latitud',
+			'coordLon' => 'Coordenada Longitud',
 			'observacion' => 'Observacion',
 		);
 	}
@@ -104,15 +101,8 @@ class Histoasignacion extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
                 $criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('mac_dis',$this->mac_dis,true);
-		$criteria->compare('cuit_emp',$this->cuit_emp,true);
-		$criteria->compare('razonsocial_emp',$this->razonsocial_emp,true);
-		$criteria->compare('fecha_alta',$this->fecha_alta,true);
-		$criteria->compare('fecha_modif',$this->fecha_modif,true);
-		$criteria->compare('fecha_baja',$this->fecha_baja,true);
-		$criteria->compare('coord_lat',$this->coord_lat,true);
-		$criteria->compare('coord_lon',$this->coord_lon,true);
-		$criteria->compare('observacion',$this->observacion,true);
+                $criteria->compare('id_suc',$this->id_suc);		
+		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -127,20 +117,20 @@ class Histoasignacion extends CActiveRecord
         public static function getVigentes()
 	{
             $criterial= new CDbCriteria();
-            $criterial->condition=("fecha_baja='1900-1-1'");	
+            $criterial->condition=("fechaBaja='1900-01-01'");	
             return Histoasignacion::model()->findAll($criterial);
 	}
         
         public static function getDispositivosNODisponibles(){
             $criterial = new CDbCriteria();
-            $criterial->condition=("fecha_baja='1900-1-1'");            
+            $criterial->condition=("fechaBaja='1900-01-01'");            
             return Histoasignacion::model()->with('dispositivo')->findAll($criterial);
         }
         
         public static function getDatosMapa(){
             //[id_dis coord_lat coord_lon direccion]
             $criterial = new CDbCriteria();
-            $criterial->condition=("fecha_baja='1900-1-1'");
+            $criterial->condition=("fechaBaja='1900-01-01'");
             $nodisponibles=Histoasignacion::model()->with('dispositivo')->findAll($criterial);
             
             $array_datos_mapa = array(); // [id => direccion]
@@ -162,7 +152,7 @@ class Histoasignacion extends CActiveRecord
         public static function getDispositivosDispoibles(){
             //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:
             $criterial = new CDbCriteria();
-            $criterial->condition=("fecha_baja='1900-1-1'");
+            $criterial->condition=("fechaBaja='1900-01-01'");
             $dispositivosNoDispoibles = Histoasignacion::model()->with('dispositivo')->findAll($criterial);
             $dispositivos = Dispositivo::model()->findAll();
                                    
@@ -170,7 +160,7 @@ class Histoasignacion extends CActiveRecord
             $dispositivosDisponibles=array();
             foreach ($dispositivos as $Dispo) {
                 foreach ($dispositivosNoDispoibles as $NoDispo) {
-                    if($Dispo->id==$NoDispo->id_dis && $Dispo->mac==$NoDispo->mac_dis){                        
+                    if($Dispo->id==$NoDispo->id_dis){                        
                         $bandera=true;
                     }
                 }
@@ -186,7 +176,7 @@ class Histoasignacion extends CActiveRecord
             
             //Obtengo los Dispositivos ocupados o los NO DISPONIBLES:            
             $criterial = new CDbCriteria();
-            $criterial->condition=("fecha_baja='1900-1-1'");
+            $criterial->condition=("fechaBaja='1900-01-01'");
             $empresaNoDispoibles = Histoasignacion::model()->with('empresa')->findAll($criterial);
             
             

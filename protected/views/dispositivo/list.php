@@ -1,3 +1,20 @@
+<?php
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                'error' => array('closeText' => false),                
+            ),
+        ));
+        ?>
+
 <h1>
     Dispositivos almacenados 
 </h1>
@@ -11,6 +28,10 @@ $this->widget('booster.widgets.TbGridView', array(
     'dataProvider' => $modelo->search(),
     'filter' => $modelo,
     'columns' => array(
+        array(
+            'name' => 'id',
+            'header'=>'Nro. Identificación'
+        ),
         array(
             'name' => 'mac',
             'header'=>'MAC'

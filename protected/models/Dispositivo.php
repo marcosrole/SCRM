@@ -122,6 +122,12 @@ class Dispositivo extends CActiveRecord
             return $id;
         }
         
+        public static function getMAC($id){
+            $modelo=Dispositivo::model()->findAllByAttributes(array('id'=>$id));
+            $mac=$modelo[0]['mac'];
+            return $mac;
+        }
+        
         
         public static function exits($id, $mac){
             $existe= Dispositivo::model()->exists("mac='$mac' OR id='$id'");           

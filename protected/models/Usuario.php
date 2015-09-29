@@ -38,9 +38,11 @@ class Usuario extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, pass, dni_per', 'required'),
-			array('dni_per', 'numerical', 'integerOnly'=>true),
-			array('name, pass', 'length', 'max'=>20),
+			//array('name, pass', 'required',"message"=>"El campo no puede estar en blanco"),
+                        array('name, nivel, pass, dni_per', 'required',"message"=>"El campo no puede estar en blanco"),
+                        array('name', 'unique',"message"=>'El usuario ya existe'),
+			array('dni_per', 'numerical', 'integerOnly'=>true,"message"=>"Debe ser un numero"),
+			array('name, pass', 'length', 'max'=>20, "message"=>"No puede sobrepasar los 20 caracteres"),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('name, pass, dni_per', 'safe', 'on'=>'search'),
@@ -55,16 +57,7 @@ class Usuario extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'inspectors' => array(self::HAS_MANY, 'Inspector', 'dni_per_usu'),
-			'inspectors1' => array(self::HAS_MANY, 'Inspector', 'name_usu'),
-			'inspectors2' => array(self::HAS_MANY, 'Inspector', 'pass_usu'),
-			'onlines' => array(self::HAS_MANY, 'Online', 'dni_per_usu'),
-			'onlines1' => array(self::HAS_MANY, 'Online', 'name_usu'),
-			'onlines2' => array(self::HAS_MANY, 'Online', 'pass_usu'),
-			'permisos' => array(self::HAS_MANY, 'Permiso', 'dni_per_usu'),
-			'permisos1' => array(self::HAS_MANY, 'Permiso', 'name_usu'),
-			'permisos2' => array(self::HAS_MANY, 'Permiso', 'pass_usu'),
-			'dniPer' => array(self::BELONGS_TO, 'Persona', 'dni_per'),
+                        'esPersona' => array(self::BELONGS_TO, 'Persona', 'DNI_per'),			
 		);
 	}
 
@@ -74,9 +67,10 @@ class Usuario extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'name' => 'Name',
-			'pass' => 'Pass',
-			'dni_per' => 'Dni Per',
+			'name' => 'Nombre de Usuario',
+			'pass' => 'Contraseña',
+			'dni_per' => 'DNI del Usuario',                        
+                        'nivel' => 'Nivel de acceso',
 		);
 	}
 
@@ -101,13 +95,24 @@ class Usuario extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('pass',$this->pass,true);
 		$criteria->compare('dni_per',$this->dni_per);
+                $criteria->compare('permiso',$this->permiso);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+        
+        public static function getDNI_per($name){            
+            $criterial = new CDbCriteria();
+            $criterial->condition="name='" . $name . "' ";
+            $usuario = new Usuario();
+            $usuario = Usuario::model()->find($criterial);
+            
+            return $usuario{'dni_per'};
+            
+        }
 
-	/**
+        /**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.

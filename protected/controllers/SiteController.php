@@ -27,9 +27,22 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index', array('usuario'=>new Usuario()));
+            $user = new Usuario();
+            $error=false;
+            if (isset($_POST['Usuario'])){
+                $user->attributes=$_POST['Usuario'];
+                $identity = new UserIdentity($_POST['Usuario']['name'],$_POST['Usuario']['pass']);                             
+//                if ($user->validate()){
+                    if ($identity->authenticate()){
+                        echo "Entro";
+                        Yii::app()->user->login($identity);
+                        $this->redirect(Yii::app()->user->returnUrl);
+                    }else $error=true;
+//                }
+                
+
+            }            
+            $this->render('index', array('usuario'=>$user, 'error'=>$error));
 	}
 
 	/**
@@ -55,8 +68,8 @@ class SiteController extends Controller
 		if(isset($_POST['ContactForm']))
 		{
 			$model->attributes=$_POST['ContactForm'];
-			if($model->validate())
-			{
+//			if($model->validate())
+//			{
 				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
 				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
 				$headers="From: $name <{$model->email}>\r\n".
@@ -67,7 +80,7 @@ class SiteController extends Controller
 				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
 				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
 				$this->refresh();
-			}
+//			}
 		}
 		$this->render('contact',array('model'=>$model));
 	}
@@ -75,28 +88,54 @@ class SiteController extends Controller
 	/**
 	 * Displays the login page
 	 */
-	public function actionLogin()
+        public function actionLogin()
 	{
-		$model=new LoginForm;
-
-		// if it is ajax validation request
-		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-
-		// collect user input data
-		if(isset($_POST['LoginForm']))
-		{
-			$model->attributes=$_POST['LoginForm'];
-			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
-				$this->redirect(Yii::app()->user->returnUrl);
-		}
-		// display the login form
-		$this->render('login',array('model'=>$model));
+            if (isset($_POST['Usuario'])){
+                die((""));
+            }
+            $identity = new UserIdentity($username,$password);
+            
+            if($identity->authenticate()){
+                Yii::app()->user->login($identity);
+            }else $identity->errorMessage;
+//            
+//		if($this->_identity===null)
+//		{
+//			$this->_identity=new UserIdentity($this->username,$this->password);
+//			$this->_identity->authenticate();
+//		}
+//		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
+//		{
+//			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+//			Yii::app()->user->login($this->_identity,$duration);
+//			return true;
+//		}
+//		else
+//			return false;
 	}
+        
+//	public function actionLogin()
+//	{
+//		$model=new LoginForm;
+//
+//		// if it is ajax validation request
+//		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+//		{
+//			echo CActiveForm::validate($model);
+//			Yii::app()->end();
+//		}
+//
+//		// collect user input data
+//		if(isset($_POST['LoginForm']))
+//		{
+//			$model->attributes=$_POST['LoginForm'];
+//			// validate user input and redirect to the previous page if valid
+//			if($model->validate() && $model->login())
+//				$this->redirect(Yii::app()->user->returnUrl);
+//		}
+//		// display the login form
+//		$this->render('login',array('model'=>$model));
+//	}
 
 	/**
 	 * Logs out the current user and redirect to homepage.

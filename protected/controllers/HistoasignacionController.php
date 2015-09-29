@@ -36,66 +36,44 @@ class HistoasignacionController extends Controller
        public function actionCrear() {
         $dispositivo = new Dispositivo();
         $empresa = new Empresa();
+        $sucursal = new Sucursal();
         $histasignacion = new Histoasignacion();
         
-        $array_empresa = array();
+        $array_sucursal = array();
         $array_dispositivo = array();
         
-        if (isset($_POST['selectedIds1'])) {
-
-            $array_empresa = (preg_split("/,/", $_POST['selectedIds1'][0]));
-
-            if (isset($_POST['selectedIds2'])) {
-                $array_dispositivo = (preg_split("/,/", $_POST['selectedIds2'][0]));
-
+        if (isset($_POST['selectEmpresa'])) {           
+            if (isset($_POST['selectDispositivo'])) {
                 $histasignacion->attributes = $_POST['Histoasignacion'];
-            }
+                    $sucursal=Sucursal::model()->findByAttributes(array('id' => $_POST['selectEmpresa'][0]));            
+                $histasignacion->id_suc =  $sucursal{'id'};
+                    $dispositivo=  Dispositivo::model()->findByAttributes(array('id' => $_POST['selectDispositivo'][0]));            
+                $histasignacion->id_dis=$dispositivo{'id'};
+                $histasignacion->fechaBaja='1900-01-01';           
+                //----------------------------------------------------------                        
+                    //Cambio el formato de la fecha.
+                    //SQL: yyyy-mm-dd
+                    $originalDate = $histasignacion->{'fechaAlta'};
+                    $newDate = date("Y-m-d", strtotime($originalDate));
+                    $histasignacion->setAttribute('fechaAlta', $newDate);
+                //----------------------------------------------------------             
             
-            $histasignacion->cuit_emp=$array_empresa[0];
-            $histasignacion->razonsocial_emp=$array_empresa[1];
-            $histasignacion->mac_dis=$array_dispositivo[1];
-            $histasignacion->id_dis=$array_dispositivo[0];
-            $histasignacion->fecha_baja='1900-01-01';
-            
-            //----------------------------------------------------------                        
-                //Cambio el formato de la fecha.
-                //SQL: yyyy-mm-dd
-                $originalDate = $histasignacion->{'fecha_alta'};
-                $newDate = date("Y-m-d", strtotime($originalDate));
-                $histasignacion->setAttribute('fecha_alta', $newDate);
-            //---------------------------------------------------------- 
-           
-            
-            if($histasignacion->validate()){
-                if($histasignacion->insert()){
-                    $user = Yii::app()->getComponent('user');
-                        $user->setFlash('success', "<strong>Guardado!</strong> Se ha almacenado correctamente.");
-                        $this->widget('booster.widgets.TbAlert', array(
-                            'fade' => true,
-                            'closeText' => '&times;', // false equals no close link
-                            'events' => array(),
-                            'htmlOptions' => array(),
-                            'userComponentId' => 'user',
-                            'alerts' => array(// configurations per alert type
-                                // success, info, warning, error or danger
-                                'success' => array('closeText' => '&times;'),
-                            ),
-                        ));
-                        header('Refresh:2;url=' . $this->createUrl('histoasignacion/crear'));
-                }
+                if($histasignacion->validate()){
+                    $histasignacion->insert();
+                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                                
+                }else Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos invalidos o incompletos ");                                                
             }
         }
-        
+         
+        $sucursal=new Sucursal();
+        $dispositivo=new Dispositivo();             
         
         $dataProviderDispositivo = Dispositivo::model()->search();        
-        $dataProviderDispositivo->setData(Histoasignacion::model()->getDispositivosDispoibles());        
-        $dataProviderEmpresas = Empresa::model()->search();          
-        $dataProviderEmpresas->setData(Histoasignacion::model()->getEmpresaDispoibles());        
+        $dataProviderDispositivo->setData(Histoasignacion::model()->getDispositivosDispoibles());                
         
         $this->render('crear', array(
-            'dataProviderDispositivo' => $dataProviderDispositivo,
-            'dataProviderEmpresas' => $dataProviderEmpresas,
-            'empresa'=>$empresa,
+            'dataProviderDispositivo' => $dataProviderDispositivo,                        
+            'sucursal'=>$sucursal,
             'dispositivo' =>$dispositivo,
             'histasignacion' => $histasignacion));
     }
@@ -126,38 +104,42 @@ class HistoasignacionController extends Controller
     }
     
     
-    public function actionModificarModalEmpresa($id_dis, $razonsocial){
+    public function actionModificarModalEmpresa($id_dis, $id_suc){
         //Se puede cambiar la empresa.Pero la empresa puede como no ya tener un dispositivo. 
+        //Unaempresa acepta 1 o mas dispositivos
        date_default_timezone_set('UTC');
         
        $histoasignacion = new Histoasignacion;
         
-       $condition = new CDbCriteria();
-       $condition->addCondition("id_dis='" . $id_dis . "' "); 
-        $condition->addCondition("razonsocial_emp='" . $razonsocial . "' ");        
-       $histoasignacion= Histoasignacion::model()->find($condition);
+       $histoasignacion= Histoasignacion::model()->findByAttributes(
+               array(
+                   'id_dis'=>$id_dis,
+                   'id_suc'=>$id_suc,));
        
-        
-        $dataProviderEmpresas = Empresa::model()->search();        
-        $dataProviderEmpresas->setData(Histoasignacion::model()->getEmpresaDispoibles());
-        
+        //Todas las scursales menos la actual
+               
+        $criterial = new CDbCriteria();
+        $criterial->addCondition("id<>'" . $id_suc . "' " );
+        $sucursal = Sucursal::model()->findAll($criterial);
+            
+        $dataProviderSucursal = Sucursal::model()->search();    
+        //$dataProviderSucursal->setData($sucursal);
+                
         $array_emprsa=array();
         if (isset($_POST['selectedEmpresa'])) {
             try {
-                $histoasignacion->fecha_baja=date("Y" . "-" . "m" . "-" . "d");
+                $histoasignacion->fechaBaja=date("Y" . "-" . "m" . "-" . "d");
                 
                 $array_empresa = (preg_split("/,/", $_POST['selectedEmpresa'][0]));                        
 
                 $histoasignacionNEW = new Histoasignacion();            
                 $histoasignacionNEW->id_dis=$id_dis;
-                $histoasignacionNEW->mac_dis=$histoasignacion{'mac_dis'};
-                $histoasignacionNEW->razonsocial_emp=$array_empresa[1];            
-                $histoasignacionNEW->cuit_emp=$array_empresa[0];
-                $histoasignacionNEW->fecha_alta=$histoasignacion{'fecha_alta'};
-                $histoasignacionNEW->fecha_modif=date("Y" . "-" . "m" . "-" . "d");
-                $histoasignacionNEW->fecha_baja=date("1900" . "-" . "1" . "-" . "1");
-                $histoasignacionNEW->coord_lat=$histoasignacion{'coord_lat'};
-                $histoasignacionNEW->coord_lon=$histoasignacion{'coord_lon'};            
+                $histoasignacionNEW->id_suc=$_POST['selectedEmpresa'][0];
+                $histoasignacionNEW->fechaAlta=$histoasignacion{'fechaAlta'};
+                $histoasignacionNEW->fechaModif=date("Y" . "-" . "m" . "-" . "d");
+                $histoasignacionNEW->fechaBaja=date("1900" . "-" . "1" . "-" . "1");
+                $histoasignacionNEW->coordLat=$histoasignacion{'coordLat'};
+                $histoasignacionNEW->coordLon=$histoasignacion{'coordLon'};            
                 $histoasignacionNEW->observacion="Cambio de empresa: ". $_POST['Histoasignacion']['observacion'];
 
                 $histoasignacionNEW->insert();
@@ -172,48 +154,41 @@ class HistoasignacionController extends Controller
                    
         $this->render('modificarModalEmpresa',
                 array(
-                'empresa_original'=>$razonsocial,                
-                'empresa'=>new Empresa(),                   
-                'dataProviderEmpresas'=>$dataProviderEmpresas,
-                'histoasignacion'=>$histoasignacion)
+                'empresa_original'=>$id_suc,                
+                'sucursal'=>new Sucursal(),
+                'dataProviderSucursal'=>$dataProviderSucursal,
+                'histoasignacion'=>new Histoasignacion())
                 );
     }
     
-    public function actionModificarModalDispositivo($id_dis, $razonsocial){
+    public function actionModificarModalDispositivo($id_dis, $id_suc){
        date_default_timezone_set('UTC');
         
        $histoasignacion = new Histoasignacion;
         
-        $condition = new CDbCriteria();       
-        $condition->addCondition("id_dis='" . $id_dis . "' "); 
-        $condition->addCondition("razonsocial_emp='" . $razonsocial . "' ");        
-        $histoasignacion= Histoasignacion::model()->find($condition);
+        $histoasignacion= Histoasignacion::model()->findByAttributes(array('id_dis'=>$id_dis, 'id_suc'=>$id_suc));
         
         $dataProviderDispositivo = Dispositivo::model()->search();        
         $dataProviderDispositivo->setData(Histoasignacion::model()->getDispositivosDispoibles());
         
         if (isset($_POST['selectedDispositivo'])) {
+            
             try {
-                $histoasignacion->fecha_baja=date("Y" . "-" . "m" . "-" . "d");
+                $histoasignacion->fechaBaja=date("Y" . "-" . "m" . "-" . "d");                
                 
-
-                $array_dispositivo = (preg_split("/,/", $_POST['selectedDispositivo'][0]));                        
-               
                 $histoasignacionNEW = new Histoasignacion();            
-                $histoasignacionNEW->id_dis=$array_dispositivo[0];
-                $histoasignacionNEW->mac_dis=$array_dispositivo[1];            
-                $histoasignacionNEW->razonsocial_emp=$histoasignacion{'razonsocial_emp'};            
-                $histoasignacionNEW->cuit_emp=$histoasignacion{'cuit_emp'};            
-                $histoasignacionNEW->fecha_alta=$histoasignacion{'fecha_alta'};
-                $histoasignacionNEW->fecha_modif=date("Y" . "-" . "m" . "-" . "d");
-                $histoasignacionNEW->fecha_baja=date("1900" . "-" . "1" . "-" . "1");
-                $histoasignacionNEW->coord_lat=$histoasignacion{'coord_lat'};
-                $histoasignacionNEW->coord_lon=$histoasignacion{'coord_lon'};            
-                $histoasignacionNEW->observacion="Cambio de dispositivo: " . $_POST['Histoasignacion']['observacion'];
+                $histoasignacionNEW->id_dis=$_POST['selectedDispositivo'][0];                                
+                $histoasignacionNEW->id_suc=$histoasignacion{'id_suc'};            
+                $histoasignacionNEW->fechaAlta=$histoasignacion{'fechaAlta'};
+                $histoasignacionNEW->fechaModif=date("Y" . "-" . "m" . "-" . "d");
+                $histoasignacionNEW->fechaBaja=date("1900" . "-" . "1" . "-" . "1");
+                $histoasignacionNEW->coordLat=$histoasignacion{'coordLat'};
+                $histoasignacionNEW->coordLon=$histoasignacion{'coordLon'};            
+                $histoasignacionNEW->observacion="Cambio de dispositivo: " . $_POST['Histoasignacion']['observacion'];                
                 
                 $histoasignacionNEW->insert();
                 $histoasignacion->save();
-
+                 Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Dispositivo modificado ");                                                            
                 $this->redirect(array('modificar'));
             } catch (Exception $ex) {
                 Yii::app()->user->setFlash('error', $ex->getMessage());
@@ -226,23 +201,27 @@ class HistoasignacionController extends Controller
                 'dispositivo_original'=>$id_dis,                
                 'dispositivo'=>new Dispositivo(),                   
                 'dataProviderDispositivo'=>$dataProviderDispositivo,
-                'histoasignacion'=>$histoasignacion)
+                'histoasignacion'=>new Histoasignacion())
                 );
     }
   
-    public function actionEliminar($id, $razonsocial){
-        
+    public function actionEliminar($id_dis, $id_suc){
+        date_default_timezone_set('UTC');
         $histoasignacion=new Histoasignacion();
-        $condition = new CDbCriteria();
-        $condition->addCondition("id_dis='" . $id . "' "); 
-        $condition->addCondition("razonsocial_emp='" . $razonsocial . "' ");  
-        $histoasignacion=  Histoasignacion::model()->find($condition);
+        $newHistoAsignacion=new Histoasignacion();
+        $histoasignacion=  Histoasignacion::model()->findByAttributes(array('id_dis'=>$id_dis, 'id_suc'=>$id_suc));        
         try{
-            $histoasignacion->fecha_baja=date("Y" . "-" . "m" . "-" . "d");
-            $histoasignacion->fecha_modif=date("Y" . "-" . "m" . "-" . "d");
-            $histoasignacion->observacion="Registro eliminado";
-            $histoasignacion->save();
-            
+            $newHistoAsignacion->fechaAlta=$histoasignacion->fechaAlta;
+            $newHistoAsignacion->fechaModif=date("Y" . "-" . "m" . "-" . "d");
+            $newHistoAsignacion->fechaBaja=date("Y" . "-" . "m" . "-" . "d");
+            $newHistoAsignacion->coordLat = $histoasignacion->coordLat;
+            $newHistoAsignacion->coordLon = $histoasignacion->coordLon;
+            $newHistoAsignacion->id_dis = $id_dis;
+            $newHistoAsignacion->id_suc = $id_suc;
+            $newHistoAsignacion->observacion="Registro eliminado";                        
+            $histoasignacion->delete();
+            $newHistoAsignacion->insert();
+            Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Registro Eliminado ");                                                            
             $this->redirect(array('modificar'));
             
         } catch (Exception $ex) {
@@ -254,9 +233,11 @@ class HistoasignacionController extends Controller
         $this->render('modal');
     }
     public function actionList(){
+        $histoasignacion = new Histoasignacion();
+        
        $this->render('list',
                array(
-                'histoasignacion'=>new Histoasignacion())                
+                'histoasignacion'=>$histoasignacion)                
                 );
                
     }

@@ -50,7 +50,7 @@ return array(
                        
 			'rules'=>array(                            
                             'dispositivo/create/<id_dispositivo>/<ubic>'=>'dispositivo/create',                            
-                            'detalledispo/create/<mac>/<db>/<dist>/<fecha>/<hs>'=>'detalledispo/create',                            
+                            'detalledispo/create/<id>/<db>/<dist>/<fecha>/<hs>'=>'detalledispo/create',                            
 //                            'dispositivo/<id:\d+>/<txt>'=>'dispositivo/create',                            
                             'dispositivo/<id:\d+>'=>'dispositivo/create',
                             

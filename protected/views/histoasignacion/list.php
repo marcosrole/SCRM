@@ -10,21 +10,17 @@
                         array(
                             'name' => 'id_dis',
                             'header'=>'Dispositivo',                                                       
-                        ),
+                        ),                        
                         array(
-                            'name' => 'razonsocial_emp',
-                            'header'=>'Razon Social'
-                        ),                           
-                        array(
-                            'name' => 'fecha_alta',
+                            'name' => 'fechaAlta',
                             'header'=>'Fecha de Alta'
                         ),
                         array(
-                            'name' => 'fecha_modif',
+                            'name' => 'fechaModif',
                             'header'=>'Fecha de Modificacion'
                         ),
                         array(
-                            'name' => 'fecha_baja',
+                            'name' => 'fechaBaja',
                             'header'=>'Fecha de Baja'
                         ),
                         array(

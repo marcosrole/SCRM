@@ -1,34 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "empresa".
+ * This is the model class for table "sucursal".
  *
- * The followings are the available columns in table 'empresa':
- * @property string $cuit
- * @property string $razonsocial
- * @property integer $dni_per
- * @property string $tipo_dni_per
+ * The followings are the available columns in table 'sucursal':
+ * @property integer $id
+ * @property string $nombre
+ * @property string $cuit_emp
  * @property integer $id_dir
- * @property integer $altura_dir
- * @property string $calle_dir
  *
  * The followings are the available model relations:
- * @property Direccion $idDirDir
- * @property Direccion $alturaDir
- * @property Direccion $calleDir
- * @property Persona $dniPer
- * @property Persona $tipoDniPer
- * @property Histoasignacion[] $Histoasignacions
- * @property Histoasignacion[] $Histoasignacions1
+ * @property Histoasignacion[] $histoasignacions
+ * @property Direccion $idDir
+ * @property Empresa $cuitEmp
  */
-class Empresa extends CActiveRecord
+class Sucursal extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'empresa';
+		return 'sucursal';
 	}
 
 	/**
@@ -39,12 +32,12 @@ class Empresa extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cuit, razonsocial, dni_per', 'required'),
-			array('dni_per', 'numerical', 'integerOnly'=>true),
-			array('cuit, razonsocial', 'length', 'max'=>50),
+			array('nombre, cuit_emp, id_dir', 'required'),
+			array('id_dir', 'numerical', 'integerOnly'=>true),
+			array('nombre, cuit_emp', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cuit, razonsocial, dni_per', 'safe', 'on'=>'search'),
+			array('id, nombre, cuit_emp, id_dir', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +49,9 @@ class Empresa extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dueño' => array(self::BELONGS_TO, 'Persona', 'dni_per'),                        			
+			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id_suc'),
+			'direccion' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
+			'empresa' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp'),
 		);
 	}
 
@@ -66,9 +61,10 @@ class Empresa extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cuit' => 'Cuit',
-			'razonsocial' => 'Razonsocial',
-			'dni_per' => 'Dni Per',			
+			'id' => 'ID Sucursal',
+			'nombre' => 'Nombre de Sucursal',
+			'cuit_emp' => 'Cuit Emp',
+			'id_dir' => 'Id Dir',
 		);
 	}
 
@@ -87,13 +83,13 @@ class Empresa extends CActiveRecord
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
-                $sucursal=new Sucursal();
+
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('cuit',$this->cuit,true);
-		$criteria->compare('razonsocial',$this->razonsocial,true);
-		$criteria->compare('dni_per',$this->dni_per);		
-                $criteria->compare('id',$sucursal->id);		
+		$criteria->compare('id',$this->id);
+		$criteria->compare('nombre',$this->nombre,true);
+		$criteria->compare('cuit_emp',$this->cuit_emp,true);
+		$criteria->compare('id_dir',$this->id_dir);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,14 +100,18 @@ class Empresa extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Empresa the static model class
+	 * @return Sucursal the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-        public static function getListado(){
-            return Empresa::model()->findAll();
+        public static function getID($cuit){
+            $criterial = new CDbCriteria();
+            $criterial->condition="cuit_emp='" . $cuit . "' ";
+            $sucursal = Sucursal::model()->find($criterial);
+            var_dump($cuit);
+            var_dump($sucursal);
+            return $sucursal{'id'};            
         }
-        
 }

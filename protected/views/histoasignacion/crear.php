@@ -1,4 +1,19 @@
-
+<?php
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                'error' => array('closeText' => false),                
+            ),
+        ));
+?>
 
 
 <h1>Asignar Dispositivo</h1>
@@ -6,26 +21,26 @@
 <div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     
-    <h3>Empresas:</h3>
+    <h3>Empresas asociadas:</h3>
     
     <div class="campo">
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
-                    'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $dataProviderEmpresas,
-                    'filter' => $empresa,
+                    'id' => 'empresasAsociadas',
+                    'dataProvider' => $sucursal->search(),
+                    'filter' => $sucursal,
                     'columns' => array(                        
                         array(
-                            'name' => 'cuit',
-                            'header'=>'CUIT',
-                                                        
+                            'name' => 'cuit_emp',
+                            'header'=>'CUIT Empresa'
                         ),
                         array(
-                            'name' => 'razonsocial',
-                            'header'=>'Razon Social'
+                            'name' => 'nombre',
+                            'header'=>'Nombre Sucursal',                                                        
                         ),
                          array(
-                            'id' => 'selectedIds1',
+                            'header' => "",
+                            'id' => 'selectEmpresa',
                             'class' => 'CCheckBoxColumn',
                             'selectableRows' => 1, //Numero de filas que se pueden seleccionar
                         ),                        
@@ -33,14 +48,13 @@
                     
                 ));
                 
-            ?>
-        <?php echo $form->error($histasignacion,'cuit'); ?>
-        <?php echo $form->error($histasignacion,'razonsocial'); ?>
-        
+            ?>       
     </div>
     
+        <?php echo $form->error($histasignacion,'id_suc'); ?>
     
-    <h3>Dispositivos:</h3>
+    
+    <h3>Dispositivos disponibles:</h3>
     <div class="campo">
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
@@ -59,11 +73,11 @@
                         array(
                             'name' => 'funciona',
                             'header'=>'Funciona',
-                            'type'=>'boolean'
-                            
+                            'type'=>'boolean'                            
                         ),
                         array(
-                            'id' => 'selectedIds2',
+                            'header' => "",
+                            'id' => 'selectDispositivo',
                             'class' => 'CCheckBoxColumn',
                             'selectableRows' => 1, //Numero de filas que se pueden seleccionar
                         ),
@@ -78,33 +92,33 @@
         <div class="campo">
 		<?php echo $form->textFieldGroup(
 			$histasignacion,
-			'coord_lat',
+			'coordLat',
 			array(
 				'wrapperHtmlOptions' => array(
 					'class' => 'col-sm-5',
 				),                            
 			)
 		); ?>
-		<?php echo $form->error($histasignacion,'coord_lat'); ?>
+		<?php echo $form->error($histasignacion,'coordLat'); ?>
 	</div>
     
         <div class="campo">
 		<?php echo $form->textFieldGroup(
 			$histasignacion,
-			'coord_lon',
+			'coordLon',
 			array(
 				'wrapperHtmlOptions' => array(
 					'class' => 'col-sm-5',
 				),                            
 			)
 		); ?>
-		<?php echo $form->error($histasignacion,'coord_lon'); ?>
+		<?php echo $form->error($histasignacion,'coordLon'); ?>
 	</div>
     
         <div class="campo">
             <?php echo $form->datePickerGroup(
                    $histasignacion,
-                   'fecha_alta',
+                   'fechaAlta',
                    array(
                            'widgetOptions' => array(
                                    'options' => array(
@@ -113,12 +127,13 @@
                            ),
                            'wrapperHtmlOptions' => array(
                                    'class' => 'col-sm-5',
-                           ),
+                           ),    
+                       
                            'hint' => ' ',
                            'prepend' => '<i class="glyphicon glyphicon-calendar"></i>'
                    )
            ); ?>
-                <?php echo $form->error($histasignacion,'fecha_alta'); ?>
+                <?php echo $form->error($histasignacion,'fechaAlta'); ?>
         </div>
     
     <div class="boton">

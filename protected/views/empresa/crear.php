@@ -1,4 +1,23 @@
 <?php
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                'error' => array('closeText' => false),                
+            ),
+        ));
+        ?>
+
+
+<?php
+
 
 
 $this->breadcrumbs=array(
@@ -51,74 +70,7 @@ if($datos_guardados){
         
         <?php echo $form->error($empresa, 'cuit'); ?>
     </div>
-
-    <div class="row">
-        <?php
-        echo $form->textFieldGroup(
-                $direccion, 'calle', array(
-            'wrapperHtmlOptions' => array(
-                'class' => 'col-sm-5',
-            ),
-                )
-        );
-        ?>
-        <?php echo $form->error($direccion, 'calle'); ?>
-    </div>
-    <div class="row">
-        <?php
-        echo $form->textFieldGroup(
-                $direccion, 'altura', array(
-            'wrapperHtmlOptions' => array(
-                'class' => 'col-sm-5',
-            ),
-                )
-        );
-        ?>
-        <?php echo $form->error($direccion, 'altura'); ?>
-    </div>
-
-    <div class="row">
-        <?php
-        echo $form->textFieldGroup(
-                $direccion, 'piso', array(
-            'wrapperHtmlOptions' => array(
-                'class' => 'col-sm-5',
-            ),
-                )
-        );
-        ?>
-        <?php echo $form->error($direccion, 'piso'); ?>
-    </div>
-    <div class="row">
-        <?php
-        echo $form->textFieldGroup(
-                $direccion, 'depto', array(
-            'wrapperHtmlOptions' => array(
-                'class' => 'col-sm-5',
-            ),
-                )
-        );
-        ?>
-        <?php echo $form->error($direccion, 'depto'); ?>
-    </div>
     
-    <div class="row">
-        <?php echo $form->dropDownListGroup(
-			$localidad,
-			'id',
-			array(
-				'wrapperHtmlOptions' => array(
-					'class' => 'col-sm-5',
-				),
-				'widgetOptions' => array(
-					'data' => $lista_localidades,
-					'htmlOptions' => array(),
-				)
-			)
-		); ?>
-                <?php echo $form->error($localidad,'id'); ?>
-    
-    </div>
    
     <h3>Datos del dueño</h3>
     
@@ -161,14 +113,26 @@ if($datos_guardados){
     <div class="row">
         <?php
         echo $form->textFieldGroup(
-                $persona, 'nom_ape', array(
+                $persona, 'nombre', array(
             'wrapperHtmlOptions' => array(
                 'class' => 'col-sm-5',
             ),
                 )
         );
         ?>
-        <?php echo $form->error($persona, 'nom_ape'); ?>
+        <?php echo $form->error($persona, 'nombre'); ?>
+    </div>
+    <div class="row">
+        <?php
+        echo $form->textFieldGroup(
+                $persona, 'apellido', array(
+            'wrapperHtmlOptions' => array(
+                'class' => 'col-sm-5',
+            ),
+                )
+        );
+        ?>
+        <?php echo $form->error($persona, 'apellido'); ?>
     </div>
     
     
@@ -187,9 +151,8 @@ if($datos_guardados){
 			)
 		); ?>
                 <?php echo $form->error($persona,'tipo_dni'); ?>
-	</div>
-
-        <div class="row">
+    
+                <div class="row">
             <?php
             echo $form->textFieldGroup(
                     $persona, 'cuil', array(
@@ -201,6 +164,115 @@ if($datos_guardados){
             ?>
             <?php echo $form->error($persona, 'cuil'); ?>
         </div>
+    
+        <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                            $direccion, 'calle', array(
+                        'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                        ),
+                            )
+                    );
+                    ?>
+                    <?php echo $form->error($direccion, 'calle'); ?>
+                </div>
+                <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                            $direccion, 'altura', array(
+                        'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                        ),
+                            )
+                    );
+                    ?>
+                    <?php echo $form->error($direccion, 'altura'); ?>
+                </div>
+
+                <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                            $direccion, 'piso', array(
+                        'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                        ),
+                            )
+                    );
+                    ?>
+                    <?php echo $form->error($direccion, 'piso'); ?>
+                </div>
+                <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                            $direccion, 'depto', array(
+                        'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                        ),
+                            )
+                    );
+                    ?>
+                    <?php echo $form->error($direccion, 'depto'); ?>
+                </div>
+
+                <div class="row">
+                    <?php
+                    echo $form->dropDownListGroup(
+                            $localidad, 'id', array(
+                        'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                        ),
+                        'widgetOptions' => array(
+                            'data' => $lista_localidades,
+                            'htmlOptions' => array(),
+                        )
+                            )
+                    );
+                    ?>
+                    
+                    </div>
+
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+                    $persona, 'telefono', array(
+                'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',
+                ),
+                    )
+            );
+            ?>
+            <?php echo $form->error($persona, 'telefono'); ?>
+        </div>
+
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+                    $persona, 'celular', array(
+                'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',
+                ),
+                    )
+            );
+            ?>
+            <?php echo $form->error($persona, 'celular'); ?>
+        </div>
+
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+                    $persona, 'email', array(
+                'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',
+                ),
+                    )
+            );
+            ?>
+            <?php echo $form->error($persona, 'email'); ?>
+        </div>
+	</div>
+
+        
 
     <div class="boton">
        <?php $this->widget('booster.widgets.TbButton', 

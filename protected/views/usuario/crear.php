@@ -7,6 +7,11 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
+        <style>
+            .form .row{
+                text-transform: capitalize;
+            }
+        </style>
         <title></title>
     </head>
     <body>
@@ -17,122 +22,164 @@ and open the template in the editor.
             'events' => array(),
             'htmlOptions' => array(),
             'userComponentId' => 'user',
-            'alerts' => array( // configurations per alert type
+            'alerts' => array(// configurations per alert type
                 // success, info, warning, error or danger
                 'success' => array('closeText' => '&times;'),
                 'info', // you don't need to specify full config
                 'warning' => array('closeText' => false),
-                'error' => array('closeText' => false),                
+                'error' => array('closeText' => false),
             ),
         ));
         ?>
-        
+
         <?php
-        $this->breadcrumbs=array(
-	'Usuario'=>array('/usuario'),
-	'Crear',
-        );
+            $this->breadcrumbs = array(
+                'Usuario' => array('/usuario'),
+            'Crear',
+            );
         ?>
-        
+
         <h1>Añadir Usuario</h1>
-        
+
         <div class="form">    
-            <?php $form = $this->beginWidget('booster.widgets.TbActiveForm', array('id' => 'verticalForm',)); ?>
-            <div class="row">
-                    <?php
-                    echo $form->textFieldGroup(
-                            $usuario, 'name', array(
-                        'wrapperHtmlOptions' => array(
-                            'class' => 'col-sm-5',
-                        ),
-                            )
+            <?php $form = $this->beginWidget('booster.widgets.TbActiveForm', array ('id' =>  'verticalForm',)); ?>
+                <div class="row">
+                    <?php echo $form->textFieldGroup(
+                    $usuario, 'name', array(
+                      'style' => 'text-transform: uppercase',
+                      'wrapperHtmlOptions' => array('class' => 'col-sm-5', ),
+                    )
                     );
                     ?>
                     <?php echo $form->error($usuario, 'name'); ?>
-            </div>
-            <div class="row">
+                </div>
+                <div class="row">
                     <?php
                     echo $form->textFieldGroup(
-                            $usuario, 'pass', array(
-                        'wrapperHtmlOptions' => array(
-                            'class' => 'col-sm-5',
-                        ),
-                            )
-                    );
+                    $usuario, 'pass', array (
+                        'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),
+                        )
+                        );
                     ?>
                     <?php echo $form->error($usuario, 'pass'); ?>
                 </div>            
-            
 
-             <div class="row">
+                <?php
+                echo $form->radioButtonListGroup(
+                $usuario, 'nivel', array (
+        'widgetOptions' => array(
+                 'data' =>  array(
+                'Administrador',
+                'Jefe de Inspectores',
+                )
+                )
+                )
+                );
+                ?>
 
-                        <?php echo $form->dropDownListGroup(
-                                $persona,
-                                'tipo_dni',
-                                array(
-                                        'wrapperHtmlOptions' => array(
-                                                'class' => 'col-sm-5',
-                                        ),
-                                        'widgetOptions' => array(
-                                                'data' => array('DNI','LE','LC'),
-                                                'htmlOptions' => array(),
-                                        )
-                                )
-                        ); ?>
-                        <?php echo $form->error($persona,'tipo_dni'); ?>
+                <div class="row">
+
+                    <?php
+                    echo $form->dropDownListGroup(
+                    $persona, 'tipo_dni', array   (
+                'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',
+                    ),
+                    'widgetOptions' => array( 'data' => array('DNI', 'LE', 'LC'),
+            'htmlOptions' => array(),
+                    )                          )
+                    );
+                    ?>
+                    <?php echo $form->error($persona, 'tipo_dni'); ?>
                 </div>
 
-            <div class="row">            
-                <?php
-                echo $form->textFieldGroup(
-                        $persona, 'dni', array(
-                            'hint' => 'Check keyboard layout',
-                            'widgetOption' => 'Checsdasadut',      
-
-
-                         'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
-                    ),
+                <div class="row">            
+                    <?php
+                    echo $form->textFieldGroup(
+                    $persona, 'dni', array (
+            'hint' => 'Check keyboard layout',
+                    'widgetOption'  =>  'Checsdasadut',
+             'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',          ),
                     'width' => '40',
-                        )
-                );
-                ?>
-                <?php echo $form->error($persona, 'dni'); ?>
-            </div> 
+                    )
+                    );
+                    ?>
+                    <?php echo $form->error($persona, 'dni'); ?>
+                </div> 
 
-            <div class="row">
-                <?php
-                echo $form->textFieldGroup(
-                        $persona, 'nom_ape', array(
-                    'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
-                    ),
-                        )
+                <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                    $persona, 'nombre', array (
+                    'wrapperHtmlOptions'  =>  array(
+                'class' => 'col-sm-5',
+                ),
+                )
                 );
                 ?>
-                <?php echo $form->error($persona, 'nom_ape'); ?>
-            </div>
-
-            <div class="row">
-                <?php
-                echo $form->textFieldGroup(
-                        $direccion, 'calle', array(
-                    'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
-                    ),
-                        )
-                );
-                ?>
-                <?php echo $form->error($direccion, 'calle'); ?>
+                <?php echo $form->error($persona, 'nombre'); ?>
             </div>
             <div class="row">
                 <?php
                 echo $form->textFieldGroup(
-                        $direccion, 'altura', array(
-                    'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
+                $persona, 'apellido', array (
+                    'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5',
                     ),
-                        )
+                    )
+                    );
+                    ?>
+                    <?php echo $form->error($persona, 'apellido'); ?>
+                </div>
+
+
+                    <?php
+                    echo $form->dropDownListGroup(
+                    $persona, 'sexo', array(
+            'wrapperHtmlOptions' => array(
+            'class' => 'col-sm-5', ),
+            'widgetOptions' => array(
+            'data' => array('M', 'F'),
+            'htmlOptions' => array(),
+            )
+                    )
+                    );
+                    ?>
+                <?php  echo $form->error($persona, 'tipo_dni'); ?>
+
+                <div class="row">
+                <?php
+                echo $form->textFieldGroup(
+                $persona, 'cuil', array(
+                'wrapperHtmlOptions' =>  array(
+        'class' => 'col-sm-5',
+        ),
+        )
+        );
+                ?>
+                            <?php echo $form->error($persona, 'cuil'); ?> 
+                        </div>
+
+                        <div class="row">
+                            <?php
+                            echo $form->textFieldGroup(
+                            $direccion, 'calle', array(
+                            'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                    ),
+            )
+            );
+            ?>
+            <?php echo $form->error($direccion, 'calle'); ?> 
+        </div>
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+                    $direccion, 'altura', 
+                    array(
+                        'style' => 'text-transform: uppercase',
+                        'wrapperHtmlOptions' => array('class' => 'col-sm-5',),
+                    )
                 );
                 ?>
                 <?php echo $form->error($direccion, 'altura'); ?>
@@ -141,102 +188,96 @@ and open the template in the editor.
             <div class="row">
                 <?php
                 echo $form->textFieldGroup(
-                        $direccion, 'piso', array(
-                    'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
-                    ),
-                        )
-                );
-                ?>
-                <?php echo $form->error($direccion, 'piso'); ?>
-            </div>
-            <div class="row">
-                <?php
-                echo $form->textFieldGroup(
-                        $direccion, 'depto', array(
-                    'wrapperHtmlOptions' => array(
-                        'class' => 'col-sm-5',
-                    ),
-                        )
-                );
-                ?>
-                <?php echo $form->error($direccion, 'depto'); ?>
-            </div>
-
-            <div class="row">
-                <?php echo $form->dropDownListGroup(
-                                $localidad,
-                                'id',
-                                array(
-                                        'wrapperHtmlOptions' => array(
-                                                'class' => 'col-sm-5',
-                                        ),
-                                        'widgetOptions' => array(
-                                                'data' => $lista_localidades,
-                                                'htmlOptions' => array(),
-                                        )
-                                )
-                        ); ?>
-                        <?php echo $form->error($localidad,'id'); ?>
-
-            </div>
-            <div class="row">
-                <?php echo $form->dropDownListGroup(
-                                $persona,
-                                'sexo',
-                                array(
-
-                                        'wrapperHtmlOptions' => array(
-                                                'class' => 'col-sm-5',
-                                        ),
-                                        'widgetOptions' => array(
-                                                'data' => array('M','F'),
-                                                'htmlOptions' => array(),
-                                        )
-                                )
-                        ); ?>
-                        <?php echo $form->error($persona,'tipo_dni'); ?>
-            </div>
-                
-                <div class="row">
-                    <?php
-                    echo $form->textFieldGroup(
-                            $persona, 'cuil', array(
-                        'wrapperHtmlOptions' => array(
-                            'class' => 'col-sm-5',
-                        ),
-                            )
+                $direccion, 'piso', array (
+            'wrapperHtmlOptions' => array(
+            'class' => 'col-sm-5',
+            ),
+                    )
                     );
                     ?>
-                    <?php echo $form->error($persona, 'cuil'); ?>
+                    <?php  echo $form ->error($direccion, 'piso'); ?>
                 </div>
-        
                 <div class="row">
                     <?php
                     echo $form->textFieldGroup(
-                            $persona, 'telefono', array(
-                        'wrapperHtmlOptions' => array(
-                            'class' => 'col-sm-5',
-                        ),
-                            )
+                    $direccion, 'depto', array(
+            'wrapperHtmlOptions' => array(
+                     'class' => 'col-sm-5',
+            ),
+            )
+            );
+            ?>
+            <?php echo $form->error($direccion, 'depto'); ?>  
+                </div>
+
+                <div class="row">
+                    <?php
+                    echo $form->dropDownListGroup(
+                    $localidad, 'id', array(
+                'wrapperHtmlOptions' => array(
+                    'class' => 'col-sm-5',
+            ),
+            'widgetOptions' => array(
+            'data' => $lista_localidades,
+                    'htmlOptions' =>  array(),
+            )
+            )
+            );
+            ?>
+
+        </div>
+
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+            $persona, 'telefono', array(
+                    'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5',
+                    ),
+                    )
                     );
                     ?>
                     <?php echo $form->error($persona, 'telefono'); ?>
                 </div>
 
-            <div class="boton">
-               <?php $this->widget('booster.widgets.TbButton', 
-                        array(
-                            'label' => 'Cargar',
-                            'context' => 'success',
-                            'buttonType'=>'submit', 
-                            )); 
-                ?>
-            </div>
-
-            <?php $this->endWidget(); ?>
+                <div class="row">
+                    <?php
+                    echo $form->textFieldGroup(
+                    $persona, 'celular', array (
+            'wrapperHtmlOptions' => array(
+            'class' => 'col-sm-5',
+            ),
+            )
+            );
+            ?>
+            <?php echo $form->error($persona, 'celular'); ?>
         </div>
-        
-        
+
+        <div class="row">
+            <?php
+            echo $form->textFieldGroup(
+            $persona, 'email', array(
+            'wrapperHtmlOptions' => array(
+                    'class' =>  'col-sm-5',
+                    ),                         )
+                    );
+                    ?>
+                    <?php echo $form->error($persona, 'email'); ?>
+                </div>
+
+
+
+                <div class="boton">
+                    <?php
+                    $this->widget('booster.widgets.TbButton', array(
+            'label' => 'Cargar', 'context' => 'success',
+            'buttonType' => 'submit',
+            ));
+            ?>
+        </div>
+
+            <?php $this->endWidget(); ?>        
+        </div>
+
+
     </body>
 </html>

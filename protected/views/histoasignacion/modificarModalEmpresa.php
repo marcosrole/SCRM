@@ -15,28 +15,25 @@
 </head>
 
 <?php
-    foreach(Yii::app()->user->getFlashes() as $key => $message) {
-        echo '  <div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span class="sr-only">Error:</span>
-                ERROR: El sistema no funciona correctamente.
-                </div>';
-        echo '<div class="flash-' . $key . '">' . $message . "</div>\n";        
-    }
-?>
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                'error' => array('closeText' => false),                
+            ),
+        ));
+        ?>
 
 
-<div class="modal-header" style="padding:35px 50px;">    
-    <h4><span class="glyphicon glyphicon-pencil"></span> Modificar</h4>
-    
-    
-    
-</div>
 
-
-<div class="modal-body" style="padding:35px 50px;">
-    <div class="form">    
-    <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
+<?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     <div class="label_original">
         <h2>Empresa: <?php echo $empresa_original ?> </h2>            
     </div>
@@ -44,16 +41,16 @@
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'empresa-grid-list',
-                    'dataProvider' => $dataProviderEmpresas,                    
-                    'filter' => $empresa,
+                    'dataProvider' => $dataProviderSucursal,                 
+                    'filter' => $sucursal,
                     'columns' => array(                        
                         array(
-                            'name' => 'cuit',
+                            'name' => 'cuit_emp',
                             'header'=>'CUIT',                                                        
                         ),
                         array(
-                            'name' => 'razonsocial',
-                            'header'=>'Razon Social'
+                            'name' => 'nombre',
+                            'header'=>'Sucursal'
                         ),
                          array(
                             'id' => 'selectedEmpresa',
@@ -92,10 +89,3 @@
         ?>        
     </div>
     <?php $this->endWidget(); ?>    
-</div>
-</div>
-
-<div class="modal-footer" style="padding:35px 50px;">
-    
-</div>
-
