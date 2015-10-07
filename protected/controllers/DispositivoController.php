@@ -259,6 +259,7 @@ class DispositivoController extends Controller {
             $condition = new CDbCriteria();
             $condition = "id='" . $id . "' ";
             DetalleDispo::model()->deleteAll($condition);
+            Histoasignacion::model()->deleteAllByAttributes(array('id_dis'=>$id));
                 $condition = "id='" . $id . "' ";
                 if(Dispositivo::model()->deleteAll($condition)){
                     $transaction->commit();

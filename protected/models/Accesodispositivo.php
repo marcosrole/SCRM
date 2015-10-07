@@ -1,14 +1,27 @@
 <?php
 
-
-class DetalleDispo extends CActiveRecord
+/**
+ * This is the model class for table "accesodispositivo".
+ *
+ * The followings are the available columns in table 'accesodispositivo':
+ * @property integer $id
+ * @property string $fechaUltimo
+ * @property string $hsUltimo
+ * @property integer $id_detDis
+ * @property integer $id_dis_detDis
+ *
+ * The followings are the available model relations:
+ * @property DetalleDispo $idDetDis
+ * @property DetalleDispo $idDisDetDis
+ */
+class Accesodispositivo extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'detalle_dispo';
+		return 'accesodispositivo';
 	}
 
 	/**
@@ -19,13 +32,11 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_dis, db, distancia, fecha, hs', 'required'),
-			array('id_dis,db,distancia', 'numerical', 'integerOnly'=>true),
-			array('db, distancia', 'numerical'),
-			array('', 'length', 'max'=>50),
+			array('fechaUltimo, hsUltimo, id_detDis, id_dis_detDis', 'required'),
+			array('id_detDis, id_dis_detDis', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, id, db, distancia, fecha, hs', 'safe', 'on'=>'search'),
+			array('id, fechaUltimo, hsUltimo, id_detDis, id_dis_detDis', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -37,7 +48,8 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),			
+			'idDetDis' => array(self::BELONGS_TO, 'DetalleDispo', 'id_detDis'),
+			'idDisDetDis' => array(self::BELONGS_TO, 'DetalleDispo', 'id_dis_detDis'),
 		);
 	}
 
@@ -47,12 +59,11 @@ class DetalleDispo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dis' => 'ID Dispositivo',
-			'id' => 'ID Detalle Dispositivo',			
-			'db' => 'dB',
-			'distancia' => 'Distancia',
-			'fecha' => 'Fecha',
-			'hs' => 'Hs',
+			'id' => 'ID',
+			'fechaUltimo' => 'Fecha Ultimo',
+			'hsUltimo' => 'Hs Ultimo',
+			'id_detDis' => 'Id Det Dis',
+			'id_dis_detDis' => 'Id Dis Det Dis',
 		);
 	}
 
@@ -74,17 +85,13 @@ class DetalleDispo extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id',$this->id);		
-		$criteria->compare('db',$this->db);
-		$criteria->compare('distancia',$this->distancia);
-		$criteria->compare('fecha',$this->fecha,true);
-		$criteria->compare('hs',$this->hs,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('fechaUltimo',$this->fechaUltimo,true);
+		$criteria->compare('hsUltimo',$this->hsUltimo,true);
+		$criteria->compare('id_detDis',$this->id_detDis);
+		$criteria->compare('id_dis_detDis',$this->id_dis_detDis);
 
 		return new CActiveDataProvider($this, array(
-                        'pagination' => array(
-                             'pageSize' => 25,
-                        ),
 			'criteria'=>$criteria,
 		));
 	}
@@ -93,13 +100,9 @@ class DetalleDispo extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return DetalleDispo the static model class
+	 * @return Accesodispositivo the static model class
 	 */
-        
-        public static function validarDatos(){
-            $calibracion;
-        }
-        public static function model($className=__CLASS__)
+	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}

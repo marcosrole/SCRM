@@ -1,40 +1,25 @@
 <?php
-        $this->widget('booster.widgets.TbAlert', array(
-            'fade' => true,
-            'closeText' => '&times;', // false equals no close link
-            'events' => array(),
-            'htmlOptions' => array(),
-            'userComponentId' => 'user',
-            'alerts' => array( // configurations per alert type
-                // success, info, warning, error or danger
-                'success' => array('closeText' => '&times;'),
-                'info', // you don't need to specify full config
-                'warning' => array('closeText' => false),
-                'error' => array('closeText' => false),                
-            ),
-        ));
-        ?>
-
-
-<?php
-
-
-
-$this->breadcrumbs=array(
-	'Detalle Dispos'=>array('index'),
-	'Create',
-);
-
-$this->menu=array(
-	array('label'=>'Cargar Detalles', 'url'=>array('DetalleDispo/create')),
-	array('label'=>'Administrar Dispositivos', 'url'=>array('Dispositivo/admin')),
-);
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));
 ?>
 
 <?php
-if($datos_guardados){
-    echo "Datos guardados con exito";    
-}
+$this->menu=array(
+	array('label'=>'Cargar Detalles', 'url'=>array('DetalleDispo/create')),	
+        array('label'=>'Listar Dispositivos', 'url'=>array('Dispositivo/list')),
+);
 ?>
 
 <h1>Nuevo Dispositivo</h1>

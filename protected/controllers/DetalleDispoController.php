@@ -35,6 +35,17 @@ class DetalleDispoController extends Controller
                 if ($model->insert()) { //Si se guardo Correctamente.. insert() devuelve un boolean 
                     Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> El registro del dispositivo: " . $_GET['id'] . " se guardo corectamente");                                                
                     $transaction->commit();
+                    
+                    //Cargo la table ACCESO DISPOSITIVO
+                    $AccesoDispo = new Accesodispositivo();
+                    Accesodispositivo::model()->deleteAllByAttributes(array('id_dis_detDis'=>$_GET['id']));
+                    $AccesoDispo->fechaUltimo=$_GET['fecha'];
+                    $AccesoDispo->hsUltimo=$_GET['hs'];
+                    $AccesoDispo->id_detDis=$model{'id'};
+                    $AccesoDispo->id_dis_detDis=$_GET['id'];
+                    
+                    $AccesoDispo->insert();
+                    
                 }
             } else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios");}
         }

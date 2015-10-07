@@ -1,14 +1,25 @@
 <?php
 
-
-class DetalleDispo extends CActiveRecord
+/**
+ * This is the model class for table "asignarpermiso".
+ *
+ * The followings are the available columns in table 'asignarpermiso':
+ * @property integer $id
+ * @property integer $id_usr
+ * @property integer $id_per
+ *
+ * The followings are the available model relations:
+ * @property Usuario $idUsr
+ * @property Permiso $idPer
+ */
+class Asignarpermiso extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'detalle_dispo';
+		return 'asignarpermiso';
 	}
 
 	/**
@@ -19,13 +30,11 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_dis, db, distancia, fecha, hs', 'required'),
-			array('id_dis,db,distancia', 'numerical', 'integerOnly'=>true),
-			array('db, distancia', 'numerical'),
-			array('', 'length', 'max'=>50),
+			array('id_usr, id_per', 'required'),
+			array('id_usr, id_per', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, id, db, distancia, fecha, hs', 'safe', 'on'=>'search'),
+			array('id, id_usr, id_per', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -37,7 +46,8 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),			
+			'idUsr' => array(self::BELONGS_TO, 'Usuario', 'id_usr'),
+			'idPer' => array(self::BELONGS_TO, 'Permiso', 'id_per'),
 		);
 	}
 
@@ -47,12 +57,9 @@ class DetalleDispo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dis' => 'ID Dispositivo',
-			'id' => 'ID Detalle Dispositivo',			
-			'db' => 'dB',
-			'distancia' => 'Distancia',
-			'fecha' => 'Fecha',
-			'hs' => 'Hs',
+			'id' => 'ID',
+			'id_usr' => 'Id Usr',
+			'id_per' => 'Id Per',
 		);
 	}
 
@@ -74,17 +81,11 @@ class DetalleDispo extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id',$this->id);		
-		$criteria->compare('db',$this->db);
-		$criteria->compare('distancia',$this->distancia);
-		$criteria->compare('fecha',$this->fecha,true);
-		$criteria->compare('hs',$this->hs,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('id_usr',$this->id_usr);
+		$criteria->compare('id_per',$this->id_per);
 
 		return new CActiveDataProvider($this, array(
-                        'pagination' => array(
-                             'pageSize' => 25,
-                        ),
 			'criteria'=>$criteria,
 		));
 	}
@@ -93,14 +94,16 @@ class DetalleDispo extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return DetalleDispo the static model class
+	 * @return Asignarpermiso the static model class
 	 */
-        
-        public static function validarDatos(){
-            $calibracion;
-        }
-        public static function model($className=__CLASS__)
+	public static function getPermisos()
 	{
-		return parent::model($className);
+            $permisos = Permiso::model()->findAll();
+            $array_permisos = array();
+            
+            foreach ($permisos as $key=>$value){
+                $array_permisos[]=$value{'titulo'};
+            }
+                return $array_permisos;
 	}
 }

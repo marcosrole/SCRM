@@ -111,6 +111,16 @@ class Usuario extends CActiveRecord
             return $usuario{'dni_per'};
             
         }
+        public static function getArrayUsuarios()
+	{
+            $usuarios = Usuario::model()->findAll();
+            $array_usuarios = array();
+            
+            foreach ($usuarios as $key=>$value){
+                $array_usuarios[$value{'id'}]=$value{'name'};
+            }
+                return $array_usuarios;
+	}
 
         /**
 	 * Returns the static model of the specified AR class.

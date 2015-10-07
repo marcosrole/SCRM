@@ -29,7 +29,7 @@ $this->menu=array(
 );
 ?>
 
-http://localhost/SCRM/DetalleDispo/create/00:13:49:00:01:02/99/0/2015-03-22/2:00:00
+http://localhost/SCRM/DetalleDispo/create/901/62/1/2015-03-22/2:00:00
 
 <h1>Crear Registro</h1>
 

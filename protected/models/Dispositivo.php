@@ -53,8 +53,7 @@ class Dispositivo extends CActiveRecord
 		return array(
 			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id'),
 			'detalleDispos1' => array(self::HAS_MANY, 'DetalleDispo', 'mac_dis'),
-			'Histoasignacions2' => array(self::HAS_MANY, 'Histoasignacion', 'id'),
-			'Histoasignacions1' => array(self::HAS_MANY, 'Histoasignacion', 'mac_dis'),
+			'Histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id'),			
 		);
 	}
 
@@ -146,5 +145,11 @@ class Dispositivo extends CActiveRecord
         public static function deleteDisp($id){
             Dispositivo::model()->deleteAll(array('id'=>$id));
             return $existe;
+        }
+        /**
+         * 
+         */
+        public static function disponible(){            
+            var_dump(Histoasignacion::model()->findAll());
         }
 }

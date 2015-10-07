@@ -26,6 +26,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Cargar Detalles', 'url'=>array('DetalleDispo/create')),	
         array('label'=>'Listar Dispositivos', 'url'=>array('Dispositivo/list')),
+        array('label'=>'Calibrar Dispositivo', 'url'=>array('Calibracion/create?id_disp=')),
 );
 ?>
 
