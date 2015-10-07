@@ -95,7 +95,7 @@ class Usuario extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('pass',$this->pass,true);
 		$criteria->compare('dni_per',$this->dni_per);
-                $criteria->compare('permiso',$this->permiso);
+                $criteria->compare('nivel',$this->nivel);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -111,6 +111,22 @@ class Usuario extends CActiveRecord
             return $usuario{'dni_per'};
             
         }
+        
+        public static function darPermiso($nivel, $id_usr){
+            switch ($nivel){
+                case 0:
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 1);
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 2);
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 3);
+                    break;
+                case 1:
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 1);
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 2);
+                    break;
+            }
+        }
+
+
         public static function getArrayUsuarios()
 	{
             $usuarios = Usuario::model()->findAll();

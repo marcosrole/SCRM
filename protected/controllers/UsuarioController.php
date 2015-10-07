@@ -4,7 +4,7 @@ class UsuarioController extends Controller
 {
     public function actionList(){
      $usuario = new Usuario();     
-     $this->render('list', array('usuario'=>$usuario));
+     $this->render('view', array('usuario'=>$usuario));
     }  
     
     public function actionAdminUsuarios(){
@@ -12,47 +12,23 @@ class UsuarioController extends Controller
      $this->render('adminusuarios', array('usuario'=>$usuario));
     }  
     
-    public function actionModificar($name, $pass)
+    public function actionUpdate($id)
     {
-        if( (isset($_POST['Usuario']['name'])=='') ){
-            try {
-                $transaction = Yii::app()->db->beginTransaction();
-                $criterial = new CDbCriteria();
-                $criterial->addCondition("name='".$name."'");
-                $usuario = Usuario::model()->find($criterial);
-//                $usuario = Usuario::model()->findByAttributes(array(
-//                    'name' => $name
-//                ));
-                $usuario->pass=$_POST['Usuario']['pass'];              
-
-                if($usuario->validate()){
-                    $usuario->save();
-                    $transaction->commit(); 
-                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos actualizados ");                                                
-                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos ");}
-            } catch (Exception $ex) {
-                Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
-            }
-        }
-              
         $usuario = new Usuario();
+        $usuario=  Usuario::model()->findByAttributes(array('id'=>$id));        
+        if (isset($_POST['Usuario'])){
+            $usuario->attributes=$_POST['Usuario'];           
+            $usuario->save();
+            Yii::app()->user->setFlash('success', "<strong>Acualización!</strong> Contraseña modificada "); 
+            
+            $this->redirect('list',array('usuario'=>new Usuario()));
+        }
         
-        if( Yii::app()->request->isAjaxRequest )
-            {
-            $criterial =new CDbCriteria();
-            $criterial->condition="name='" . $name . "' ";
-            $usuario=  Usuario::model()->find($criterial);
-
-            $this->renderPartial('_ModalModificar',array(
-                'usuario'=>$usuario,
-            ), false, true);
-        }
-        else
-        {
-            $this->render('list',array(
-                'usuario'=>$usuario
-            ));
-        }
+        $usuario=  Usuario::model()->findByAttributes(array('id'=>$id));        
+        $this->render('update',array(
+            'usuario'=>$usuario
+        ));
+        
     }
     
     public function action_ModalModificar()
@@ -80,7 +56,7 @@ class UsuarioController extends Controller
     }
 
 
-    public function actionCrear()
+    public function actionCreate()
 	{
             
             $persona = new Persona();
@@ -132,8 +108,10 @@ class UsuarioController extends Controller
                                 $usuario->save();                            
                                 Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
                                 $transaction->commit(); 
-                               // sleep(18000);
-                                $this->redirect('crear');
+                                //Generar los permisos por default
+                                $usuario->darPermiso($usuario{'nivel'}, $usuario{'id'});                               
+                                
+                                $this->redirect('create');
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Ya existe usuario con el mismo nombre");}                                                                            
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                                                
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios");}                                                
@@ -144,7 +122,7 @@ class UsuarioController extends Controller
                 Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
             }
             
-            $this->render('crear',
+            $this->render('create',
                     array(
                         'usuario'=>$usuario,
                         'persona'=>$persona,

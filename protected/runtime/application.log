@@ -24116,3 +24116,699 @@ in C:\wamp\www\SCRM\index.php (13)
 2015/10/06 15:42:03 [warning] [application] Failed to set unsafe attribute "coordLon" of "Histoasignacion".
 in C:\wamp\www\SCRM\protected\controllers\HistoasignacionController.php (47)
 in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 14:23:17 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in C:\wamp\www\yii\framework\web\CController.php:336
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('create')
+#9 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('Calibracion/cre...')
+#10 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#11 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/SCRM/Calibracion/create
+HTTP_REFERER=http://localhost/SCRM/index.php
+---
+2015/10/07 14:24:20 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in C:\wamp\www\yii\framework\web\CController.php:336
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('create')
+#9 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('Calibracion/cre...')
+#10 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#11 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/SCRM/Calibracion/create
+HTTP_REFERER=http://localhost/SCRM/Calibracion/create
+---
+2015/10/07 14:25:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "permisos".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('permisos')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('permisos')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/permiso...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/permisos
+HTTP_REFERER=http://localhost/SCRM/usuario/crear
+---
+2015/10/07 14:25:48 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in C:\wamp\www\yii\framework\web\CController.php:336
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#2 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('asignarpermiso/...')
+#5 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#6 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#7 {main}
+REQUEST_URI=/SCRM/asignarpermiso/crear
+---
+2015/10/07 14:25:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "create".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('create')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('create')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('asignarpermiso/...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/asignarpermiso/create
+---
+2015/10/07 14:27:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "permisos".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('permisos')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('permisos')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/permiso...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/permisos
+HTTP_REFERER=http://localhost/SCRM/asignarpermiso/ver
+---
+2015/10/07 14:27:34 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\list.php(35): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('list', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(7): CController->render('list', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/list')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/list
+HTTP_REFERER=http://localhost/SCRM/asignarpermiso/ver
+---
+2015/10/07 14:27:41 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\adminUsuarios.php(46): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('adminusuarios', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(12): CController->render('adminusuarios', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionAdminUsuarios()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('adminusuarios')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/adminus...')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/adminusuarios
+HTTP_REFERER=http://localhost/SCRM/asignarpermiso/ver
+---
+2015/10/07 14:28:07 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\adminUsuarios.php(46): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('adminusuarios', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(12): CController->render('adminusuarios', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionAdminUsuarios()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('adminusuarios')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/adminus...')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/adminusuarios
+HTTP_REFERER=http://localhost/SCRM/Calibracion/update?id=1
+---
+2015/10/07 15:11:38 [error] [exception.CException] exception 'CException' with message 'UsuarioController cannot find the requested view "crear".' in C:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('crear', Array, true)
+#1 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(156): CController->render('crear', Array)
+#2 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionCreate()
+#3 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('create')
+#7 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/create')
+#8 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#9 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/SCRM/usuario/create
+---
+2015/10/07 15:25:09 [error] [php] Undefined variable: permisosUsuario (C:\wamp\www\SCRM\protected\views\permisosusuario\create.php:38)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(869): PermisosusuarioController->renderFile()
+#1 C:\wamp\www\yii\framework\web\CController.php(782): PermisosusuarioController->renderPartial()
+#2 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(35): PermisosusuarioController->render()
+#3 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisosusuarioController->actionView()
+#4 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): PermisosusuarioController->runAction()
+#6 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\wamp\www\yii\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): PermisosusuarioController->filterAccessControl()
+#9 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\wamp\www\yii\framework\web\CController.php(265): PermisosusuarioController->runActionWithFilters()
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): PermisosusuarioController->run()
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/permisosusuario/view
+in C:\wamp\www\SCRM\protected\views\permisosusuario\create.php (38)
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (35)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 15:34:16 [error] [php] Undefined variable: model (C:\wamp\www\SCRM\protected\views\permisosusuario\view.php:7)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(869): PermisosusuarioController->renderFile()
+#1 C:\wamp\www\yii\framework\web\CController.php(782): PermisosusuarioController->renderPartial()
+#2 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(43): PermisosusuarioController->render()
+#3 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisosusuarioController->actionList()
+#4 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): PermisosusuarioController->runAction()
+#6 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\wamp\www\yii\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): PermisosusuarioController->filterAccessControl()
+#9 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\wamp\www\yii\framework\web\CController.php(265): PermisosusuarioController->runActionWithFilters()
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): PermisosusuarioController->run()
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/permisosusuario/list
+in C:\wamp\www\SCRM\protected\views\permisosusuario\view.php (7)
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (43)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 15:34:40 [error] [exception.CException] exception 'CException' with message 'CActiveDataProvider and its behaviors do not have a method or closure named "getValidators".' in C:\wamp\www\yii\framework\base\CComponent.php:266
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\helpers\CHtml.php(2435): CComponent->__call('getValidators', Array)
+#1 C:\wamp\www\yii\framework\web\helpers\CHtml.php(2435): CActiveDataProvider->getValidators('id')
+#2 C:\wamp\www\yii\framework\web\helpers\CHtml.php(1533): CHtml::activeInputField('text', Object(CActiveDataProvider), 'id', Array)
+#3 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbDataColumn.php(119): CHtml::activeTextField(Object(CActiveDataProvider), 'id', Array)
+#4 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbDataColumn.php(78): TbDataColumn->renderFilterCellContent()
+#5 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(538): TbDataColumn->renderFilterCell()
+#6 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(516): CGridView->renderFilter()
+#7 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(486): CGridView->renderTableHeader()
+#8 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(181): CGridView->renderItems()
+#9 [internal function]: CBaseListView->renderSection(Array)
+#10 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(164): preg_replace_callback('/{(\\w+)}/', Array, '{summary}\n{item...')
+#11 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(149): CBaseListView->renderContent()
+#12 C:\wamp\www\yii\framework\web\CBaseController.php(181): CBaseListView->run()
+#13 C:\wamp\www\SCRM\protected\views\permisosusuario\view.php(40): CBaseController->widget('booster.widgets...', Array)
+#14 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#15 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#16 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#17 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#18 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(43): CController->render('view', Array)
+#19 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisosusuarioController->actionList()
+#20 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#21 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#22 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#23 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#24 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#25 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#26 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#27 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#28 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#29 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#30 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#31 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#32 {main}
+REQUEST_URI=/SCRM/permisosusuario/list
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/view
+---
+2015/10/07 15:35:06 [error] [exception.CException] exception 'CException' with message 'Property "Permisosusuario.titulo" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('titulo')
+#1 C:\wamp\www\yii\framework\web\helpers\CHtml.php(2728): CActiveRecord->__get('titulo')
+#2 C:\wamp\www\yii\framework\web\helpers\CHtml.php(2451): CHtml::resolveValue(Object(Permisosusuario), 'titulo')
+#3 C:\wamp\www\yii\framework\web\helpers\CHtml.php(1533): CHtml::activeInputField('text', Object(Permisosusuario), 'titulo', Array)
+#4 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbDataColumn.php(119): CHtml::activeTextField(Object(Permisosusuario), 'titulo', Array)
+#5 C:\wamp\www\SCRM\protected\extensions\booster\widgets\TbDataColumn.php(78): TbDataColumn->renderFilterCellContent()
+#6 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(538): TbDataColumn->renderFilterCell()
+#7 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(516): CGridView->renderFilter()
+#8 C:\wamp\www\yii\framework\zii\widgets\grid\CGridView.php(486): CGridView->renderTableHeader()
+#9 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(181): CGridView->renderItems()
+#10 [internal function]: CBaseListView->renderSection(Array)
+#11 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(164): preg_replace_callback('/{(\\w+)}/', Array, '{summary}\n{item...')
+#12 C:\wamp\www\yii\framework\zii\widgets\CBaseListView.php(149): CBaseListView->renderContent()
+#13 C:\wamp\www\yii\framework\web\CBaseController.php(181): CBaseListView->run()
+#14 C:\wamp\www\SCRM\protected\views\permisosusuario\view.php(40): CBaseController->widget('booster.widgets...', Array)
+#15 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#16 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#17 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#18 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#19 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(43): CController->render('view', Array)
+#20 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisosusuarioController->actionList()
+#21 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#22 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#23 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#24 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#25 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#26 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#27 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#28 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#29 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#30 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#31 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#32 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#33 {main}
+REQUEST_URI=/SCRM/permisosusuario/list
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/view
+---
+2015/10/07 15:35:53 [error] [exception.CException] exception 'CException' with message 'Property "Permiso.nombre" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('nombre')
+#1 C:\wamp\www\SCRM\protected\models\Permiso.php(92): CActiveRecord->__get('nombre')
+#2 C:\wamp\www\SCRM\protected\views\permisosusuario\view.php(24): Permiso->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(43): CController->render('view', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisosusuarioController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#13 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#14 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#18 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#19 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#20 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/SCRM/permisosusuario/list
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/view
+---
+2015/10/07 15:38:59 [error] [exception.CException] exception 'CException' with message 'Property "Permiso.nombre" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('nombre')
+#1 C:\wamp\www\SCRM\protected\models\Permiso.php(92): CActiveRecord->__get('nombre')
+#2 C:\wamp\www\SCRM\protected\views\permiso\view.php(24): Permiso->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\PermisoController.php(28): CController->render('view', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): PermisoController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#13 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#14 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#18 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permiso/list')
+#19 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#20 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/SCRM/permiso/list
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/view
+---
+2015/10/07 15:43:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "crear".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('crear')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/crear
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/view
+---
+2015/10/07 15:43:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "crear".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('crear')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/crear
+HTTP_REFERER=http://localhost/SCRM/usuario/crear
+---
+2015/10/07 15:43:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "crear".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('crear')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/crear
+HTTP_REFERER=http://localhost/SCRM/usuario/crear
+---
+2015/10/07 15:44:46 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\list.php(35): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('list', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(7): CController->render('list', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/list')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/list
+HTTP_REFERER=http://localhost/SCRM/Calibracion/update?id=1
+---
+2015/10/07 15:53:08 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\view.php(15): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(7): CController->render('view', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/list')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/list
+---
+2015/10/07 15:54:18 [error] [exception.CException] exception 'CException' with message 'Property "Usuario.permiso" is not defined.' in C:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(145): CComponent->__get('permiso')
+#1 C:\wamp\www\SCRM\protected\models\Usuario.php(98): CActiveRecord->__get('permiso')
+#2 C:\wamp\www\SCRM\protected\views\usuario\view.php(15): Usuario->search()
+#3 C:\wamp\www\yii\framework\web\CBaseController.php(126): require('C:\\wamp\\www\\SCR...')
+#4 C:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\wamp\\www\\SCR...', Array, true)
+#5 C:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('C:\\wamp\\www\\SCR...', Array, true)
+#6 C:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#7 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(7): CController->render('view', Array)
+#8 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): UsuarioController->actionList()
+#9 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#11 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('list')
+#13 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/list')
+#14 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#15 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/SCRM/usuario/list
+---
+2015/10/07 16:02:38 [error] [php] Undefined variable: name (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#7 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:03:31 [error] [php] Undefined variable: name (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#7 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:04:00 [error] [php] Undefined variable: name (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#7 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:04:01 [error] [php] Undefined variable: name (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#7 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:04:03 [error] [php] Undefined variable: name (C:\wamp\www\SCRM\protected\controllers\UsuarioController.php:22)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#5 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#7 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (22)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:04:17 [error] [php] Undefined variable: calibracion (C:\wamp\www\SCRM\protected\views\usuario\update.php:7)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(869): UsuarioController->renderFile()
+#1 C:\wamp\www\yii\framework\web\CController.php(782): UsuarioController->renderPartial()
+#2 C:\wamp\www\SCRM\protected\controllers\UsuarioController.php(23): UsuarioController->render()
+#3 unknown(0): UsuarioController->actionUpdate()
+#4 C:\wamp\www\yii\framework\web\actions\CAction.php(109): ReflectionMethod->invokeArgs()
+#5 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#6 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 C:\wamp\www\yii\framework\web\CController.php(286): UsuarioController->runAction()
+#8 C:\wamp\www\yii\framework\web\CController.php(265): UsuarioController->runActionWithFilters()
+#9 C:\wamp\www\yii\framework\web\CWebApplication.php(282): UsuarioController->run()
+#10 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#12 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/usuario/update?id=12
+in C:\wamp\www\SCRM\protected\views\usuario\update.php (7)
+in C:\wamp\www\SCRM\protected\controllers\UsuarioController.php (23)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:08:09 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in C:\wamp\www\yii\framework\web\CController.php:336
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#2 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('update')
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/update')
+#5 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#6 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#7 {main}
+REQUEST_URI=/SCRM/usuario/update
+HTTP_REFERER=http://localhost/SCRM/usuario/update?id=12
+---
+2015/10/07 16:08:24 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in C:\wamp\www\yii\framework\web\CController.php:336
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 C:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#2 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#3 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('update')
+#4 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/update')
+#5 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#6 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#7 {main}
+REQUEST_URI=/SCRM/usuario/update
+HTTP_REFERER=http://localhost/SCRM/usuario/update?id=12
+---
+2015/10/07 16:14:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "ver".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('ver')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('ver')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/permisosusuario/ver
+HTTP_REFERER=http://localhost/SCRM/asignarpermiso/ver
+---
+2015/10/07 16:14:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "ver".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('ver')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('ver')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/permisosusuario/ver
+HTTP_REFERER=http://localhost/SCRM/asignarpermiso/ver
+---
+2015/10/07 16:21:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "crear".' in C:\wamp\www\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\CController.php(270): CController->missingAction('crear')
+#1 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#2 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('usuario/crear')
+#3 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#4 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/SCRM/usuario/crear
+HTTP_REFERER=http://localhost/SCRM/usuario/create
+---
+2015/10/07 16:23:49 [error] [php] Undefined offset: 0 (C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php:28)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): PermisosusuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#4 C:\wamp\www\yii\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#5 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): PermisosusuarioController->filterAccessControl()
+#6 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#7 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#8 C:\wamp\www\yii\framework\web\CController.php(265): PermisosusuarioController->runActionWithFilters()
+#9 C:\wamp\www\yii\framework\web\CWebApplication.php(282): PermisosusuarioController->run()
+#10 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#12 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/permisosusuario/crear/name/
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (28)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:24:03 [error] [php] Undefined offset: 0 (C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php:28)
+Stack trace:
+#0 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): PermisosusuarioController->runAction()
+#3 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#4 C:\wamp\www\yii\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#5 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): PermisosusuarioController->filterAccessControl()
+#6 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#7 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#8 C:\wamp\www\yii\framework\web\CController.php(265): PermisosusuarioController->runActionWithFilters()
+#9 C:\wamp\www\yii\framework\web\CWebApplication.php(282): PermisosusuarioController->run()
+#10 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#12 C:\wamp\www\SCRM\index.php(13): CWebApplication->run()
+REQUEST_URI=/SCRM/permisosusuario/crear/name/
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (28)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:47:56 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1).
+in C:\wamp\www\SCRM\protected\models\Permisosusuario.php (103)
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (44)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:47:56 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1)' in C:\wamp\www\yii\framework\db\CDbCommand.php:358
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1080): CDbCommand->execute()
+#1 C:\wamp\www\SCRM\protected\models\Permisosusuario.php(103): CActiveRecord->insert()
+#2 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(44): Permisosusuario::GenerarPermiso('13', '0')
+#3 [internal function]: PermisosusuarioController->actionCrear('rolemarcos')
+#4 C:\wamp\www\yii\framework\web\actions\CAction.php(109): ReflectionMethod->invokeArgs(Object(PermisosusuarioController), Array)
+#5 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermisosusuarioController), Object(ReflectionMethod), Array)
+#6 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#7 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#15 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#16 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#17 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/SCRM/permisosusuario/crear/name/rolemarcos
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/crear/name/rolemarcos
+---
+2015/10/07 16:50:15 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1).
+in C:\wamp\www\SCRM\protected\models\Permisosusuario.php (103)
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (46)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:50:15 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1)' in C:\wamp\www\yii\framework\db\CDbCommand.php:358
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1080): CDbCommand->execute()
+#1 C:\wamp\www\SCRM\protected\models\Permisosusuario.php(103): CActiveRecord->insert()
+#2 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(46): Permisosusuario::GenerarPermiso('13', '0')
+#3 [internal function]: PermisosusuarioController->actionCrear('rolemarcos')
+#4 C:\wamp\www\yii\framework\web\actions\CAction.php(109): ReflectionMethod->invokeArgs(Object(PermisosusuarioController), Array)
+#5 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermisosusuarioController), Object(ReflectionMethod), Array)
+#6 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#7 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#15 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#16 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#17 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/SCRM/permisosusuario/crear/name/rolemarcos
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/crear/name/rolemarcos
+---
+2015/10/07 16:52:33 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1).
+in C:\wamp\www\SCRM\protected\models\Permisosusuario.php (103)
+in C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php (44)
+in C:\wamp\www\SCRM\index.php (13)
+2015/10/07 16:52:33 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`scrm`.`permisosusuario`, CONSTRAINT `permisosusuario_ibfk_2` FOREIGN KEY (`id_per`) REFERENCES `permiso` (`id`)). The SQL statement executed was: INSERT INTO `permisosusuario` (`id_usr`, `id_per`) VALUES (:yp0, :yp1)' in C:\wamp\www\yii\framework\db\CDbCommand.php:358
+Stack trace:
+#0 C:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1080): CDbCommand->execute()
+#1 C:\wamp\www\SCRM\protected\models\Permisosusuario.php(103): CActiveRecord->insert()
+#2 C:\wamp\www\SCRM\protected\controllers\PermisosusuarioController.php(44): Permisosusuario::GenerarPermiso('13', '0')
+#3 [internal function]: PermisosusuarioController->actionCrear('rolemarcos')
+#4 C:\wamp\www\yii\framework\web\actions\CAction.php(109): ReflectionMethod->invokeArgs(Object(PermisosusuarioController), Array)
+#5 C:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermisosusuarioController), Object(ReflectionMethod), Array)
+#6 C:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#7 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 C:\wamp\www\yii\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\wamp\www\yii\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\wamp\www\yii\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\wamp\www\yii\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\wamp\www\yii\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('crear')
+#15 C:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('permisosusuario...')
+#16 C:\wamp\www\yii\framework\base\CApplication.php(184): CWebApplication->processRequest()
+#17 C:\wamp\www\SCRM\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/SCRM/permisosusuario/crear/name/rolemarcos
+HTTP_REFERER=http://localhost/SCRM/permisosusuario/crear/name/rolemarcos
+---

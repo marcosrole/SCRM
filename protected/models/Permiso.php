@@ -5,15 +5,12 @@
  *
  * The followings are the available columns in table 'permiso':
  * @property integer $id
- * @property string $nombre
- * @property integer $dni_per_usu
- * @property string $name_usu
- * @property string $pass_usu
+ * @property string $titulo
+ * @property string $descripcion
  *
  * The followings are the available model relations:
- * @property Usuario $dniPerUsu
- * @property Usuario $nameUsu
- * @property Usuario $passUsu
+ * @property Asignarpermiso[] $asignarpermisos
+ * @property Permisosusuario[] $permisosusuarios
  */
 class Permiso extends CActiveRecord
 {
@@ -33,12 +30,11 @@ class Permiso extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, nombre, dni_per_usu, name_usu, pass_usu', 'required'),
-			array('id, dni_per_usu', 'numerical', 'integerOnly'=>true),
-			array('nombre, name_usu, pass_usu', 'length', 'max'=>20),
+			array('titulo', 'required'),
+			array('titulo, descripcion', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, dni_per_usu, name_usu, pass_usu', 'safe', 'on'=>'search'),
+			array('id, titulo, descripcion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,9 +46,8 @@ class Permiso extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dniPerUsu' => array(self::BELONGS_TO, 'Usuario', 'dni_per_usu'),
-			'nameUsu' => array(self::BELONGS_TO, 'Usuario', 'name_usu'),
-			'passUsu' => array(self::BELONGS_TO, 'Usuario', 'pass_usu'),
+			'asignarpermisos' => array(self::HAS_MANY, 'Asignarpermiso', 'id_per'),
+			'permisosusuarios' => array(self::HAS_MANY, 'Permisosusuario', 'id_per'),
 		);
 	}
 
@@ -63,10 +58,8 @@ class Permiso extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
-			'dni_per_usu' => 'Dni Per Usu',
-			'name_usu' => 'Name Usu',
-			'pass_usu' => 'Pass Usu',
+			'titulo' => 'Titulo',
+			'descripcion' => 'Descripcion',
 		);
 	}
 
@@ -89,10 +82,8 @@ class Permiso extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('nombre',$this->nombre,true);
-		$criteria->compare('dni_per_usu',$this->dni_per_usu);
-		$criteria->compare('name_usu',$this->name_usu,true);
-		$criteria->compare('pass_usu',$this->pass_usu,true);
+		$criteria->compare('titulo',$this->titulo,true);
+		$criteria->compare('descripcion',$this->descripcion,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

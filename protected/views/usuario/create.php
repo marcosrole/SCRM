@@ -1,45 +1,36 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            .form .row{
-                text-transform: capitalize;
-            }
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <?php
+<?php
+/* @var $this CalibracionController */
+/* @var $model Calibracion */
+
+$this->breadcrumbs=array(
+	'Calibracions'=>array('index'),
+	'Create',
+);
+
+$this->menu=array(
+	array('label'=>'Listar Calibraciones', 'url'=>array('list')),
+);
+?>
+
+<?php
         $this->widget('booster.widgets.TbAlert', array(
             'fade' => true,
             'closeText' => '&times;', // false equals no close link
             'events' => array(),
             'htmlOptions' => array(),
             'userComponentId' => 'user',
-            'alerts' => array(// configurations per alert type
+            'alerts' => array( // configurations per alert type
                 // success, info, warning, error or danger
                 'success' => array('closeText' => '&times;'),
                 'info', // you don't need to specify full config
                 'warning' => array('closeText' => false),
-                'error' => array('closeText' => false),
+                
             ),
         ));
-        ?>
+?>
 
-        <?php
-            $this->breadcrumbs = array(
-                'Usuario' => array('/usuario'),
-            'Crear',
-            );
-        ?>
 
-        <h1>Añadir Usuario</h1>
+<h1>Añadir Usuario</h1>
 
         <div class="form">    
             <?php $form = $this->beginWidget('booster.widgets.TbActiveForm', array ('id' =>  'verticalForm',)); ?>
@@ -277,7 +268,3 @@ and open the template in the editor.
 
             <?php $this->endWidget(); ?>        
         </div>
-
-
-    </body>
-</html>

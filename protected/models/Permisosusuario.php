@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "asignarpermiso".
+ * This is the model class for table "permisosusuario".
  *
- * The followings are the available columns in table 'asignarpermiso':
+ * The followings are the available columns in table 'permisosusuario':
  * @property integer $id
  * @property integer $id_usr
  * @property integer $id_per
@@ -12,14 +12,14 @@
  * @property Usuario $idUsr
  * @property Permiso $idPer
  */
-class Asignarpermiso extends CActiveRecord
+class Permisosusuario extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'asignarpermiso';
+		return 'permisosusuario';
 	}
 
 	/**
@@ -94,9 +94,17 @@ class Asignarpermiso extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Asignarpermiso the static model class
+	 * @return Permisosusuario the static model class
 	 */
-	public static function getPermisos()
+        public static function GenerarPermiso($id_usr, $id_permi){
+            $permiso = new Permisosusuario();
+            $permiso->id_usr=$id_usr;
+            $permiso->id_per=$id_permi;            
+            $permiso->insert();
+            var_dump($permiso);
+            die();
+        }
+        public static function getPermisos()
 	{
             $permisos = Permiso::model()->findAll();
             $array_permisos = array();
@@ -105,5 +113,9 @@ class Asignarpermiso extends CActiveRecord
                 $array_permisos[]=$value{'titulo'};
             }
                 return $array_permisos;
+	}
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
 	}
 }

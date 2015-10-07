@@ -45,6 +45,7 @@
                                 array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'Dispositivo/create'),
                                 array('label' => 'Ver', 'url' => Yii::app()->homeUrl . 'Dispositivo/list'),
                                 array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
+                                array('label' => 'Calibrar', 'url' => Yii::app()->homeUrl . 'calibracion/create?id_disp'),
                             )
                         ),
                         array(
@@ -79,8 +80,8 @@
 //                            'visible' => !Yii::app()->user->isGuest,
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/crear'),
-                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . 'usuario/permisos'),
+                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),
+                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . 'permisosusuario/view'),
                                 '----------',
                                 array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/list'),
 //                                array(
