@@ -15,11 +15,20 @@
         ));
 ?>
 
-
-<h1>Asignar Dispositivo</h1>
+<?php
+$this->menu=array(
+	array('label'=>'Listar Empresas', 'url'=>array('list')),
+	array('label'=>'Administrar Empresas', 'url'=>array('admin')),
+        array('label'=>'Crear Sucursal', 'url'=>array('sucursal/create')),
+);
+?>
 
 <div class="form">    
-    <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
+    <h1>Asignar Dispositivo</h1>
+    <?php $form = $this->beginWidget('booster.widgets.TbActiveForm',array(
+                'id' => 'UsuarioForm',
+                'htmlOptions' => array('class' => 'well'), )); ?>
+            
     
     <h3>Empresas asociadas:</h3>
     
@@ -127,8 +136,7 @@
                            ),
                            'wrapperHtmlOptions' => array(
                                    'class' => 'col-sm-5',
-                           ),    
-                       
+                           ),                       
                            'hint' => ' ',
                            'prepend' => '<i class="glyphicon glyphicon-calendar"></i>'
                    )
@@ -145,7 +153,7 @@
                     )); 
         ?>        
     </div>
-
     <?php $this->endWidget(); ?>
+    
 </div>
 

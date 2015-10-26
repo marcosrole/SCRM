@@ -55,6 +55,15 @@ class CalibracionController extends Controller
 			'calibracion'=>$this->loadModel($id),
 		));
 	}
+        public function actionEliminar($id)
+	{            
+            $calibracion=$this->loadModel($id);
+            $calibracion->delete();
+
+            $this->render('list',array(
+                'calibracion'=>new Calibracion(),
+                )); 
+	}
 
 	/**
      * Creates a new model.
@@ -65,23 +74,45 @@ class CalibracionController extends Controller
         $calibracion = new Calibracion();
         if (isset($_POST['Calibracion'])) {
             $calibracion->attributes = $_POST['Calibracion'];
-            $calibracion->id_dis=$_GET['id_disp'];
-            
+            $calibracion->id_dis=$_GET['id_disp'];            
             $histoasignacion = new Histoasignacion();
             $histoasignacion = Histoasignacion::model()->findAllByAttributes(array('id_dis'=>$_GET['id_disp'],'fechaBaja'=>'1900-01-01'));
             $calibracion->id_suc=$histoasignacion[0]['id_suc'];
             
-            if($calibracion->validate()){               
-                if ($calibracion->save())
-                    $this->redirect(array('view', 'id' => $calibracion->id));
-            }            
+            
+            if(Calibracion::model()->exists('id_dis=' . $calibracion{'id_dis'} . ' AND id_suc=' . $calibracion{'id_suc'} .  ' ' )){
+                    $modeloCalibracion = Calibracion::model()->findByAttributes(
+                    array(                      
+                        'id_dis'=>$calibracion{'id_dis'},
+                        'id_suc'=>$calibracion{'id_suc'}));
+                    $modeloCalibracion->db_permitido= $calibracion{'db_permitido'};
+                    $modeloCalibracion->dist_permitido= $calibracion{'dist_permitido'};
+            
+                    if($calibracion->validate()){                                
+                        if ($modeloCalibracion->save()) $this->redirect(array('view', 'id' => $modeloCalibracion->id));
+                    }          
+            }else {
+                if($calibracion->validate()){                                
+                    if ($calibracion->insert())
+                        $this->redirect(array('view', 'id' => $calibracion->id));
+                }                
+            }
+                        
         }        
         if ($_GET['id_disp'] != '') { //Si NO viene vacio...
             //Verifico cual es la sucursal en la que se encuentra instalado actualmente
             $histoasignacion = new Histoasignacion();
             $histoasignacion = Histoasignacion::model()->findAllByAttributes(array('id_dis'=>$_GET['id_disp'],'fechaBaja'=>'1900-01-01'));
             $calibracion->id_suc=$histoasignacion[0]['id_suc'];
-             Yii::app()->user->setFlash('info', "<strong>Dispositivo seleccionado:</strong> " .  $_GET['id_disp']);                                                           
+            
+            //Si el dispositivo ya se enceuntra calibrado, cargo los datos actuales.          
+            $calibracion_aux=Calibracion::model()->findByAttributes(array('id_suc'=>$calibracion{'id_suc'}));
+            if ($calibracion_aux){
+                $calibracion->db_permitido=$calibracion_aux{'db_permitido'};
+                $calibracion->dist_permitido=$calibracion_aux{'dist_permitido'};
+            }
+            
+            Yii::app()->user->setFlash('info', "<strong>Dispositivo seleccionado:</strong> " .  $_GET['id_disp']);                                                           
         }
         
         //Listo todos los dispisitivos que estan asigandos actualmente
@@ -108,16 +139,21 @@ class CalibracionController extends Controller
 	public function actionUpdate($id)
 	{
 		$calibracion=$this->loadModel($id);
-                
+                $model = new Calibracion();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-//		if(isset($_POST['Calibracion']))
-//		{
-//			$model->attributes=$_POST['Calibracion'];
-//			if($model->save())
-//				$this->redirect(array('view','id'=>$model->id));
-//		}
+		if(isset($_POST['Calibracion']))
+		{
+                    $model->attributes=$_POST['Calibracion'];
+                    
+                    $calibracion->db_permitido=$model{'db_permitido'};
+                    $calibracion->dist_permitido=$model{'dist_permitido'};
+                    if($calibracion->validate()){
+                        if($calibracion->save())
+                            $this->redirect(array('view','id'=>$calibracion->id));
+                    }                    
+		}
 
 		$this->render('update',array(
 			'calibracion'=>$calibracion,

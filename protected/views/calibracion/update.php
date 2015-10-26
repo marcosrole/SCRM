@@ -44,7 +44,6 @@ $this->menu=array(
             <?php echo $form->textFieldGroup($calibracion,'dist_permitido',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
 	</div>
 
-
 	<div class="row buttons">
             <?php $this->widget('booster.widgets.TbButton', array('label' => 'Actualizar', 'context' => 'success','buttonType'=>'submit',));         ?> 
 	</div>

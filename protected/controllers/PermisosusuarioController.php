@@ -20,6 +20,9 @@ class PermisosusuarioController extends Controller
 	}
         public function actionCrear($name)
 	{
+//            ************NO FUNCIONA**************
+//            AL MOMENTO DE ELIMINAR TODOS LOS PERMISOS DE UN USUARIO, NO LOS ELIMINA
+        
             $permisosUsuario = new Permisosusuario();            
             $permisosDelUsuario = new Permisosusuario();
             
@@ -27,7 +30,7 @@ class PermisosusuarioController extends Controller
             $permisosDelUsuario=$permisosDelUsuario->findAllByAttributes(array('id_usr'=>$usuario[0]['id']));           
             $array_prmisoDelUsuario=array();
             foreach ($permisosDelUsuario as $key=>$value){
-                $array_prmisoDelUsuario[]=(int)$value{'id_per'}-1;
+                $array_prmisoDelUsuario[]=(int)$value{'id_per'};
             }
             
             $permisosUsuario->id_per=$array_prmisoDelUsuario;
@@ -36,39 +39,29 @@ class PermisosusuarioController extends Controller
             $array_permisos=$permisosUsuario->getPermisos();            
             $array_usuarios=  Usuario::model()->getArrayUsuarios();
             $transaction = Yii::app()->db->beginTransaction();
-            if(isset($_POST['Permisosusuario'])){
-               //Elimino todos los permisos del Usuario               
-               Permisosusuario::model()->deleteAllByAttributes(array('id_usr'=>$usuario[0]['id']));               
+            if(isset($_POST['Permisosusuario'])){                
+               //Elimino todos los permisos del Usuario                                             
+                $permisoUsuario = new Permisosusuario();
+                foreach ($permisosDelUsuario as $key=>$value){
+                    $permisoUsuario=$value;
+                    $permisoUsuario->delete();
+                }
+               
                //Genero los nuevos permisos para el Usuario
-               foreach ($_POST['Permisosusuario']['id_per'] as $key=>$value){                   
+               foreach ($_POST['Permisosusuario']['id_per'] as $key=>$value){                           
                    Permisosusuario::model()->GenerarPermiso($usuario[0]['id'], $value);
                }
                $transaction->commit();
-               $this->redirect(Yii::app()->createUrl("permiso/istByUsr", array("id_usr"=>$usuario[0]['id'])));
-               
+               Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Permisos modificados con exito");                                                
+               $this->redirect(Yii::app()->createUrl("permisosusuario/crear?name=" . $_GET['name']));
+                
             }
             $usuario_seleccionado = $_GET['name'];            
-            $this->render('create', array(
+            $this->render('view', array(
                 'permisosUsuario' => $permisosUsuario,
                 'array_permiso' => $array_permisos,
                 'array_usuarios' => $array_usuarios,
                 'usuario_seleccionado'=>$usuario_seleccionado,
-            ));
-	}
-
-	public function actionView()
-	{            
-            $permisosUsuario = new Permisosusuario();                       
-            $array_permisos=$permisosUsuario->getPermisos();            
-            $array_usuarios=  Usuario::model()->getArrayUsuarios();
-            if(isset($_POST['Permisosusuario'])){
-                var_dump($_POST['Permisosusuario']);
-            }
-             
-            $this->render('create', array(
-                'permisosUsuario' => $permisosUsuario,
-                'array_permiso' => $array_permisos,
-                'array_usuarios' => $array_usuarios,
             ));
 	}
         

@@ -17,19 +17,7 @@ $this->menu=array(
                     'id' => 'dispositivo-grid-list',
                     'dataProvider' => $calibracion->search(),
                     'filter' => $calibracion,
-                    'columns' => array(
-                        array(
-                            'name' => 'id',
-                            'header'=>'ID'
-                        ),
-                        array(
-                            'name' => 'db_permitido',
-                            'header'=>'dB Permitido'
-                        ),
-                        array(
-                            'name' => 'dist_permitido',
-                            'header'=>'Distancia Permitido'
-                        ),
+                    'columns' => array(                        
                         array(
                             'name' => 'id_dis',
                             'header'=>'ID Dispositivo'
@@ -38,6 +26,14 @@ $this->menu=array(
                             'name' => 'id_suc',
                             'header'=>'ID Sucursal'
                         ),
+                        array(
+                            'name' => 'db_permitido',
+                            'header'=>'dB Permitido'
+                        ),
+                        array(
+                            'name' => 'dist_permitido',
+                            'header'=>'Distancia Permitido'
+                        ),                        
                         array(
                             'class' => 'booster.widgets.TbButtonColumn',
                            // 'htmlOptions' => array('width' => '10'), //ancho de la columna

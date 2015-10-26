@@ -20,6 +20,12 @@
 
     <body>
         <?php
+//        $self="http://".$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI']; //obtengo la URL donde estoy
+//        header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
+
+        $usuario = new Usuario();
+        $usuario=Usuario::model()->find();
+        
         $this->widget(
                 'booster.widgets.TbNavbar', array(
             'type' => 'inverse',
@@ -53,8 +59,8 @@
                             'label' => 'Empresa',
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Añadir', 'url' => Yii::app()->homeUrl . 'empresa/crear'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'empresa/modificar'),
+                                array('label' => 'Añadir', 'url' => Yii::app()->homeUrl . 'empresa/create'),
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'empresa/admin'),
                                 array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
                                 '--------------------------',
                                 array('label' => 'Añadir Sucursal', 'url' => Yii::app()->homeUrl . 'sucursal/crear'),
@@ -80,10 +86,10 @@
 //                            'visible' => !Yii::app()->user->isGuest,
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),
-                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . 'permisosusuario/view'),
+                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),                                
+                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . "permisosusuario/crear?name=" . $usuario{'name'}),
                                 '----------',
-                                array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/list'),
+                                array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/index'),
 //                                array(
 //                                    'label' => 'Ver', 
 //                                    'url' => '#',
@@ -91,18 +97,25 @@
 //                                        array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/list'),
 //                                        )
 //                                    ),                                  
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'usuario/adminusuarios'),
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'usuario/admin'),
                             )
                         ),
+                        
+                      
                         array(
                             'label' => 'Login',
                             'url' => Yii::app()->homeUrl,
                             'visible' => Yii::app()->user->isGuest),
-                        'htmlOptions' => array('class' => 'pull-right'),
+                            'htmlOptions' => array('class' => 'pull-right'),
                         array(
                             'label' => 'Logout (' . Yii::app()->user->name . ')',
                             'url' => array('/site/logout'),
                             'visible' => !Yii::app()->user->isGuest),
+                        array(
+                            'label' => 'Alarma (' . Alarma::model()->count() . ')',
+                            'url' => array('/alarma/admin'),
+                            //'visible' => !Yii::app()->user->isGuest),
+                            ),
                     ),
                 ),
             ),

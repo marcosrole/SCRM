@@ -136,11 +136,10 @@ class Histoasignacion extends CActiveRecord
             $array_datos_mapa = array(); // [id => direccion]
             
             $criterial = new CDbCriteria();            
-            foreach ($nodisponibles as $key=>$value){
-                $criterial->condition=("cuit='" . $value{'cuit_emp'} . "'");                
-                $empresa = new Empresa();
-                $empresa = Empresa::model()->find($criterial);                
-                $array_datos_mapa[]=[$value{'id_dis'}, $value{'coord_lat'}, $value{'coord_lon'}, ($empresa{'calle_dir'} . "" . $empresa{'altura_dir'} . " ")];                                        
+            foreach ($nodisponibles as $key=>$value){                
+                $sucursal = Sucursal::model()->findByAttributes(array('id'=>$value{'id_suc'}));
+                $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                $array_datos_mapa[]=[$value{'id_dis'}, $value{'coordLat'}, $value{'coordLon'}, ($direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'})];                                        
             }
             
             return $array_datos_mapa;

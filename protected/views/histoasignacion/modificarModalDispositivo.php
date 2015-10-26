@@ -1,19 +1,3 @@
-<head>  
-  <style>
-  .modal-header, h4, .close {
-      background-color: #19A3FF;
-      color:white !important;
-      text-align: center;
-      font-size: 30px;
-      
-  }
-  .modal-footer {
-      background-color: #19A3FF;
-      
-  }
-  </style>
-</head>
-
 <?php
     foreach(Yii::app()->user->getFlashes() as $key => $message) {
         echo '  <div class="alert alert-danger" role="alert">
@@ -25,20 +9,7 @@
     }
 ?>
 
-
-
-
-
-<div class="modal-header" style="padding:35px 50px;">    
-    <h4><span class="glyphicon glyphicon-pencil"></span> Modificar</h4>
-    
-    
-    
-</div>
-
-
-<div class="modal-body" style="padding:35px 50px;">
-    <div class="form">    
+<div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     <div class="label_original">
         <h2>Dispositivo: <?php echo $dispositivo_original ?> </h2>            
@@ -95,10 +66,5 @@
         ?>        
     </div>
     <?php $this->endWidget(); ?>    
-</div>
-</div>
-
-<div class="modal-footer" style="padding:35px 50px;">
-    
 </div>
 

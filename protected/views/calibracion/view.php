@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>'Listar Calibraciones', 'url'=>array('list')),
 	array('label'=>'Calibrar Dispositivo', 'url'=>array('calibracion/create?id_disp')),
 	array('label'=>'Modificar datos', 'url'=>array('update', 'id'=>$calibracion->id)),
-	array('label'=>'Eliminar registro', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$calibracion->id),'confirm'=>'Desea eliminar el registro?')),
+	array('label'=>'Eliminar registro', 'url'=>array('eliminar', 'id'=>$calibracion->id), 'linkOptions'=>array('confirm'=>'Desea eliminar el registro?')),
 	
 );
 ?>

@@ -42,7 +42,8 @@ class Usuario extends CActiveRecord
                         array('name, nivel, pass, dni_per', 'required',"message"=>"El campo no puede estar en blanco"),
                         array('name', 'unique',"message"=>'El usuario ya existe'),
 			array('dni_per', 'numerical', 'integerOnly'=>true,"message"=>"Debe ser un numero"),
-			array('name, pass', 'length', 'max'=>20, "message"=>"No puede sobrepasar los 20 caracteres"),
+			array('name', 'length', 'max'=>20, "message"=>"No puede sobrepasar los 20 caracteres"),
+                        array('pass', 'length', 'max'=>8000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('name, pass, dni_per', 'safe', 'on'=>'search'),
@@ -115,13 +116,13 @@ class Usuario extends CActiveRecord
         public static function darPermiso($nivel, $id_usr){
             switch ($nivel){
                 case 0:
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 0);
                     Permisosusuario::model()->GenerarPermiso($id_usr, 1);
                     Permisosusuario::model()->GenerarPermiso($id_usr, 2);
-                    Permisosusuario::model()->GenerarPermiso($id_usr, 3);
                     break;
                 case 1:
+                    Permisosusuario::model()->GenerarPermiso($id_usr, 0);
                     Permisosusuario::model()->GenerarPermiso($id_usr, 1);
-                    Permisosusuario::model()->GenerarPermiso($id_usr, 2);
                     break;
             }
         }

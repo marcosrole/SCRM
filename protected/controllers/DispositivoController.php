@@ -188,9 +188,9 @@ class DispositivoController extends Controller {
         $model->unsetAttributes();
         if (isset($_POST['Dispositivo'])) {
             $model->setAttribute('id', rand(1, 1000));
-            $model->setAttribute('mac', $_POST['Dispositivo']['mac']);
-            $model->setAttribute('modelo', $_POST['Dispositivo']['modelo']);
-            $model->setAttribute('version', $_POST['Dispositivo']['version']);
+            $model->setAttribute('mac', strtoupper($_POST['Dispositivo']['mac']));
+            $model->setAttribute('modelo', strtoupper($_POST['Dispositivo']['modelo']));
+            $model->setAttribute('version', strtoupper($_POST['Dispositivo']['version']));
             $model->setAttribute('funciona', true);
             
             if ($model->validate()) {

@@ -56,7 +56,7 @@ class Empresa extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dueño' => array(self::BELONGS_TO, 'Persona', 'dni_per'),                        			
+			'dueÃ±o' => array(self::BELONGS_TO, 'Persona', 'dni_per'),                        			
 		);
 	}
 

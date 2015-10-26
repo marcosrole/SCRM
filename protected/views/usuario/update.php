@@ -1,44 +1,32 @@
 <?php
-/* @var $this CalibracionController */
-/* @var $model Calibracion */
+/* @var $this UsuarioController */
+/* @var $model Usuario */
 
+$this->breadcrumbs=array(
+//	'Usuarios'=>array('index'),
+//	$usuario->name=>array('view','id'=>$usuario->id),
+//	'Update',
+);
 
 $this->menu=array(
-	array('label'=>'Listar Calibraciones', 'url'=>array('list')),
-	array('label'=>'Calibrar Dispositivo', 'url'=>array('calibracion/create?id_disp')),
+	array('label'=>'Listar Usuario', 'url'=>array('index')),
+	array('label'=>'Crear Usuario', 'url'=>array('create')),
+	array('label'=>'Cambiar contraseña', 'url'=>array('password', 'id'=>$usuario->id)),
+//	array('label'=>'Manage Usuario', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Actualizar valores de aceptación <?php  ?></h1>
-
-<h3>Datos originales: <?php  ?></h3>
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$usuario,
-	'attributes'=>array(
-		'id',
-		'name',
-		'pass',
-		'nivel',		
-	),
-)); ?>
-
-<div class="form">
-    <br>
-<?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
-
-	<p class="note">Campos con <span class="required">*</span> son requeridos.</p>
-
-	<?php echo $form->errorSummary($usuario); ?>
-        	
-	<div class="row">
-            <?php echo $form->textFieldGroup($usuario,'pass',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
-	</div>
+<h1>Actualizar Usuario <?php ?></h1>
 
 
-	<div class="row buttons">
-            <?php $this->widget('booster.widgets.TbButton', array('label' => 'Actualizar', 'context' => 'success','buttonType'=>'submit',));         ?> 
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- form -->
+<?php $this->renderPartial('_form',
+                        array(
+                            'usuario'=>$usuario,
+                            'persona'=>$persona,
+                            'direccion'=>$direccion,
+                            'localidad'=>$localidad,
+                            'lista_localidades'=>$lista_localidades,
+                            'inspector'=>$inspector,
+                            'update'=>$update,
+                            ));
+ ?>

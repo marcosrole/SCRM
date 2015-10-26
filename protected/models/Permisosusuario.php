@@ -100,9 +100,7 @@ class Permisosusuario extends CActiveRecord
             $permiso = new Permisosusuario();
             $permiso->id_usr=$id_usr;
             $permiso->id_per=$id_permi;            
-            $permiso->insert();
-            var_dump($permiso);
-            die();
+            $permiso->insert();            
         }
         public static function getPermisos()
 	{

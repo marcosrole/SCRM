@@ -31,11 +31,12 @@ class SiteController extends Controller
             $error=false;
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
-                $identity = new UserIdentity($_POST['Usuario']['name'],$_POST['Usuario']['pass']);                             
+                $identity = new UserIdentity(($_POST['Usuario']['name']),md5($_POST['Usuario']['pass']));
+               
 //                if ($user->validate()){
                     if ($identity->authenticate()){
-                        echo "Entro";
-                        Yii::app()->user->login($identity);
+                        
+                        Yii::app()->user->login($identity);                        
                         $this->redirect(Yii::app()->user->returnUrl);
                     }else $error=true;
 //                }
@@ -63,41 +64,48 @@ class SiteController extends Controller
 	 * Displays the contact page
 	 */
 	public function actionContact()
+                
 	{
-		$model=new ContactForm;
-		if(isset($_POST['ContactForm']))
-		{
-			$model->attributes=$_POST['ContactForm'];
-//			if($model->validate())
-//			{
-				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
+            $name='=?UTF-8?B?'.base64_encode("marcos").'?=';
+				$subject='=?UTF-8?B?'.base64_encode("pruebaa").'?=';
+				$headers="From: $name <{'marcosrole@gmail.com'}>\r\n".
+					"Reply-To: {'marcosrole@gmail.com'}\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-Type: text/plain; charset=UTF-8";
 
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
+				if(mail(Yii::app()->params['adminEmail'],$subject,"Holaaaaaaaaaa",$headers)){
+                                    echo "se envio";
+                                }else echo "no";
 				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-				$this->refresh();
-//			}
-		}
-		$this->render('contact',array('model'=>$model));
-	}
+        }
+
 
 	/**
 	 * Displays the login page
 	 */
         public function actionLogin()
-	{
-            if (isset($_POST['Usuario'])){
-                die((""));
-            }
-            $identity = new UserIdentity($username,$password);
+	{            
+            $user = new Usuario();
+            $error=false;
             
-            if($identity->authenticate()){
-                Yii::app()->user->login($identity);
-            }else $identity->errorMessage;
+            if (isset($_POST['Usuario'])){
+                $user->attributes=$_POST['Usuario'];
+                
+                $identity = new UserIdentity(($_POST['Usuario']['name']),md5($_POST['Usuario']['pass']));
+                    if ($identity->authenticate()){                      
+                        Yii::app()->user->login($identity);                          
+                        $this->redirect(Yii::app()->user->returnUrl);
+                        }else $error=true;
+                    } 
+            
+            $this->render('login',array('usuario'=>$user, 'error'=>$error));
+            
+//            $identity = new UserIdentity($username,$password);
+//            var_dump($identity);
+//            die();
+//            if($identity->authenticate()){
+//                Yii::app()->user->login($identity);
+//            }else $identity->errorMessage;
 //            
 //		if($this->_identity===null)
 //		{

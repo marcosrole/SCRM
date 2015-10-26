@@ -15,11 +15,19 @@
         ));
         ?>
 
+<?php $this->menu=array(
+	array('label'=>'Cargar Dispositivo', 'url'=>array('dispositivo/create')),	
+        array('label'=>'Calibrar Dispositivo', 'url'=>array('calibracion/create?id_disp')),
+        
+);
+
+?>
+
 <h1>
     Dispositivos almacenados 
 </h1>
 
-
+<div class="form">
 <?php
 $modelo = new Dispositivo();
 
@@ -57,5 +65,6 @@ $this->widget('booster.widgets.TbGridView', array(
     ),
 ));
 ?>
+</div>
 
     

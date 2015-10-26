@@ -2,57 +2,98 @@
 /* @var $this PermisosusuarioController */
 /* @var $model Permisosusuario */
 
+$this->breadcrumbs=array(
+	'Permisosusuarios'=>array('index'),
+	'Create',
+);
 
 $this->menu=array(
-//	array('label'=>'List Permisosusuario', 'url'=>array('index')),
-//	array('label'=>'Create Permisosusuario', 'url'=>array('create')),
-//	array('label'=>'Update Permisosusuario', 'url'=>array('update', 'id'=>$model->id)),
-//	array('label'=>'Delete Permisosusuario', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-//	array('label'=>'Manage Permisosusuario', 'url'=>array('admin')),
+	array('label'=>'Accesos disponibles', 'url'=>array('permiso/list')),
+	array('label'=>'Administrar Permiso', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Permisos del usuario #<?php echo $permisosUsuario->id_usr; ?></h1>
-
 <?php
-$this->widget('booster.widgets.TbGridView', array(
-        'type' => 'striped bordered condensed',
-        'dataProvider' => $permisosUsuario->search(),        
-        
-         'columns' => array(
-                array(
-                    'name' => 'id',
-                    'header'=>'#'
-                ),
-                array(
-                    'name' => 'name',
-                    'header'=>'Nombre'
-                ),
-                array(
-                    'name' => 'pass',
-                    'header'=>'Contraseña'
-                ),                
-                array(
-                    'name' => 'nivel',
-                    'header'=>'Nivel de Acceso'
-                ),             
-             array(
-                    'class' => 'booster.widgets.TbButtonColumn',
-                   // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{delete} {update}', // botones a mostrar
-                    'buttons' => array(
-                        'delete' => array(
-                            'label' => 'Detalles',                                                         
-                            'url'=> 'Yii::app()->createUrl("/Calibracion/view?id=$data->id")'
-                        ),                        
-                        'update' => array(
-                            'label' => 'Actualizar',                                                         
-                            'url'=> 'Yii::app()->createUrl("/usuario/update?id=$data->id")'
-                        ),                
-                    ),
-                    //'htmlOptions'=>array('style'=>'width: 120px'),
-                    ),
-             ),
-    ));
-        
+Yii::app()->clientScript->registerCoreScript('jquery');
+Yii::app()->clientScript->registerScript('dropdown', '
+   $("#Permisosusuario_id_usr").change(function() {
+      var content = $("#Permisosusuario_id_usr option:selected").text();      
+      var direccion = "http://localhost/SCRM/permisosusuario/crear/name/" + content;
+      window.location=direccion;      
+      $("#show_dropdown_content").text("You have selected: "+content);
+   });
+');
 ?>
+<?php
+        $this->widget('booster.widgets.TbAlert', array(
+            'fade' => true,
+            'closeText' => '&times;', // false equals no close link
+            'events' => array(),
+            'htmlOptions' => array(),
+            'userComponentId' => 'user',
+            'alerts' => array( // configurations per alert type
+                // success, info, warning, error or danger
+                'success' => array('closeText' => '&times;'),
+                'info', // you don't need to specify full config
+                'warning' => array('closeText' => false),
+                
+            ),
+        ));
+?>
+<h1>Permisos de usuario</h1>
+<div class="form">
+    <?php
+$form = $this->beginWidget(
+    'booster.widgets.TbActiveForm',
+    array(
+        'id' => 'verticalForm',
+        'htmlOptions' => array('class' => 'well'), // for inset effect
+    ));?>
+        <?php echo $form->dropDownListGroup(
+                $permisosUsuario,
+                'id_usr',
+                array(
+                    'id'=>'dropdown',
+                    'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
+                    ),
+                    'widgetOptions' => array(
+                            'data' => $array_usuarios,
+                            //'htmlOptions' => array('prompt'=>'--Seleccionar--'),
+                    )
+                ),
+                array(
+                    'options' => array('5'=>array('selected'=>true)),
+                )
+        ); ?>
+
+        
+        <?php echo $form->checkboxListGroup(
+                $permisosUsuario,
+                'id_per',
+                array(
+                        'widgetOptions' => array(
+                                'data' => $array_permiso,
+                                'disabled'=>'disabled',
+                        ),
+                        'hint' => '<strong>Note:</strong> Seleccione todos los permisos para el usuario.'
+                )
+        ); ?>
+
+        <?php
+        $form->widget(
+            'booster.widgets.TbButton',
+            array(
+                'label' => 'Asignar',
+                'context' => 'success',
+                 'buttonType'=>'submit',
+            )
+        );
+        ?>
+
+<?php 
+$this->endWidget();
+unset($form);
+?>
+
+</div>

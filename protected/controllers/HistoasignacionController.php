@@ -34,37 +34,55 @@ class HistoasignacionController extends Controller
 	*/
     
        public function actionCrear() {
+        
         $dispositivo = new Dispositivo();
         $empresa = new Empresa();
         $sucursal = new Sucursal();
         $histasignacion = new Histoasignacion();
         
+        date_default_timezone_set('UTC');
+        $histasignacion->fechaAlta = date("Y-m-d");
+        
+        
         $array_sucursal = array();
         $array_dispositivo = array();
-        
-        if (isset($_POST['selectEmpresa'])) {           
-            if (isset($_POST['selectDispositivo'])) {
-                $histasignacion->attributes = $_POST['Histoasignacion'];
-                    $sucursal=Sucursal::model()->findByAttributes(array('id' => $_POST['selectEmpresa'][0]));            
-                $histasignacion->id_suc =  $sucursal{'id'};
-                    $dispositivo=  Dispositivo::model()->findByAttributes(array('id' => $_POST['selectDispositivo'][0]));            
-                $histasignacion->id_dis=$dispositivo{'id'};
-                $histasignacion->fechaBaja='1900-01-01';           
-                //----------------------------------------------------------                        
-                    //Cambio el formato de la fecha.
-                    //SQL: yyyy-mm-dd
-                    $originalDate = $histasignacion->{'fechaAlta'};
-                    $newDate = date("Y-m-d", strtotime($originalDate));
-                    $histasignacion->setAttribute('fechaAlta', $newDate);
-                //----------------------------------------------------------             
-            
-                if($histasignacion->validate()){
-                    $histasignacion->insert();
-                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                                
-                }else Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos invalidos o incompletos ");                                                
+        $transaction = Yii::app()->db->beginTransaction();             
+        try{
+            if (isset($_POST['selectEmpresa']) || isset($_POST['Empresa']) || isset($_POST['Sucursal']) || isset($_POST['Histoasignacion'])) {           
+
+                
+                if(isset($_POST['selectEmpresa'])){
+                    if(isset($_POST['selectDispositivo'])){
+                        $sucursal=Sucursal::model()->findByAttributes(array('id' => $_POST['selectEmpresa'][0]));            
+                        $dispositivo=  Dispositivo::model()->findByAttributes(array('id' => $_POST['selectDispositivo'][0]));            
+                        
+                        $histasignacion->attributes = $_POST['Histoasignacion'];                
+                        $histasignacion->fechaAlta = $_POST['Histoasignacion']['fechaAlta'];
+                        $histasignacion->coordLat = $_POST['Histoasignacion']['coordLat'];
+                        $histasignacion->coordLon = $_POST['Histoasignacion']['coordLon'];
+                        /*FK1*/ $histasignacion->id_suc =  $sucursal{'id'};
+                        /*FK2*/ $histasignacion->id_dis=$dispositivo{'id'};
+                        $histasignacion->fechaBaja='1900-01-01';           
+                        //----------------------------------------------------------                        
+                            //Cambio el formato de la fecha.
+                            //SQL: yyyy-mm-dd
+                            $originalDate = $histasignacion->{'fechaAlta'};
+                            $newDate = date("Y-m-d", strtotime($originalDate));
+                            $histasignacion->setAttribute('fechaAlta', $newDate);
+                        //----------------------------------------------------------             
+                        
+                        if($histasignacion->validate()){
+                            $histasignacion->insert();
+                            $transaction->commit();                        
+                            Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                                
+                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos incompletos");}                                   
+                    }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una dispositivo");}                                   
+                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una Empresa");}                                
             }
+        } catch (Exception $ex) {
+            Yii::app()->user->setFlash('error',$ex->getMessage());
         }
-         
+        
         $sucursal=new Sucursal();
         $dispositivo=new Dispositivo();             
         
@@ -89,10 +107,23 @@ class HistoasignacionController extends Controller
     
     public function actionViewMap(){        
         $array_datos_mapa = array();
-        $histoasignacion = Histoasignacion::model()->getDispositivosNODisponibles();
+        $histoasignacion = Histoasignacion::model()->with('dispositivo')->findAllByAttributes(array('fechaBaja'=>'1900-01-01'));
         $array_datos_mapa = Histoasignacion::model()->getDatosMapa();
-                
-        $this->render('viewmap', array('array_dispo'=>$array_datos_mapa));
+        
+        $rawData = array();
+        foreach($histoasignacion as $item=>$asignacion){            
+                $raw = array();                
+                $raw['id']=(int)$asignacion{'id_dis'};
+                $raw['fechaAlta']=$asignacion{'fechaAlta'};                
+                        $sucural = Sucursal::model()->findByAttributes(array('id'=>$asignacion{'id_suc'}));
+                $raw['sucursal']=$sucural{'nombre'};                
+                        $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucural{'cuit_emp'}));
+                $raw['empresa']=$empresa{'razonsocial'};                
+                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucural{'id_dir'}));                
+                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+                $rawData[]=$raw;            
+            }     
+        $this->render('viewmap', array('array_dispo'=>$array_datos_mapa, 'rawData'=>$rawData));
     }
 
 

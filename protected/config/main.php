@@ -16,6 +16,8 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+                'ext.yii-mail.YiiMailMessage',
+                
 	),
 
 	'modules'=>array(
@@ -32,6 +34,19 @@ return array(
 
 	// application components
 	'components'=>array(
+            
+                'mail' => array(
+                    'class' => 'ext.yii-mail.YiiMail',
+                    'transportType' => 'smtp',
+                    'transportOptions' => array(
+                        'host' => 'smtp.gmail.com',
+                        'encryption' => 'ssl',
+                        'username' => 'marcosrole@gmail.com',
+                        'password' => 'vera2834',
+                        'port' => 465,
+                    ),
+                    'viewPath' => 'application.views.mails',
+                ),
 
 		'user'=>array(
 			// enable cookie-based authentication

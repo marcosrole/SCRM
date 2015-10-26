@@ -71,7 +71,7 @@ class Persona extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'dni' => 'Dni',
+			'dni' => 'DNI',
 			'tipo_dni' => 'Tipo Dni',
 			'nombre' => 'Nombre',
 			'apellido' => 'Apellido',

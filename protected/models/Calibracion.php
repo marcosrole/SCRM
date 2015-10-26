@@ -103,7 +103,27 @@ class Calibracion extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Calibracion the static model class
 	 */
-	public static function model($className=__CLASS__)
+        public static function verificarDatos($id_dis, $db_in, $dist_in){            
+            $calibracion = Calibracion::model()->findByAttributes(array('id_dis'=>$id_dis));            
+            
+            $estado=array();
+            $estado['db']=true;
+            $estado['dist']=true;
+            
+            if($calibracion->db_permitido < $db_in) $estado['db']=false;            
+            if($calibracion->dist_permitido < $dist_in) $estado['dist']=false;
+            return $estado;
+            
+        }
+        public static function dbEsperado($id_dis){
+            $calibracion = Calibracion::model()->findByAttributes(array('id_dis'=>$id_dis));                        
+            return $calibracion{'db_permitido'};            
+        }
+        public static function distEsperado($id_dis){
+            $calibracion = Calibracion::model()->findByAttributes(array('id_dis'=>$id_dis));                        
+            return $calibracion{'dist_permitido'};            
+        }
+        public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}

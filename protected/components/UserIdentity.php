@@ -10,7 +10,7 @@ class UserIdentity extends CUserIdentity
             $criterial = new CDbCriteria();
             $criterial->addCondition("name='" . strtolower($this->username) . "' ");
             $user = Usuario::model()->find($criterial);
-            
+                      
             if($user===null)
                     $this->errorCode=self::ERROR_USERNAME_INVALID;                
             elseif($this->password!==$user->pass)
@@ -20,7 +20,10 @@ class UserIdentity extends CUserIdentity
                         //Yii::app()->user->id
                     $this->_id=$user->name;
                         //Yii::app()->user->getState("dni");
-                    $this->setState("dni", $user->dni_per);
+                    $this->setState('dni', $user->dni_per);
+                    $this->setState('roles', $user->nivel);
+                    
+                    
             }
             $flag=true;
             if($this->errorCode == 0){

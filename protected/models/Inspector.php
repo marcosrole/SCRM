@@ -4,18 +4,15 @@
  * This is the model class for table "inspector".
  *
  * The followings are the available columns in table 'inspector':
+ * @property integer $id
  * @property integer $matricula
  * @property string $coordLat
  * @property string $coordLon
  * @property integer $ocupado
- * @property integer $dni_per_usu
- * @property string $name_usu
- * @property string $pass_usu
+ * @property integer $id_usr
  *
  * The followings are the available model relations:
- * @property Usuario $dniPerUsu
- * @property Usuario $nameUsu
- * @property Usuario $passUsu
+ * @property Usuario $idUsr
  */
 class Inspector extends CActiveRecord
 {
@@ -35,13 +32,12 @@ class Inspector extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('matricula, dni_per_usu, name_usu, pass_usu', 'required'),
-			array('matricula, ocupado, dni_per_usu', 'numerical', 'integerOnly'=>true),
-			array('name_usu, pass_usu', 'length', 'max'=>20),
+			array('matricula, id_usr', 'required'),
+			array('matricula, ocupado, id_usr', 'numerical', 'integerOnly'=>true),
 			array('coordLat, coordLon', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('matricula, coordLat, coordLon, ocupado, dni_per_usu, name_usu, pass_usu', 'safe', 'on'=>'search'),
+			array('id, matricula, coordLat, coordLon, ocupado, id_usr', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,9 +49,7 @@ class Inspector extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dniPerUsu' => array(self::BELONGS_TO, 'Usuario', 'dni_per_usu'),
-			'nameUsu' => array(self::BELONGS_TO, 'Usuario', 'name_usu'),
-			'passUsu' => array(self::BELONGS_TO, 'Usuario', 'pass_usu'),
+			'idUsr' => array(self::BELONGS_TO, 'Usuario', 'id_usr'),
 		);
 	}
 
@@ -65,13 +59,12 @@ class Inspector extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id' => 'ID',
 			'matricula' => 'Matricula',
 			'coordLat' => 'Coord Lat',
 			'coordLon' => 'Coord Lon',
 			'ocupado' => 'Ocupado',
-			'dni_per_usu' => 'Dni Per Usu',
-			'name_usu' => 'Name Usu',
-			'pass_usu' => 'Pass Usu',
+			'id_usr' => 'Id Usr',
 		);
 	}
 
@@ -93,13 +86,12 @@ class Inspector extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id);
 		$criteria->compare('matricula',$this->matricula);
 		$criteria->compare('coordLat',$this->coordLat,true);
 		$criteria->compare('coordLon',$this->coordLon,true);
 		$criteria->compare('ocupado',$this->ocupado);
-		$criteria->compare('dni_per_usu',$this->dni_per_usu);
-		$criteria->compare('name_usu',$this->name_usu,true);
-		$criteria->compare('pass_usu',$this->pass_usu,true);
+		$criteria->compare('id_usr',$this->id_usr);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

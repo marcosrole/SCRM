@@ -1,3 +1,19 @@
+<?php
+/* @var $this EmpresaController */
+/* @var $dataProvider CActiveDataProvider */
+
+$this->breadcrumbs=array(
+	'Empresas',
+);
+
+$this->menu=array(
+	array('label'=>'Create Empresa', 'url'=>array('create')),
+	array('label'=>'Administrar Empresa', 'url'=>array('admin')),
+);
+?>
+
+<h1>Empresas</h1>
+
 <div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>            
     <div class="campo">
@@ -24,7 +40,7 @@
                                     'sucursal' => array(
                                     'label'=>'Sucursal',
                                     'icon'=>'glyphicon glyphicon-list-alt',
-                                    'url'=>'Yii::app()->createUrl("sucursal/list", array("cuit"=>$data->cuit))',                                    
+                                    'url'=>'Yii::app()->createUrl("empresa/view", array("cuit"=>$data->cuit))',                                    
                                 ), 
                             ),             
                              'htmlOptions'=>array('style'=>'width: 140px'),
