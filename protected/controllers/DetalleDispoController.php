@@ -59,11 +59,13 @@ class DetalleDispoController extends Controller
                         
                         if(true){//VERIFICO ALARMA
                             $Calibracion = Calibracion::model()->findByAttributes(array('id_AsiDis'=>$HistoAsig{'id'}));
-                            if(!$this->VerificarAlarmaContinua($_GET['id'],$Calibracion{'db_permitido'})){                                
+                            if(!$this->VerificarRuidoContinua($_GET['id'],$Calibracion{'db_permitido'})){                                
                                if($this->VerificarRuidoIntermedio($_GET['id'],$Calibracion{'db_permitido'}, 0.5)){
-                                   $this->GenerarAlarmaContinua($_GET['id'], 4);
+                                   
                                }
-                            }                            
+                            }
+                            $this->VerificarDistancia($_GET['id'], $Calibracion{'dist_permitido'});
+                                                        
                         }
                         
                     }
@@ -173,7 +175,7 @@ class DetalleDispoController extends Controller
         $this->render('create', array('model' => $model, 'array_dispo' => $array_dispo)); 
     }
     
-    public function VerificarAlarmaContinua($id_dis, $db_permitido){
+    public function VerificarRuidoContinua($id_dis, $db_permitido){
 //        ********** ALARMA CONTINUA ****************
         //Determino cuantos detalleDispo necesito:
         $existeRuidoContinuo=false;
@@ -186,56 +188,55 @@ class DetalleDispoController extends Controller
         $ListDetalleDispo = DetalleDispo::model()->findAllByAttributes(array('id_dis'=>$id_dis));
         $ListDetalleDispo = array_slice($ListDetalleDispo, -$cantDetalleDispo, $cantDetalleDispo); //Ya tengo la cantidad de DetalleDispò necesario
        
-        if(count($ListDetalleDispo)==$cantDetalleDispo){
-            $fechas = CHtml::listData($ListDetalleDispo, 'id','fecha');
-            $horas = CHtml::listData($ListDetalleDispo, 'id', 'hs');
-
-            $Solofechas=[];
-
-            while (list($clave, $valor) = each($fechas)) {
-                array_push($Solofechas, $valor);
-            }        
-            $contador=0;
-            for ($i=0; $i<count($Solofechas)-1; $i++){            
-                $contador+=abs(strtotime($Solofechas[$i])-strtotime($Solofechas[$i+1]));
+        //Ahora analizo la tolerancia de Continuuidad
+        $contadorLimite=0;
+        foreach ($ListDetalleDispo as $item=>$value){
+            //Cuento cuantos registros se pasaron del limite de aceptacion
+            if($value{'db'}>=$db_permitido) $contadorLimite++;
+        }
+        //Determino porcentaje de aceptacion
+        if($contadorLimite/$cantDetalleDispo>=$porcCont){
+            //GENERO ALARMA CONTINUA
+//                ********************************
+            if($this->PermitirGenerarAlarma($id_dis, 3, 20)){//ALARMA CONTINUA   18000seg=5 mintos
+                 $this->GenerarAlarmaContinua($id_dis,3);
+                 $existeRuidoContinuo=true;
             }
-
-            if($contador<=86400){ // ¿Paso menos de un dia?
-                //Verifico que diferencia hay en los registros de HORA:
-                 $SoloHoras=[];
-                 $contador=0;
-                while (list($clave, $valor) = each($horas)) {
-                    array_push($SoloHoras, $valor);
-                } 
-                for ($i=0; $i<count($SoloHoras)-1; $i++){ 
-                    $contador+=$this->actionRestarHoras($SoloHoras[$i], $SoloHoras[$i+1]);                
-                }
-                $horaTolerancia = 86400; //segundos
-                if ($contador<$horaTolerancia){
-                    //Ahora analizo la tolerancia de Continuuidad
-                    $contadorLimite=0;
-                    foreach ($ListDetalleDispo as $item=>$value){
-                        //Cuento cuantos registros se pasaron del limite de aceptacion
-                        if($value{'db'}>=$db_permitido) $contadorLimite++;
-                    }
-                    //Determino porcentaje de aceptacion
-                    if($contadorLimite/$cantDetalleDispo>=$porcCont){
-                        //GENERO ALARMA CONTINUA
-    //                ********************************
-                        if($this->PermitirGenerarAlarma($id_dis, 3, 18000)){//ALARMA CONTINUA   18000seg=5 mintos
-                             $this->GenerarAlarmaContinua($id_dis,3);
-                             $existeRuidoContinuo=true;
-                        }
-                    }
-                    
-                }
-
-            }else{//No genero alarma: Paso mas de un dia entre los registros
-                }
-
         }
         
         return $existeRuidoContinuo;
+    }
+    
+     public function VerificarDistancia($id_dis, $dist_permitido){
+//        ********** ALARMA DE DISTANCIA ****************
+        //Determino cuantos detalleDispo necesito:
+        $existeAlarmaDistancia=false;
+        $segCont = 200; //segundos
+        $envioDatos = 20; //segundos. Cada cuanto envia datos el dispositivo.
+        $porcDista = 0.8;
+        $cantDetalleDispo = round($segCont/$envioDatos);
+        $disSelec=$id_dis; //Dispositivo
+                
+        $ListDetalleDispo = DetalleDispo::model()->findAllByAttributes(array('id_dis'=>$id_dis));
+        $ListDetalleDispo = array_slice($ListDetalleDispo, -$cantDetalleDispo, $cantDetalleDispo); //Ya tengo la cantidad de DetalleDispò necesario
+       
+        //Ahora analizo la tolerancia
+        $contadorLimite=0;
+        foreach ($ListDetalleDispo as $item=>$value){
+            //Cuento cuantos registros se pasaron del limite de aceptacion de distancia
+            if($value{'distancia'}>=$dist_permitido) $contadorLimite++;
+        }
+        //Determino porcentaje de aceptacion
+        if($contadorLimite/$cantDetalleDispo>=$porcDista){
+            //GENERO ALARMA DISTANCIA
+//                ********************************
+            if($this->PermitirGenerarAlarma($id_dis, 2, 20)){//ALARMA CONTINUA   18000seg=5 mintos
+                 $this->GenerarAlarmaContinua($id_dis,2);
+                 $existeRuidoContinuo=true;
+            }
+        }
+        
+//        return $existeRuidoContinuo;
     }
     
     public function actionRestarHoras($horaini,$horafin)
@@ -286,8 +287,7 @@ public function GenerarAlarmaContinua($id_dis, $tipoAlarma)
         $Alarma = new Alarma();
         $Alarma->id_tipAla=$tipoAlarma;
         $Alarma->id_dis=$id_dis; 
-        $Alarma->fechahs=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'] . " " . $hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds'];
-       
+        $Alarma->fechahs=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'] . " " . $hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds'];       
         $Alarma->insert();
 }
 
@@ -305,40 +305,47 @@ public function VerificarRuidoIntermedio($id_dis, $dbPermitido, $tolRuidoInterme
         if($value['db']>=$dbPermitido) $cantDetDisSobrepasados++;
     }
     
-    if($cantDetDisSobrepasados/count($LisDetalleDispo) > $tolRuidoIntermedio) $existeRuidoIntermedio=TRUE;
+    
+    if($cantDetDisSobrepasados/count($LisDetalleDispo) > $tolRuidoIntermedio){
+        if($this->PermitirGenerarAlarma($id_dis, 4, 18000)){//ALARMA CONTINUA   18000seg=5 mintos
+                  $existeRuidoIntermedio=TRUE;
+                  $this->GenerarAlarmaContinua($_GET['id'], 4);
+            }
+       
+    }
     RETURN $existeRuidoIntermedio;    
 }
 
 public function PermitirGenerarAlarma($id_dis, $id_tipAla, $tiempoTolerancia)
 {
+       
     $generarAlarma = FALSE;
     /* Verifica el perioro de tiempo que transcurrio luego de la ultima alarma.
      * Teniendo en cuenta: id_dis y id_tipAla */
 //        $tiempoTolerancia = Es la tolerancia de tiempo entre alarmas. EN SEGUNDOS 
 //        Busco la ultima alarma dispoible 
         $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$id_dis, 'id_tipAla'=>$id_tipAla));
-        $alarma = new Alarma();
         
-        $maxAnsTime = Yii::app()->db
-        ->createCommand("SELECT * FROM alarma ORDER BY fechahs DESC LIMIT 1")
-        ->where('id_dis=:idDis', array(':idDis'=>$id_dis))
-        ->andWhere('id_tipAla=:idtipAla', array(':idtipAla'=>$id_tipAla))        
-        ->queryRow();
-        
-        $fechahs=explode(" ", $maxAnsTime['fechahs']);
-        
-        date_default_timezone_set('America/Buenos_Aires');
-        $hoy = getdate();
-         
-         $fechahoy=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'];
-         $hshoy=$hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds'];
-         
-        //Me fijo si pertenece al mismo dia
-        if(abs(strtotime($fechahs[0])-strtotime($fechahoy))==0){ //Pertenece al mismo dia
-            if($this->actionRestarHoras($fechahs[1], $hshoy)>=$tiempoTolerancia){
-                $generarAlarma=true;
+        if($alarma==NULL){
+            $generarAlarma=true;
+        }else{
+            $maxAnsTime = Alarma::model()->findByAttributes(array('id_dis'=>$id_dis, 'id_tipAla'=>$id_tipAla), array('order' => 'fechahs DESC'));
+            
+            $fechahs=explode(" ", $maxAnsTime['fechahs']);
+            date_default_timezone_set('America/Buenos_Aires');
+            $hoy = getdate();
+
+             $fechahoy=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'];
+             $hshoy=$hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds'];
+             
+            //Me fijo si existe una diferencia de al menos un dia. Un dia tiene 86400 segundos 
+            if(abs(strtotime($fechahs[0])-strtotime($fechahoy))<=86400){ //Pertenece al mismo dia
+                if($this->actionRestarHoras($fechahs[1], $hshoy)>=$tiempoTolerancia){
+                    $generarAlarma=true;
+                }
             }
         }
+        
         return $generarAlarma;
         
 }

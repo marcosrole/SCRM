@@ -199,10 +199,11 @@ class AlarmaController extends Controller
                        ),
                      ));
                  }else{
-                        $value=$alarmas;                                 
+                        $value=$alarmas[0];                             
                         $raw['id']=(int)$value{'id'};
-                        $raw['solucionado']=$value{'solucionado'};                        
-                        $raw['alarma']=$tipoAlarma[$value{'id_tipAla'}];
+                        $raw['solucionado']=$value{'solucionado'}; 
+                            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                        $raw['alarma']=$tipoAlarma{'descripcion'};                                               
                         $fechahs=explode(" ", $value['fechahs']);
                         $raw['fecha']=$fechahs[0];  
                         $raw['hs']=$fechahs[1];                          

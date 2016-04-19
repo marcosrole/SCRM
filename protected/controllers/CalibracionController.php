@@ -129,8 +129,14 @@ class CalibracionController extends Controller
         foreach (Histoasignacion::model()->getDispositivosNODisponibles() as $key=>$value){
             $array_dispositivos[]=Dispositivo::model()->findByAttributes(array('id'=>$value->id_dis));            
         }       
-        
-         if(count($array_dispositivos)>1){
+        if(count($array_dispositivos)==0){
+            $DataProviderCalibracion=new CArrayDataProvider([], array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+        }elseif(count($array_dispositivos)>1){
                 foreach($array_dispositivos as $item=>$value){
                     
                     $raw = array();                
