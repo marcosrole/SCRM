@@ -77,8 +77,8 @@
                             'label' => 'Asignar',
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/crear'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/modificar'),
+                                array('label' => 'Generar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/create'),
+                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Histoasignacion/update'),
                                 array('label' => 'Historial', 'url' => Yii::app()->homeUrl . 'Histoasignacion/list'),
                             )
                         ),

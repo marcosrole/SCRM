@@ -75,14 +75,18 @@ and open the template in the editor.
                     $lat_promedio=0;
                     $lon_promedio=0;
                     $cant_dispo=0;
-
                     foreach ($array_dispo as $key=>$value){
-
-                        $lat_promedio=$lat_promedio+$value[1];
-                        $lon_promedio=$lon_promedio+$value[2];
-                        $cant_dispo++;
-
-
+                        if($value[1]=='' || $value[2]==''){
+                            $lat_promedio=$lat_promedio+0;
+                            $lon_promedio=$lon_promedio+0;
+                            
+                        }else{
+                            $lat_promedio=$lat_promedio+(double)$value[1];
+                            $lon_promedio=$lon_promedio+(double)$value[2];
+                            $cant_dispo++;
+                        }
+                        
+                        
                 //        *********************************
                 //                Crear un markets:   
                 //        *********************************
@@ -91,10 +95,14 @@ and open the template in the editor.
                     //Si existe,=> FIRE
                     //Sino => DRINK
                     
-                    $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$value[0], 'solucionada'=>0));
+                    $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$value[0], 'solucionado'=>0));
+                    
                     if($alarma!=null){
                         $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/fire.png");
-                    }else $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/drink.png");
+                    }else{
+                        $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/drink.png");
+                        $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
+                    }
                                      
                     
                     $icon->setSize(32, 37);
@@ -104,7 +112,7 @@ and open the template in the editor.
                     if($alarma!=null){
                         // Crear Informacion de ventana de mensaje
                         $linea1 = 'Dispositivo: ' . $value[0] . ' ' ;                        
-                        $linea2 = 'Alarma: ' . $alarma{'descripcion'} . ' ' ;                        
+                        $linea2 = 'Alarma: ' . $tipoAlarma{'descripcion'} . ' ' ;                        
                         $linea3 = 'Direccion: ' . $value[3] . ' ' ;
                             $url = "http://" . $_SERVER['HTTP_HOST'] . "/SCRM/asignarinspector/create";
                         $linea4 = '<a href= ' . $url . '>Solucionar</a> ';
@@ -127,21 +135,27 @@ and open the template in the editor.
                     }
                     
                      
-                    
-
                     //Crear el market
-                    $marker = new EGMapMarker($value[1], $value[2], array(
-                        'title' => $value[3],
-                        'icon' => $icon));
-                    $marker->addHtmlInfoWindow($info_window_a); //Set la info de la ventana
-
-                    $gMap->addMarker($marker);
+                    if($value[1]!='' && $value[2]!=''){
+                            $marker = new EGMapMarker($value[1], $value[2], array(
+                                'title' => $value[3],
+                                'icon' => $icon));
+                            $marker->addHtmlInfoWindow($info_window_a); //Set la info de la ventana
+                            $gMap->addMarker($marker);                            
+                        }
+                    
                     }
-
-
-                    //Posicionamiento Central
+                    
+                    if($cant_dispo==0){
+                       //Posicionamiento Central
+                        $gMap->setCenter(-36.359371, -62.632124);
+                         $gMap->setZoom(4);   
+                    }else{
+                        
                     $gMap->setCenter($lat_promedio/$cant_dispo, $lon_promedio/$cant_dispo);
-                    $gMap->setZoom(14);        
+                    $gMap->setZoom(14); 
+                    }
+                           
 
 
 

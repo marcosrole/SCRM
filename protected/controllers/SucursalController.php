@@ -248,7 +248,15 @@ class SucursalController extends Controller
                 
             }else{
                 $ListSucursal = Sucursal::model()->findAllByAttributes(array('id_zon'=>$id_zon));
-                foreach ($ListSucursal as $key=>$value){                    
+                if(count($ListSucursal)==0){
+                   $DataProviderSucursales=new CArrayDataProvider([], array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     )); 
+                }else{
+                   foreach ($ListSucursal as $key=>$value){                    
                         $raw['id']=(int)$value{'id'};
                         $raw['nombre']=$value{'nombre'};
                             $aux=  Empresa::model()->findByAttributes(array('cuit'=>$value{'cuit_emp'}));
@@ -266,7 +274,9 @@ class SucursalController extends Controller
                        'pagination'=>array(
                            'pageSize'=>10,
                        ),
-                     ));
+                     )); 
+                }
+                
                     
             }
             

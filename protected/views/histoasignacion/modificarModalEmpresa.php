@@ -1,56 +1,32 @@
-<head>  
-  <style>
-  .modal-header, h4, .close {
-      background-color: #19A3FF;
-      color:white !important;
-      text-align: center;
-      font-size: 30px;
-      
-  }
-  .modal-footer {
-      background-color: #19A3FF;
-      
-  }
-  </style>
-</head>
 
-<?php
-        $this->widget('booster.widgets.TbAlert', array(
-            'fade' => true,
-            'closeText' => '&times;', // false equals no close link
-            'events' => array(),
-            'htmlOptions' => array(),
-            'userComponentId' => 'user',
-            'alerts' => array( // configurations per alert type
-                // success, info, warning, error or danger
-                'success' => array('closeText' => '&times;'),
-                'info', // you don't need to specify full config
-                'warning' => array('closeText' => false),
-                'error' => array('closeText' => false),                
-            ),
-        ));
-        ?>
-
-
-
-<?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
-    <div class="label_original">
+<div class="label_original">
         <h2>Empresa: <?php echo $empresa_original ?> </h2>            
     </div>
+    
+<?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
+    
     <div class="dato_nuevo">
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'empresa-grid-list',
-                    'dataProvider' => $dataProviderSucursal,                 
-                    'filter' => $sucursal,
+                    'dataProvider' => $dataProviderSucursal,      
+                    
                     'columns' => array(                        
                         array(
-                            'name' => 'cuit_emp',
-                            'header'=>'CUIT',                                                        
+                            'name' => 'nombre',
+                            'header'=>'Sucursal',                                                        
                         ),
                         array(
-                            'name' => 'nombre',
-                            'header'=>'Sucursal'
+                            'name' => 'empresa',
+                            'header'=>'Empresa'
+                        ),
+                        array(
+                            'name' => 'direccion',
+                            'header'=>'Direccion'
+                        ),
+                        array(
+                            'name' => 'localidad',
+                            'header'=>'Localidad'
                         ),
                          array(
                             'id' => 'selectedEmpresa',

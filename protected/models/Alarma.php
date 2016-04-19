@@ -8,11 +8,12 @@
  * @property integer $solucionado
  * @property integer $enviarSMS
  * @property integer $id_tipAla
- * @property string $fecha
- * @property string $hs
+ * @property integer $id_dis
+ * @property string $fechahs
  *
  * The followings are the available model relations:
  * @property Tipoalarma $idTipAla
+ * @property Dispositivo $idDis
  * @property Registroalarma[] $registroalarmas
  */
 class Alarma extends CActiveRecord
@@ -33,11 +34,12 @@ class Alarma extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_tipAla, fecha, hs', 'required'),
-			array('solucionado, enviarSMS, id_tipAla', 'numerical', 'integerOnly'=>true),
+			array('id_tipAla', 'required'),
+			array('solucionado, enviarSMS, id_tipAla, id_dis', 'numerical', 'integerOnly'=>true),
+			array('fechahs', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, solucionado, enviarSMS, id_tipAla, fecha, hs', 'safe', 'on'=>'search'),
+			array('id, solucionado, enviarSMS, id_tipAla, id_dis, fechahs', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,6 +52,7 @@ class Alarma extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'idTipAla' => array(self::BELONGS_TO, 'Tipoalarma', 'id_tipAla'),
+			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
 			'registroalarmas' => array(self::HAS_MANY, 'Registroalarma', 'id_ala'),
 		);
 	}
@@ -64,8 +67,8 @@ class Alarma extends CActiveRecord
 			'solucionado' => 'Solucionado',
 			'enviarSMS' => 'Enviar Sms',
 			'id_tipAla' => 'Id Tip Ala',
-			'fecha' => 'Fecha',
-			'hs' => 'Hs',
+			'id_dis' => 'Id Dis',
+			'fechahs' => 'Fechahs',
 		);
 	}
 
@@ -91,8 +94,8 @@ class Alarma extends CActiveRecord
 		$criteria->compare('solucionado',$this->solucionado);
 		$criteria->compare('enviarSMS',$this->enviarSMS);
 		$criteria->compare('id_tipAla',$this->id_tipAla);
-		$criteria->compare('fecha',$this->fecha,true);
-		$criteria->compare('hs',$this->hs,true);
+		$criteria->compare('id_dis',$this->id_dis);
+		$criteria->compare('fechahs',$this->fechahs,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

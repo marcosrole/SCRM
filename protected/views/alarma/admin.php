@@ -61,17 +61,11 @@ $this->menu=array(
     <?php 
         $this->widget('booster.widgets.TbGridView', array(
             'id' => 'dispositivo-grid-list',
-            'dataProvider' => $model->search(),
-            'filter' => $model,
-            'columns' => array(                                                       
+            'dataProvider' => $DataProviderAlarma,
+            'columns' => array( 
                 array(
-                    'name' => 'id_dis',
-                    'header'=>'Dispositivo',
-                    'htmlOptions'=>array('width'=>'2%'),
-                ),
-                array(
-                    'name' => 'id_suc',
-                    'header'=>'Sucursal'
+                    'name' => 'id',
+                    'header'=>'#'
                 ),                                
                 array(
                     'name' => 'fecha',
@@ -82,9 +76,14 @@ $this->menu=array(
                     'header'=>'Hora'
                 ),                        
                 array(
-                    'name' => 'descripcion',
+                    'name' => 'alarma',
                     'header'=>'Descripcion'
-                ),                 
+                ), 
+                array(
+                    'name' => 'solucionado',
+                    'header'=>'Solucionado',
+                    'value'=>'$data["solucionado"]== 0 ? "NO" : "SI"',  
+                ),
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
@@ -92,18 +91,18 @@ $this->menu=array(
                     'htmlOptions'=>array('width'=>'10%'),
                     'buttons' => array(
                         'view' => array(
-                            'label' => 'Detalles',                                                         
-                            'url'=> 'Yii::app()->createUrl("/alarma/view?id=$data->id")'
+                            'label' => 'Detalles', 
+                            'url'=> 'Yii::app()->createUrl("alarma/view", array("id"=> ' . '$data["id"])) ',
                         ),                                                
                         'email' => array(
                             'label' => 'Enviar E-mail',
                             'icon'=>'glyphicon glyphicon-envelope',
-                            'url'=> 'Yii::app()->createUrl("/alarma/Sendemail?id_alarma=$data->id")'
+                            'url'=> 'Yii::app()->createUrl("alarma/Sendemail", array("id_alarma"=> ' . '$data["id"])) ',
                         ),
                         'delete' => array(
                             'label' => 'Eliminar Alarma',                            
                             'click' => 'function(){return confirm("Desea eliminar la empresa?");}',
-                            'url'=> 'Yii::app()->createUrl("alarma/eliminar?id=$data->id")', 
+                             'url'=> 'Yii::app()->createUrl("alarma/eliminar", array("id"=> ' . '$data["id"])) ',
                         ),
                     ),
                     //'htmlOptions'=>array('style'=>'width: 120px'),

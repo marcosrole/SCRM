@@ -170,14 +170,57 @@ class AlarmaController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Alarma('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Alarma']))
-			$model->attributes=$_GET['Alarma'];
+		$alarmas = Alarma::model()->findAll();
+                
+                $rawData=[];
+                if(count($alarmas)==0){
+                    $DataProviderAlarma=new CArrayDataProvider([], array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }elseif (count($alarmas)>1) {
+                    foreach ($alarmas as $item=>$value){                                      
+                        $raw['id']=(int)$value{'id'};
+                        $raw['solucionado']=$value{'solucionado'}; 
+                           $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                        $raw['alarma']=$tipoAlarma{'descripcion'};
+                        $fechahs=explode(" ", $value['fechahs']);
+                        $raw['fecha']=$fechahs[0];  
+                        $raw['hs']=$fechahs[1];                          
+                        $rawData[]=$raw;                   
+                }    
 
-		$this->render('admin',array(
-			'model'=>$model,
+                    $DataProviderAlarma=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                 }else{
+                        $value=$alarmas;                                 
+                        $raw['id']=(int)$value{'id'};
+                        $raw['solucionado']=$value{'solucionado'};                        
+                        $raw['alarma']=$tipoAlarma[$value{'id_tipAla'}];
+                        $fechahs=explode(" ", $value['fechahs']);
+                        $raw['fecha']=$fechahs[0];  
+                        $raw['hs']=$fechahs[1];                          
+                        $rawData[]=$raw;                   
+                   
+
+                    $DataProviderAlarma=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     )); 
+                 }
+                 
+                $this->render('admin',array(
+			'DataProviderAlarma'=>$DataProviderAlarma,
 		));
+                                     
 	}
 
 	/**

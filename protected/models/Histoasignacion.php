@@ -153,6 +153,7 @@ class Histoasignacion extends CActiveRecord
             $criterial = new CDbCriteria();
             $criterial->condition=("fechaBaja='1900-01-01'");
             $dispositivosNoDispoibles = Histoasignacion::model()->with('dispositivo')->findAll($criterial);
+           
             $dispositivos = Dispositivo::model()->findAll();
                                    
             $bandera=false;

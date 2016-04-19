@@ -15,16 +15,19 @@ $this->menu=array(
             <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $calibracion->search(),
-                    'filter' => $calibracion,
+                    'dataProvider' => $DataProviderCalibracion,
                     'columns' => array(                        
                         array(
                             'name' => 'id_dis',
                             'header'=>'ID Dispositivo'
                         ),
                         array(
-                            'name' => 'id_suc',
-                            'header'=>'ID Sucursal'
+                            'name' => 'sucursal',
+                            'header'=>'Sucursal'
+                        ),
+                        array(
+                            'name' => 'direccion',
+                            'header'=>'Direccion'
                         ),
                         array(
                             'name' => 'db_permitido',
@@ -33,19 +36,25 @@ $this->menu=array(
                         array(
                             'name' => 'dist_permitido',
                             'header'=>'Distancia Permitido'
-                        ),                        
+                        ),  
+                        array(
+                            'name' => 'fecha',
+                            'header'=>'Fecha',
+                            'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fecha"]))'
+                        ), 
                         array(
                             'class' => 'booster.widgets.TbButtonColumn',
                            // 'htmlOptions' => array('width' => '10'), //ancho de la columna
                             'template' => '{view} {update}', // botones a mostrar
                             'buttons' => array(
                                 'view' => array(
-                                    'label' => 'Detalles',                                                         
-                                    'url'=> 'Yii::app()->createUrl("/Calibracion/view?id=$data->id")'
+                                    'label' => 'Detalles',  
+                                    'url'=> 'Yii::app()->createUrl("Calibracion/view", array("id"=> ' . '$data["id"])) ',
+                                 
                                 ),                        
                                 'update' => array(
                                     'label' => 'Actualizar',                                                         
-                                    'url'=> 'Yii::app()->createUrl("/Calibracion/update?id=$data->id")'
+                                    'url'=> 'Yii::app()->createUrl("Calibracion/update", array("id"=> ' . '$data["id"])) ',
                                 ),                
                             ),
                             //'htmlOptions'=>array('style'=>'width: 120px'),

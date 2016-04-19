@@ -49,11 +49,11 @@ class CalibracionController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id_AsiDis)
+	public function actionView($id)
 	{
+            $calibracion = Calibracion::model()->findByAttributes(array('id'=>$id));
+            $histoasignacion = Histoasignacion::model()->findByAttributes(array('id'=>$calibracion{'id_AsiDis'}, 'fechaBaja'=>'1900-01-01'));
             
-            $histoasignacion = Histoasignacion::model()->findByAttributes(array('id'=>$id_AsiDis, 'fechaBaja'=>'1900-01-01'));
-            $calibracion = Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoasignacion{'id'}));
             $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoasignacion{'id_suc'}));
             $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
             
@@ -88,6 +88,7 @@ class CalibracionController extends Controller
         $dispositivo = new Dispositivo();
         $calibracion = new Calibracion();
         if (isset($_POST['Calibracion'])) {
+            
             $calibracion->attributes = $_POST['Calibracion'];
             $calibracion->fecha=date("Y-m-d");            
             $histoasignacion = new Histoasignacion();
@@ -101,7 +102,7 @@ class CalibracionController extends Controller
                         'fecha'=>$calibracion{'fecha'},
                         'id_AsiDis'=>$calibracion{'id_AsiDis'},
                                 ))){
-                            if ($calibracion->save())  $this->redirect(array('view', 'id_AsiDis' => $calibracion->id_AsiDis));
+                            if ($calibracion->save())  $this->redirect(array('view', 'id' => $calibracion->id));
             }            
             
         }                      
@@ -129,13 +130,74 @@ class CalibracionController extends Controller
             $array_dispositivos[]=Dispositivo::model()->findByAttributes(array('id'=>$value->id_dis));            
         }       
         
+         if(count($array_dispositivos)>1){
+                foreach($array_dispositivos as $item=>$value){
+                    
+                    $raw = array();                
+                    $raw['id']=(int)$value{'id'};
+                    $raw['mac']=$value{'mac'};
+                        $histoAsign = Histoasignacion::model()->findByAttributes(array('id_dis'=>$value{'id'}, 'fechaBaja'=>'1900-01-01'));
+                        $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsign{'id_suc'}));
+                    $raw['sucursal']=$sucursal{'nombre'};                
+                if(Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoAsign{'id'}))){
+                    $raw['calibrado']='Calibrado';
+                }else $raw['calibrado']='NO Calibrado';              
+                    
+                    $rawData[]=$raw;  
+                    
+                    $DataProviderCalibracion=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }     
+            }else{
+              
+                $raw = array();                
+                $raw['id']=(int)$array_dispositivos[0]{'id'};
+                $raw['mac']=$array_dispositivos[0]{'mac'};
+                    $histoAsign = Histoasignacion::model()->findByAttributes(array('id'=>$array_dispositivos[0]{'id'}, 'fechaBaja'=>'1900-01-01'));
+                    $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsign{'id_suc'}));
+                $raw['sucursal']=$sucursal{'nombre'};                
+                if(Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoAsign{'id'}))){
+                    $raw['calibrado']='Calibrado';
+                }else $raw['calibrado']='NO Calibrado';              
+                    
+                $rawData[]=$raw;  
+
+                $DataProviderCalibracion=new CArrayDataProvider($rawData, array(
+                   'id'=>'id',
+                   'pagination'=>array(
+                       'pageSize'=>10,
+                   ),
+                 ));
+                
+            }
+            
+          
+            
         $dataprovieder->setData($array_dispositivos);
         
-        $this->render('create', array(
+        if( Yii::app()->request->isAjaxRequest )
+        {
+            
+            $this->renderPartial('_modalCalibrar', array(
+                'calibracion' => $calibracion,
+                'dispositivo' => Dispositivo::model()->findByAttributes(array('id'=>$id_disp)),
+            ), false, true);
+        }
+        else
+        {
+            $this->render('create', array(
                 'calibracion' => $calibracion,
                 'dataprovieder' => $dataprovieder,
                 'dispositivo' => $dispositivo,
+                'DataProviderCalibracion' => $DataProviderCalibracion,
             ));
+        }
+        
+        
     }
 
     /**
@@ -178,8 +240,57 @@ class CalibracionController extends Controller
 	 */
 	public function actionList()
 	{
+            $calibraciones = Calibracion::model()->findAll();
+            if(count($calibraciones)>1){
+                foreach($calibraciones as $item=>$value){
+                    $raw = array();                
+                    $raw['id']=(int)$value{'id'};
+                    $raw['db_permitido']=$value{'db_permitido'};
+                    $raw['dist_permitido']=$value{'dist_permitido'};
+                    $raw['fecha']=$value{'fecha'};
+                        $histoAsign = Histoasignacion::model()->findByAttributes(array('id'=>$value{'id_AsiDis'}));
+                        $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsign{'id_suc'}));
+                    $raw['id_dis']=$histoAsign{'id_dis'};
+                    $raw['sucursal']=$sucursal{'nombre'};                
+                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));                
+                    $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+                    $rawData[]=$raw;  
+                    
+                    $DataProviderCalibracion=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }     
+            }else{
+               
+                $raw = array();                
+                $raw['id']=(int)$calibraciones[0]{'id'};
+                $raw['db_permitido']=$calibraciones[0]{'db_permitido'};
+                $raw['dist_permitido']=$calibraciones[0]{'dist_permitido'};
+                $raw['fecha']=$calibraciones[0]{'fecha'};
+               
+                    $histoAsign = Histoasignacion::model()->findByAttributes(array('id'=>$calibraciones[0]{'id_AsiDis'}));
+                    $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsign{'id_suc'}));
+                $raw['id_dis']=$histoAsign{'id_dis'};
+                $raw['sucursal']=$sucursal{'nombre'};                
+                    $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));                
+                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+                $rawData[]=$raw;
+                
+                $DataProviderCalibracion=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                
+            }
+            
+            
             $this->render('list',array(
-                    'calibracion'=>new Calibracion(),
+                    'DataProviderCalibracion'=>$DataProviderCalibracion,
             ));   
 	}
 

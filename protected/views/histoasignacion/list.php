@@ -4,13 +4,20 @@
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
-                    'dataProvider' => $histoasignacion->search(),
-                    'filter' => $histoasignacion,
+                    'dataProvider' => $dataProviderHistoAsig,
                     'columns' => array(                        
                         array(
-                            'name' => 'id_dis',
+                            'name' => 'dispositivo',
                             'header'=>'Dispositivo',                                                       
-                        ),                        
+                        ), 
+                        array(
+                            'name' => 'sucursal',
+                            'header'=>'Sucursal',                                                       
+                        ), 
+                        array(
+                            'name' => 'empresa',
+                            'header'=>'Empresa',                                                       
+                        ), 
                         array(
                             'name' => 'fechaAlta',
                             'header'=>'Fecha de Alta'
