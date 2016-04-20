@@ -12,7 +12,7 @@ class DetalleDispoController extends Controller
     }
 
     public function actionCreate() {
-        $this->PermitirGenerarAlarma(204, 3, 3);
+        
         try {   
             $model = new DetalleDispo;       
         //Array con todos los dispositivos (id_dispo)        
@@ -179,9 +179,9 @@ class DetalleDispoController extends Controller
 //        ********** ALARMA CONTINUA ****************
         //Determino cuantos detalleDispo necesito:
         $existeRuidoContinuo=false;
-        $segCont = 200; //segundos
+        $segCont = 200; //Cuantos segundos "definimos" a un ruido continuo
         $envioDatos = 20; //segundos. Cada cuanto envia datos el dispositivo.
-        $porcCont = 0.8;
+        $porcCont = 0.8;// Porcentaje de aceptacion 
         $cantDetalleDispo = round($segCont/$envioDatos);
         $disSelec=$id_dis; //Dispositivo
                 
@@ -211,10 +211,10 @@ class DetalleDispoController extends Controller
 //        ********** ALARMA DE DISTANCIA ****************
         //Determino cuantos detalleDispo necesito:
         $existeAlarmaDistancia=false;
-        $segCont = 200; //segundos
+        $segDis = 200; //Cuantos segundos toleramos que el dispositivo está tapado (obtruido)
         $envioDatos = 20; //segundos. Cada cuanto envia datos el dispositivo.
-        $porcDista = 0.8;
-        $cantDetalleDispo = round($segCont/$envioDatos);
+        $porcDista = 0.8; //Tolerancia al momento de comparar el promedio de todos los registros
+        $cantDetalleDispo = round($segDis/$envioDatos);
         $disSelec=$id_dis; //Dispositivo
                 
         $ListDetalleDispo = DetalleDispo::model()->findAllByAttributes(array('id_dis'=>$id_dis));
@@ -241,14 +241,15 @@ class DetalleDispoController extends Controller
     
     public function actionRestarHoras($horaini,$horafin)
 {
-	$horai=substr($horaini,0,2);
-	$mini=substr($horaini,3,2);
-	$segi=substr($horaini,6,2);
+	
+        $horai=explode(":", $horaini)[0];
+	$mini=explode(":", $horaini)[1];
+	$segi=explode(":", $horaini)[2];
  
-	$horaf=substr($horafin,0,2);
-	$minf=substr($horafin,3,2);
-	$segf=substr($horafin,6,2);
- 
+	$horaf=explode(":", $horafin)[0];
+	$minf=explode(":", $horafin)[1];
+	$segf=explode(":", $horafin)[2];
+        
 	$ini=((($horai*60)*60)+($mini*60)+$segi);
 	$fin=((($horaf*60)*60)+($minf*60)+$segf);
  
@@ -294,6 +295,13 @@ public function GenerarAlarmaContinua($id_dis, $tipoAlarma)
 public function VerificarRuidoIntermedio($id_dis, $dbPermitido, $tolRuidoIntermedio)
 {
     $existeRuidoIntermedio = false;
+    $segInter = 600; //Definicion de un ruido Intermedio (debe existir durante -ej-, 600 seg. = 10 min)
+    $envioDatos = 20; //segundos. Cada cuanto envia datos el dispositivo.
+    $porcDista = 0.5; //Tolerancia al momento de comparar el promedio de todos los registros
+    $cantDetalleDispo = round($segDis/$envioDatos);
+    
+    //VERIFICAR BIEN ESTO PORQUE DEBO ANALIZAR MEJOR COMO DETERMINR SI EL RUIDO ES ITERMITENTE O NO
+    
     $cantDetalleDispo = 90;
     
     $LisDetalleDispo = DetalleDispo::model()->findAllByAttributes(array('id_dis'=>$id_dis));
@@ -340,7 +348,7 @@ public function PermitirGenerarAlarma($id_dis, $id_tipAla, $tiempoTolerancia)
              
             //Me fijo si existe una diferencia de al menos un dia. Un dia tiene 86400 segundos 
             if(abs(strtotime($fechahs[0])-strtotime($fechahoy))<=86400){ //Pertenece al mismo dia
-                if($this->actionRestarHoras($fechahs[1], $hshoy)>=$tiempoTolerancia){
+                if(abs($this->actionRestarHoras($fechahs[1], $hshoy))>=$tiempoTolerancia){
                     $generarAlarma=true;
                 }
             }
