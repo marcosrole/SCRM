@@ -159,11 +159,11 @@ class CalibracionController extends Controller
                      ));
                 }     
             }else{
-              
+                
                 $raw = array();                
                 $raw['id']=(int)$array_dispositivos[0]{'id'};
                 $raw['mac']=$array_dispositivos[0]{'mac'};
-                    $histoAsign = Histoasignacion::model()->findByAttributes(array('id'=>$array_dispositivos[0]{'id'}, 'fechaBaja'=>'1900-01-01'));
+                    $histoAsign = Histoasignacion::model()->findByAttributes(array('id_dis'=>$array_dispositivos[0]{'id'}, 'fechaBaja'=>'1900-01-01'));
                     $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsign{'id_suc'}));
                 $raw['sucursal']=$sucursal{'nombre'};                
                 if(Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoAsign{'id'}))){

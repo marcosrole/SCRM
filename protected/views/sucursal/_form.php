@@ -34,7 +34,6 @@
                             $this->widget('booster.widgets.TbGridView', array(
                                 'id' => 'empresasAsociadas',
                                 'dataProvider' => $empresa->search(),
-                                'filter' => $empresa,
                                 'columns' => array(                        
                                     array(
                                         'name' => 'cuit',
@@ -48,6 +47,8 @@
                                         'header' => "",
                                         'id' => 'selectEmpresa',
                                         'class' => 'CCheckBoxColumn',
+                                         'checked'=>'in_array($data->cuit, '  . $EmpresaSeleccionada .  '  )',
+//                                        'checked'=>'in_array($data->cuit, [45784521]  )',
                                         'selectableRows' => 1, //Numero de filas que se pueden seleccionar
                                     ),                        
                                 ),

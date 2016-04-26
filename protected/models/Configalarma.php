@@ -7,9 +7,15 @@
  * @property integer $id
  * @property integer $segCont
  * @property double $porcCont
- * @property integer $segInter
- * @property integer $cantPico
- * @property integer $pico
+ * @property integer $segInt
+ * @property double $porcInt
+ * @property double $division
+ * @property double $segDis
+ * @property double $porcDis
+ * @property double $recibirAlaDistancia
+ * @property double $recibirAlaIntermitente
+ * @property double $recibirAlaContinuo
+ * @property double $tolResponsable
  */
 class Configalarma extends CActiveRecord
 {
@@ -29,12 +35,12 @@ class Configalarma extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('segCont, porcCont, segInter, cantPico, pico', 'required'),
-			array('segCont, segInter, cantPico, pico', 'numerical', 'integerOnly'=>true),
-			array('porcCont', 'numerical'),
+			array('segCont, porcCont, segInt, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'required'),
+			array('segCont, segInt', 'numerical', 'integerOnly'=>true),
+			array('porcCont, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, segCont, porcCont, segInter, cantPico, pico', 'safe', 'on'=>'search'),
+			array('id, segCont, porcCont, segInt, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,12 +61,18 @@ class Configalarma extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-                    'id' => 'ID',
-                    'segCont' => 'Segundos Ruido Continuo',
-                    'porcCont' => '% aceptación Ruido Continuo',
-                    'segInter' => 'Segundos Ruido Intermitente',
-                    'cantPico' => 'Cantidad de Pico',
-                    'pico' => 'Pico'                    
+			'id' => 'ID',
+			'segCont' => 'Ruido Continuo (seg)',
+			'porcCont' => 'Porcentaje aceptacion ruido continuo',
+			'segInt' => 'Ruido Intermitente (seg)',
+			'porcInt' => 'Porcentaje aceptacion ruido intermitente',
+			'division' => 'Division',
+			'segDis' => 'Tiempo de obstrucción aceptable',
+			'porcDis' => 'Porcentaje de aceptacion dispositivo obstruido',
+			'recibirAlaDistancia' => 'Recibir Alarma de Distancia',
+			'recibirAlaIntermitente' => 'Recibir Alarma de R. Intermitente',
+			'recibirAlaContinuo' => 'Recibir Alarma de R. Continuo',
+			'tolResponsable' => 'Tol Responsable',
 		);
 	}
 
@@ -85,9 +97,15 @@ class Configalarma extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('segCont',$this->segCont);
 		$criteria->compare('porcCont',$this->porcCont);
-		$criteria->compare('segInter',$this->segInter);
-		$criteria->compare('cantPico',$this->cantPico);
-		$criteria->compare('pico',$this->pico);
+		$criteria->compare('segInt',$this->segInt);
+		$criteria->compare('porcInt',$this->porcInt);
+		$criteria->compare('division',$this->division);
+		$criteria->compare('segDis',$this->segDis);
+		$criteria->compare('porcDis',$this->porcDis);
+		$criteria->compare('recibirAlaDistancia',$this->recibirAlaDistancia);
+		$criteria->compare('recibirAlaIntermitente',$this->recibirAlaIntermitente);
+		$criteria->compare('recibirAlaContinuo',$this->recibirAlaContinuo);
+		$criteria->compare('tolResponsable',$this->tolResponsable);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

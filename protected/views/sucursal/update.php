@@ -5,13 +5,12 @@
 $this->menu=array(
 	array('label'=>'Listar Sucursales', 'url'=>array('index')),
 	array('label'=>'Crear Sucursal', 'url'=>array('create')),
-	array('label'=>'View Sucursal', 'url'=>array('view', 'id'=>$sucursal->id)),
-	array('label'=>'Manage Sucursal', 'url'=>array('admin')),
+	array('label'=>'Ver detalles de Sucursal', 'url'=>array('view', 'id'=>$sucursal->id)),
 );
 ?>
 
-<h1>Update Sucursal <?php echo $sucursal->id; ?></h1>
-
+<h1>Empresa: <?php echo $sucursal->id; ?></h1>
+<?php $EmpresaSeleccionada = '[' . $empresaSelec{'cuit'} . ']';?>
 <?php $this->renderPartial(
                         '_form',
                         array(
@@ -19,6 +18,8 @@ $this->menu=array(
                             'direccion'=>$direccion,
                             'empresa' => $empresa,
                             'localidad' => $localidad,                        
-                            'grupoSucural' => $grupoSucural,
+                            'zona' => $zona,
+                            'listZona'=> $listZona,
                             'lista_localidades' => $lista_localidades,
+                            'EmpresaSeleccionada' => $EmpresaSeleccionada,
                         )); ?>

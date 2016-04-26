@@ -37,14 +37,7 @@ $this->widget('booster.widgets.TbGridView', array(
         'type' => 'striped bordered condensed',
         'dataProvider' => $dataProvider,    
          'columns' => array(                
-                array(
-                    'name' => 'hs',
-                    'header'=>'Hs'
-                ),                                
-                array(
-                    'name' => 'fecha',
-                    'header'=>'Fecha'
-                ),             
+                             
              array(
                     'name' => 'nombre_suc',
                     'header'=>'Sucursal'
@@ -52,15 +45,16 @@ $this->widget('booster.widgets.TbGridView', array(
              array(
                     'name' => 'nombre_emp',
                     'header'=>'Empresa'
-                ),             
-             array(
-                    'name' => 'direccion',
-                    'header'=>'Direccion'
-                ),             
+                ),      
+                          
              array(
                     'name' => 'inspector',
                     'header'=>'Inspector'
-                ),             
+                ),  
+             array(
+                    'name' => 'fechahsIns',
+                    'header'=>'Asignacion'
+                ),
             array(
                     'header' => "",
                     'id' => 'selectDeleteInspectores',

@@ -83,96 +83,29 @@ class AsignarinspectorController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$rawData = array();
-                $inspectores = Inspector::model()->findAllByAttributes(array('ocupado'=>'0')); //No esta ocupado
-                foreach($inspectores as $item=>$inspector){
-                    $raw = array();
-                    $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
-                    $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
-
-                        $raw['id']=(int)$inspector{'id'};
-                        $raw['matricula']=$inspector{'matricula'};
-                        $raw['dni']=$persona{'dni'};
-                        $raw['nombre']=$persona{'apellido'} . " " . $persona{'nombre'};
-                        $raw['sexo']=$persona{'sexo'};                        
-                        $rawData[]=$raw;                                                   
-                }
-                $DataProviderInspector=new CArrayDataProvider($rawData, array(
-                   'id'=>'id',
-                   'pagination'=>array(
-                       'pageSize'=>10,
-                   ),
-               ));
-               
-                //Muestro las sucursales que tienen una alarma
-                
-                $alarmas = new Alarma();
-                
-                $criteria=new CDbCriteria(array(
-                        
-                        'order'=>'fecha DESC, hs DESC'));
-                       
-                $alarmas=  Alarma::model()->findAll($criteria);
-                
-                $sucursales = array();
-                
-                foreach ($alarmas as $item=>$alarma){
-                    
-                    $sucursal = Sucursal::model()->findByAttributes(array('id'=>$alarma{'id_suc'}));
-                    
-                    //Verifico si ya se encuentra en la lista de sucursales o si la alarma se encuentra solucionada
-                    $flag=true;
-                    foreach ($sucursales as $x=>$Itemsucursal){
-                        if($Itemsucursal == $sucursal) $flag=false;                                                
-                    }                    
-                    if($alarma{'solucionada'}==1) $flag=false;
-                    if($flag){
-                        //Datos: NombreSucrusal NombreEmpresa DireccionSucursal AlarmaDesripcion 
-                        $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
-                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
-                        
-                        $raw['id']=(int)$alarma{'id'};
-                        $raw['nombre_suc']=$sucursal{'nombre'};
-                        $raw['nombre_emp']=$empresa{'razonsocial'};
-                        $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
-                        $raw['alarma']=$alarma{'descripcion'};                                                
-                        $raw['hs']=$alarma{'hs'};
-                        $sucursales[]=$raw; 
-                    }                    
-                }
-                
-                $DataProviderSucursales=new CArrayDataProvider($sucursales, array(
-                   'id'=>'id',
-                   'pagination'=>array(
-                       'pageSize'=>10,
-                   ),
-               )); 
-                
+            $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0'), array('order'=>'fechahs ASC'));
+            
                 if(isset($_POST['selectInspector']) || isset($_POST['selectAlarma'])){                  
-                
+                $AasignarInspector = new Asignarinspector();
                 
                 $transaction = Yii::app()->db->beginTransaction();
-                if (!(isset($_POST['selectInspector']) && !isset($_POST['selectAlarma']))){
+                if (! (isset($_POST['selectInspector']) && !isset($_POST['selectAlarma']))){
                     if (!(!isset($_POST['selectInspector']) && isset($_POST['selectAlarma']))){
+                        
                         date_default_timezone_set('America/Buenos_Aires');
                         $alarma = Alarma::model()->findByAttributes(array('id'=>$_POST['selectAlarma'][0]));
                         
-                        $asignarInspector = new Asignarinspector();
-                        $asignarInspector->hs=date('H:i:s');
-                        $asignarInspector->fecha=date("Y-m-d");
-                        $asignarInspector->id_ins=$_POST['selectInspector'][0];
-                        $asignarInspector->id_ala=$_POST['selectAlarma'][0];
-
-                        if($asignarInspector->insert()){
-                            Yii::app()->user->setFlash('success', "<strong>Asignacion correcta!</strong>  ");
-                            $inspector->estoyOcupado($asignarInspector{'id_ins'});                                
-                            $alarma->setSolucionada($alarma{'id'},'1');
-                            $transaction->commit();
-                            $this->redirect(array('view', 'id'=>$asignarInspector{'id'}));
-                        }  else {
-                            $transaction->rollback();
-                            Yii::app()->user->setFlash('error', "<strong>Error al asignar!</strong>");
-                        }                           
+                        $AasignarInspector->fechahsIns=date("Y-m-d H:i:s");
+                        $AasignarInspector->id_ins=$_POST['selectInspector'][0];
+                        $AasignarInspector->id_ala=$_POST['selectAlarma'][0];
+                        $AasignarInspector->observacion=$_POST['Asignarinspector']['observacion'];
+//                        var_dump($AasignarInspector); die();
+                        $AasignarInspector->insert();
+                            $inspector = new Inspector();
+                        $inspector->estoyOcupado($AasignarInspector{'id_ins'});                                
+                        $alarma->setSolucionada($alarma{'id'});
+                        $transaction->commit();
+                        Yii::app()->user->setFlash('success', "<strong>Asignacion correcta!</strong>  ");
                     }else 
                         {
                         $transaction->rollback();
@@ -181,13 +114,72 @@ class AsignarinspectorController extends Controller
                 }else 
                     {
                     $transaction->rollback();
-                    Yii::app()->user->setFlash('error', "<strong>Error. Sucursal!</strong> Debe seleccionar una sucursal");
+                    Yii::app()->user->setFlash('error', "<strong>Error.!</strong> Debe seleccionar una alarma a solucionar");
                     }   
                 }
                 
+             $rawData = array();
+             
+             foreach ($alarmas as $item=>$value){
+                 $raw['id']=(int)$value{'id'};
+                    $tipoAlaram = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                 $raw['alarma']=$tipoAlaram{'descripcion'};
+                    $fecha = explode(" ",$value{'fechahs'});
+                    $aux = new DateTime($fecha[0]);
+                        
+                 $raw['fecha']=$aux->format('d-m-Y');                       
+                 $raw['hs']=$fecha[1];
+                    $dispositivo=  Dispositivo::model()->findByAttributes(array('id'=>$value{'id_dis'}));
+                    $Histoasig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+                    $sucursal = Sucursal::model()->findByAttributes(array('id'=>$Histoasig{'id_suc'}));
+                 $raw['sucursal']=$sucursal{'nombre'};
+                    $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
+                    $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                    $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                 $raw['empresa']=$empresa{'razonsocial'};
+                 $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'};
+                 $raw['localidad']=$localidad{'nombre'};
+                 if($value{'enviarSMS'}==0) $raw['SMSenviado']="NO enviado";
+                 else $raw['SMSenviado']="SI enviado";
+                 $rawData[]=$raw;                   
+             }
+             
+             $DataProviderAlarmas=new CArrayDataProvider($rawData, array(
+                   'id'=>'id',
+                   'pagination'=>array(
+                       'pageSize'=>10,
+                   ),
+               ));
+                                
+            $rawData = array();
+                $inspectores = Inspector::model()->findAllByAttributes(array('ocupado'=>'0')); //No esta ocupado
+                if(count($inspectores)!=0){
+                foreach($inspectores as $item=>$inspector){
+                    $raw = array();
+                    $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
+                    $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
+                    $zona = Zona::model()->findByAttributes(array('id'=>$inspector{'id_zon'}));
+                        $raw['id']=(int)$inspector{'id'};
+                        $raw['dni']=$persona{'dni'};
+                        $raw['nombre']=$persona{'apellido'} . " " . $persona{'nombre'};
+                        $raw['sexo']=$persona{'sexo'};                        
+                        $raw['zona']=$zona{'nombre'};
+                        $rawData[]=$raw;                                                   
+                }
+                
+                }else $rawData=[];
+                $DataProviderInspector=new CArrayDataProvider($rawData, array(
+                   'id'=>'id',
+                   'pagination'=>array(
+                       'pageSize'=>10,
+                   ),
+               ));
+                
+                
 		$this->render('create',array(
-			'dataInspectores'=>$DataProviderInspector,
-                        'dataSucursales'=>$DataProviderSucursales,
+			'DataProviderAlarmas'=>$DataProviderAlarmas,
+                        'DataProviderInspector'=>$DataProviderInspector,
+                         'AasignarInspector' => new Asignarinspector(),
 		));
 	}
 
@@ -202,24 +194,30 @@ class AsignarinspectorController extends Controller
             
             foreach ($asignaciones as $item=>$asignacion){                
                 $alarma = Alarma::model()->findByAttributes(array('id'=>$asignacion{'id_ala'}));
-                $sucursal= Sucursal::model()->findByAttributes(array('id'=>$alarma{'id_suc'}));
+                $tipoAlarma= Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
+                
+                $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
+                $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}));
+                $sucursal= Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
                 $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
+                $encargado = Persona::model()->findByAttributes(array('dni'=>$empresa{'dni_per'}));
                 $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                 $inspector = Inspector::model()->findByAttributes(array('id'=>$asignacion{'id_ins'}));
                 $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
                 $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
 
                 $raw['id']=(int)$asignacion{'id'};
-                $raw['hs']=$asignacion{'hs'};
-                $raw['fecha']=$asignacion{'fecha'};
-                $raw['alarma']=$alarma{'descripcion'};
+                $raw['fechahsIns']=$asignacion{'fechahsIns'};
+                $raw['fechahsDue']=$alarma{'fechahs'};
+                $raw['alarma']=$tipoAlarma{'descripcion'};
                 $raw['nombre_suc']=$sucursal{'nombre'};
                 $raw['nombre_emp']=$empresa{'razonsocial'};
-                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'} . " - Localidad: " . $localidad{'nombre'};
                 $raw['inspector']=$persona{'apellido'} . " " . $persona{'nombre'};
+                $raw['encargado']=$encargado{'apellido'} . " " . $encargado{'nombre'};
                 $datos[]=$raw; 
-            }
-            
+            }            
 	
 		$this->render('index',array(
 			'datos'=>$datos,
@@ -239,33 +237,41 @@ class AsignarinspectorController extends Controller
                        $asignacion = Asignarinspector::model()->findByAttributes(array('id'=>$item));
                        $inspector = Inspector::model()->findByAttributes(array('id'=>$asignacion{'id_ins'}));
                        $inspector->estoyLibre($inspector{'id'});
-                       $alarma = Alarma::model()->findByAttributes(array('id'=>$asignacion{'id_ala'}));
-                       $alarma->setSolucionada($alarma{'id'}, 0);
-                       $asignacion->delete();                       
+                       $asignacion->delete(); 
+                        Yii::app()->user->setFlash('success', "<strong>Registro !</strong>  ");
+                       
                    }
                 }
                 
-                $asignaciones = Asignarinspector::model()->findAll();
+                $asignaciones = Asignarinspector::model()->findAll(array('order'=>'fechahsIns DESC'));
                 
                 $datos = array();
                 foreach ($asignaciones as $item=>$asignacion){                
-                    $alarma = Alarma::model()->findByAttributes(array('id'=>$asignacion{'id_ala'}));
-                    $sucursal= Sucursal::model()->findByAttributes(array('id'=>$alarma{'id_suc'}));
-                    $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
-                    $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
-                    $inspector = Inspector::model()->findByAttributes(array('id'=>$asignacion{'id_ins'}));
-                    $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
-                    $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
+                $alarma = Alarma::model()->findByAttributes(array('id'=>$asignacion{'id_ala'}));
+                $tipoAlarma= Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
+                
+                $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
+                $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}));
+                $sucursal= Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
+                $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
+                $encargado = Persona::model()->findByAttributes(array('dni'=>$empresa{'dni_per'}));
+                $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                $inspector = Inspector::model()->findByAttributes(array('id'=>$asignacion{'id_ins'}));
+                $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
+                $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
 
-                    $raw['id']=(int)$asignacion{'id'};
-                    $raw['hs']=$asignacion{'hs'};
-                    $raw['fecha']=$asignacion{'fecha'};                    
-                    $raw['nombre_suc']=$sucursal{'nombre'};
-                    $raw['nombre_emp']=$empresa{'razonsocial'};
-                    $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
-                    $raw['inspector']=$persona{'apellido'} . " " . $persona{'nombre'};
-                    $datos[]=$raw; 
-                }
+                $raw['id']=(int)$asignacion{'id'};
+                $raw['fechahsIns']=$asignacion{'fechahsIns'};
+                $raw['fechahsDue']=$alarma{'fechahs'};
+                $raw['alarma']=$tipoAlarma{'descripcion'};
+                $raw['nombre_suc']=$sucursal{'nombre'};
+                $raw['nombre_emp']=$empresa{'razonsocial'};
+                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'} . " - Localidad: " . $localidad{'nombre'};
+                $raw['inspector']=$persona{'apellido'} . " " . $persona{'nombre'};
+                $raw['encargado']=$encargado{'apellido'} . " " . $encargado{'nombre'};
+                $datos[]=$raw; 
+            }  
                 
                 
                 $DataProvider=new CArrayDataProvider($datos, array(

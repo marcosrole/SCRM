@@ -23,5 +23,6 @@ $this->menu=array(
                     'direccion' => $direccion,
                     'localidad' => $localidad,
                     'lista_localidades' => $lista_localidades,
-    'checked' => $checked, 
+                    'checked'=>$checked
+    
                 )); ?>

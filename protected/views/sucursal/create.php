@@ -25,4 +25,5 @@ $this->menu=array(
                             'zona' => $zona,
                             'listZona'=> $listZona,
                             'lista_localidades' => $lista_localidades,
+                            'EmpresaSeleccionada' => '[]',
                         )); ?>

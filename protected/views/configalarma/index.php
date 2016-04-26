@@ -15,6 +15,6 @@ $this->menu=array(
 <h1>Configalarmas</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
+	'dataProvider'=>$dataProvider[0],
 	'itemView'=>'_view',
 )); ?>

@@ -177,12 +177,20 @@ $this->widget('booster.widgets.TbAlert', array(
                 <?php echo $form->textFieldGroup($persona, 'email', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
                 <?php echo $form->error($persona, 'email'); ?>
             </div>
-
+    
             <div class="boton">
                 <?php $this->widget('booster.widgets.TbButton', array('label' => 'Cargar', 'context' => 'success','buttonType' => 'submit',));?>
             </div>
+            
         </div>
-    <?php }?>
+          <?php }?>
+          <?php if(!$checked){?> 
+            <div class="boton">
+                <?php $this->widget('booster.widgets.TbButton', array('label' => 'Verificar', 'context' => 'success','buttonType' => 'submit',));?>
+            </div>
+          <?php }?>
+            
+   
         </div>
             
 

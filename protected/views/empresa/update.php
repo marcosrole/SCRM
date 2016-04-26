@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Empresas'=>array('index'),
-	$model->cuit=>array('view','id'=>$model->cuit),
+//	$model->cuit=>array('view','id'=>$model->cuit),
 	'Update',
 );
 
@@ -19,10 +19,11 @@ $this->menu=array(
 <h1>Modificar Empresa: <?php echo $empresa->razonsocial; ?></h1>
 
 
-<?php $this->renderPartial('_form', array(
+<?php  $this->renderPartial('_form', array(
                     'empresa' => $empresa,
                     'persona' => $persona,
                     'direccion' => $direccion,
                     'localidad' => $localidad,
-                    'lista_localidades' => $lista_localidades,                                        
+                    'lista_localidades' => $lista_localidades, 
+                    'checked'=>true,
                 ));?>

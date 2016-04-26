@@ -30,10 +30,11 @@ $this->menu=array(
     array(
         'data' => $dato,
         'attributes' => array(
-            array('name' => 'inspector', 'label' => 'Inspector responsable'),
-            array('name' => 'hs', 'label' => 'Hs'),
-            array('name' => 'fecha', 'label' => 'Fecha'),
-            array('name' => 'alarma', 'label' => 'Alarma'),
+            array('name' => 'encargado', 'label' => 'Responsable de la sucursal'),
+            array('name' => 'fechahsDue', 'label' => 'Horario de aviso al Responsable'),
+            array('name' => 'inspector', 'label' => 'Inspector responsable'),            
+            array('name' => 'fechahsIns', 'label' => 'Horario de aviso al Inspector'),            
+            array('name' => 'alarma', 'label' => 'Alarma generada'),
             array('name' => 'nombre_emp', 'label' => 'Empresa'),
             array('name' => 'nombre_suc', 'label' => 'Sucursal'),
             array('name' => 'direccion', 'label' => 'Direccion'),
@@ -41,4 +42,3 @@ $this->menu=array(
         )
     ); ?>
 <?php }?>
-

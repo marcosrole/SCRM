@@ -5,14 +5,15 @@
  *
  * The followings are the available columns in table 'asignarinspector':
  * @property integer $id
- * @property string $hs
- * @property string $fecha
+ * @property string $fechahsIns
+ * @property string $fechahsDue
  * @property integer $id_ins
- * @property integer $id_suc
+ * @property integer $id_ala
+ * @property string $observacion
  *
  * The followings are the available model relations:
  * @property Inspector $idIns
- * @property Sucursal $idSuc
+ * @property Alarma $idAla
  */
 class Asignarinspector extends CActiveRecord
 {
@@ -32,11 +33,12 @@ class Asignarinspector extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hs, fecha, id_ins, id_ala', 'required'),
-			array('id_ins, id_suc', 'numerical', 'integerOnly'=>true),
+			array('fechahsIns, fechahsDue, id_ins, id_ala', 'required'),
+			array('id_ins, id_ala', 'numerical', 'integerOnly'=>true),
+			array('observacion', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hs, fecha, id_ins, id_ala', 'safe', 'on'=>'search'),
+			array('id, fechahsIns, fechahsDue, id_ins, id_ala, observacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,7 +51,7 @@ class Asignarinspector extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'idIns' => array(self::BELONGS_TO, 'Inspector', 'id_ins'),
-			'idSuc' => array(self::BELONGS_TO, 'Alarma', 'id_ala'),
+			'idAla' => array(self::BELONGS_TO, 'Alarma', 'id_ala'),
 		);
 	}
 
@@ -60,10 +62,11 @@ class Asignarinspector extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'hs' => 'Hs',
-			'fecha' => 'Fecha',
+			'fechahsIns' => 'Fechahs Ins',
+			'fechahsDue' => 'Fechahs Due',
 			'id_ins' => 'Id Ins',
-			'id_ala' => 'Id ala',
+			'id_ala' => 'Id Ala',
+			'observacion' => 'Observacion',
 		);
 	}
 
@@ -86,10 +89,11 @@ class Asignarinspector extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('hs',$this->hs,true);
-		$criteria->compare('fecha',$this->fecha,true);
+		$criteria->compare('fechahsIns',$this->fechahsIns,true);
+		$criteria->compare('fechahsDue',$this->fechahsDue,true);
 		$criteria->compare('id_ins',$this->id_ins);
 		$criteria->compare('id_ala',$this->id_ala);
+		$criteria->compare('observacion',$this->observacion,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

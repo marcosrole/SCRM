@@ -25,11 +25,10 @@
         'data' => $datos,
         'attributes' => array(            
             array('name' => 'descripcion', 'label' => 'Descripcion'),
-            array('name' => 'vesperado', 'label' => 'Valor Esperado'),
-            array('name' => 'vactual', 'label' => 'Valor Actual'),
             array('name' => 'sucursal', 'label' => 'Sucursal'),
             array('name' => 'empresa', 'label' => 'Empresa'),
             array('name' => 'direccion', 'label' => 'Direccion'),
+            array('name' => 'localidad', 'label' => 'Localidad'),
             array('name' => 'fecha', 'label' => 'Fecha'),
             array('name' => 'hs', 'label' => 'HS'),
         ),

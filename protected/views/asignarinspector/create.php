@@ -11,11 +11,13 @@ $this->menu=array(
 	array('label'=>'Ver Asignaciones', 'url'=>array('index')),
 	array('label'=>'Eliminar Asignaciones', 'url'=>array('admin')),
 );
+
 ?>
 
 <h1>Asignar Inspector</h1>
 
 <?php $this->renderPartial('_form', array(
-    'dataInspectores'=>$dataInspectores,
-    'dataSucursales' => $dataSucursales,
+    'DataProviderAlarmas'=>$DataProviderAlarmas,
+     'DataProviderInspector'=>$DataProviderInspector,
+    'AasignarInspector' => $AasignarInspector,
     )); ?>

@@ -49,6 +49,38 @@ class AlarmaController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
+        
+        public function actionHisto(){
+            $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'1'));
+            $rawData=array();  
+             if(count($alarmas)!=0){
+                foreach ($alarmas as $item=>$value){                                      
+                        $raw['id']=(int)$value{'id'};
+                        $raw['solucionado']=$value{'solucionado'}; 
+                           $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                        $raw['alarma']=$tipoAlarma{'descripcion'};
+                        $fechahs=explode(" ", $value['fechahs']);
+                        $raw['fecha']=$fechahs[0];  
+                        $raw['hs']=$fechahs[1];                          
+                        $rawData[]=$raw;                   
+                }    
+               
+             } else $rawData=array();        
+              
+                    $DataProviderAlarma=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                    
+             $this->render('histo',array(
+			'DataProviderAlarma'=>$DataProviderAlarma,
+		));
+            
+            
+        }
+                
 	public function actionView($id)
 	{
             $datos = array();
@@ -145,22 +177,16 @@ class AlarmaController extends Controller
         
         public function actionEliminarTodo()
 	{
-            $alarmas = Alarma::model()->findAll();            
+            Alarma::model()->deleteAll();
+            $DataProviderAlarma=new CArrayDataProvider([], array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
             
-            foreach ($alarmas as $item=> $alarma){
-                 $asignacion = Asignarinspector::model()->findByAttributes(array('id_ala'=>$alarma{'id'}));
-                 if($asignacion!=null){
-                     $asignacion->delete();
-                 }else {
-                     $alarma->delete();
-                 }
-                 
-                 
-                 
-            }
-                        
-            $this->render('admin',array(
-			'model'=>new Alarma(),
+           $this->render('admin',array(
+			'DataProviderAlarma'=>$DataProviderAlarma,
 		));
 		
 	}
@@ -170,7 +196,7 @@ class AlarmaController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$alarmas = Alarma::model()->findAll();
+		$alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0'));
                 
                 $rawData=[];
                 if(count($alarmas)==0){
@@ -199,7 +225,7 @@ class AlarmaController extends Controller
                        ),
                      ));
                  }else{
-                        $value=$alarmas[0];                             
+                        $value=$alarmas;                             
                         $raw['id']=(int)$value{'id'};
                         $raw['solucionado']=$value{'solucionado'}; 
                             $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
@@ -242,24 +268,29 @@ class AlarmaController extends Controller
 	public function actionSendemail($id_alarma){
             
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id_alarma));
-            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$alarma{'id_suc'}));
+            $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
+            $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
             $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
             $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
+            $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
             
             $datos = array();
-            $date = date_create($alarma{'fecha'});
-            $datos['fecha']= date_format($date, 'd-m-Y');
+            $date = $alarma{'fechahs'};
+            $date = explode(" ", $date);
+            $date[0] = date_create($date[0]);
+            $datos['fecha']= date_format($date[0], 'd-m-Y');
             
             
             $datos['id']= $alarma{'id'};
-            $datos['descripcion']= $alarma{'descripcion'};
-            $datos['vesperado']=$alarma{'valorEsperado'};
-            $datos['vactual']=$alarma{'valorActual'};
-            $datos['hs']=$alarma{'hs'};
+            $datos['descripcion']= $tipoAlarma{'descripcion'};
+            $datos['hs']= $date[1];
             $datos['sucursal']=$sucursal{'nombre'};
             $datos['empresa']=$empresa{'razonsocial'};
             $datos['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
-            
+            $datos['localidad']=$localidad{'nombre'};
+           
             
             $message = new YiiMailMessage;                     
             $message->subject = 'SCRM';
@@ -270,9 +301,13 @@ class AlarmaController extends Controller
 
             if(Yii::app()->mail->send($message)){
                  Yii::app()->user->setFlash('success', "<strong>Enviado!</strong> Mail enviado correctamente ");
-            }else  Yii::app()->user->setFlash('error', "<strong>Error!</strong> No se ha enviado el mail ");
-            
-            $this->redirect('admin');
+//                 $this->render('admin');
+            }else  {
+                Yii::app()->user->setFlash('error', "<strong>Error!</strong> No se ha enviado el mail ");
+                
+                
+            }
+            $this->redirect(array('alarma/admin')); 
 
         }
 }

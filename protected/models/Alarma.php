@@ -112,4 +112,9 @@ class Alarma extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        public static function setSolucionada($id){
+            $alarma = Alarma::model()->findByAttributes(array('id'=>$id));
+            $alarma->solucionado=1;
+            $alarma->save();
+        }
 }

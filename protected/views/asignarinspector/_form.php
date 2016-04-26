@@ -27,90 +27,124 @@
                 'htmlOptions' => array('class' => 'well'), )); ?>
             
     
+    <h3>Alarmas:</h3>
+    
+    <div class="alarma">
+        <?php 
+        $this->widget('booster.widgets.TbGridView', array(
+            'id' => 'dispositivo-grid-list',
+            'dataProvider' => $DataProviderAlarmas,
+            'columns' => array(                                                
+                array(
+                    'name' => 'alarma',
+                    'header'=>'Alarma',        
+                ),
+                array(
+                    'name' => 'sucursal',
+                    'header'=>'Sucursal',                                                        
+                ),
+                array(
+                    'name' => 'empresa',
+                    'header'=>'Empresa',                                                        
+                ),                    
+                array(
+                    'name' => 'direccion',
+                    'header'=>'Direccion',                                                        
+                ),
+                array(
+                    'name' => 'localidad',
+                    'header'=>'Localidad',                                                        
+                ),
+                array(
+                    'name' => 'SMSenviado',
+                    'header'=>'SMS',                                                        
+                ),
+                array(
+                    'name' => 'fecha',
+                    'header'=>'Fecha',                                                        
+                ),
+                array(
+                    'name' => 'hs',
+                    'header'=>'HS',                                                        
+                ),
+                array(
+                    'header' => "",
+                    'id' => 'selectAlarma',
+                    'class' => 'CCheckBoxColumn',
+                    'selectableRows' => 1, //Numero de filas que se pueden seleccionar
+                ), 
+            ),
+
+        ));
+    ?>         
+    </div>
+    
     <h3>Inspectores Disponibles:</h3>
     
-    <div class="campo">
+    <div class="inspectores">
         <?php 
-                $this->widget('booster.widgets.TbGridView', array(
-                    'id' => 'empresasAsociadas',
-                    'dataProvider' => $dataInspectores,
-                   // 'filter' => $dataInspectores,
-                    'columns' => array(                                                
-                        array(
-                            'name' => 'dni',
-                            'header'=>'DNI',        
-                            
-                            
-                        ),
-                        array(
-                            'name' => 'nombre',
-                            'header'=>'Appelido y Nombre',                                                        
-                        ),
-                        array(
-                            'name' => 'sexo',                            
-                        ),                        
-                        
-                         array(
-                            'header' => "",
-                            'id' => 'selectInspector',
-                            'class' => 'CCheckBoxColumn',
-                            'selectableRows' => 1, //Numero de filas que se pueden seleccionar
-                        ),                        
-                    ),
-                    
-                ));
+        $this->widget('booster.widgets.TbGridView', array(
+            'id' => 'dispositivo-grid-list',
+            'dataProvider' => $DataProviderInspector,
+            'columns' => array(                                                
+                array(
+                    'name' => 'dni',
+                    'header'=>'DNI',        
+                ),
+                array(
+                    'name' => 'nombre',
+                    'header'=>'Nombre y Apellido',                                                        
+                ),
+                array(
+                    'name' => 'sexo',
+                    'header'=>'Sexo', 
+                    'value'=>'$data["sexo"]== 0 ? "Hombre" : "Mujer"', 
+                ),                    
+                array(
+                    'name' => 'zona',
+                    'header'=>'Zona',                                                        
+                ),
                 
-            ?>       
+                array(
+                    'header' => "",
+                    'id' => 'selectInspector',
+                    'class' => 'CCheckBoxColumn',
+                    'selectableRows' => 1, //Numero de filas que se pueden seleccionar
+                ), 
+            ),
+
+        ));
+    ?>         
     </div>
     
-    <h3>Sucursales:</h3>
     
-    <div class="campo">
-        <?php 
-                $this->widget('booster.widgets.TbGridView', array(
-                    'id' => 'empresasAsociadas',
-                    'dataProvider' => $dataSucursales,
-                   // 'filter' => $dataInspectores,
-                    'columns' => array(                                                
-                        array(
-                            'name' => 'nombre_suc',
-                            'header'=>'Sucursal',                                    
-                        ),
-                        array(
-                            'name' => 'nombre_emp',
-                            'header'=>'Empresa',                                    
-                        ),
-                        array(
-                            'name' => 'direccion',
-                            'header'=>'Direccion',                                    
-                        ),
-                        array(
-                            'name' => 'alarma',
-                            'header'=>'Alarma',                                    
-                        ),  
-                        array(
-                            'name' => 'hs',
-                            'header'=>'Hora',                                    
-                        ),
-                         array(
-                            'header' => "",
-                            'id' => 'selectAlarma',
-                            'class' => 'CCheckBoxColumn',
-                            'selectableRows' => 1, //Numero de filas que se pueden seleccionar
-                        ),                        
+    <?php echo $form->textAreaGroup(
+            $AasignarInspector,
+            'observacion',
+            array(
+                    'wrapperHtmlOptions' => array(
+                            'class' => 'col-sm-5',
                     ),
-                    
-                ));
-                
-            ?>       
-    </div>
+                    'widgetOptions' => array(
+                            'htmlOptions' => array('rows' => 5),
+                    )
+            )
+        ); ?>
     
-    <p>
-        
-    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="boton">
         <?php $this->widget('booster.widgets.TbButton', array('label' => 'Asignar','context' => 'success','buttonType'=>'submit',)); ?>        
     </div>
+    
     <?php $this->endWidget(); ?>
     
 </div>

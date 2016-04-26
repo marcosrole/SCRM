@@ -19,9 +19,15 @@ $this->menu=array(
 	'attributes'=>array(		
 		'segCont',
 		'porcCont',
-                'pico',
-                'cantPico',
-		'segInter',
+                'segInt',
+                'porcInt',
+                'segDis',
+                'porcDis',
+                'recibirAlaDistancia',
+                'recibirAlaIntermitente',
+                'recibirAlaContinuo',
+                'tolResponsable',
+		
 		
 	),
 )); ?>

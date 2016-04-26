@@ -64,7 +64,6 @@ class ConfigalarmaController extends Controller
 	{
 		$model=new Configalarma;
                 $model = Configalarma::model()->find();
-                Registroalarma::model()->determinarRuidoContinuo();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -124,9 +123,8 @@ class ConfigalarmaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Configalarma');
-                var_dump($dataProvider->getData());
-		$this->render('index',array(
+		$dataProvider=  Configalarma::model()->search();
+                $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}

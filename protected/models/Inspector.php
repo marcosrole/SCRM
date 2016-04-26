@@ -107,4 +107,14 @@ class Inspector extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        public static function estoyOcupado($id){
+            $inspector= Inspector::model()->findByAttributes(array('id'=>$id));
+            $inspector->ocupado=1;
+            $inspector->save();
+        }
+        public static function estoyLibre($id){
+            $inspector= Inspector::model()->findByAttributes(array('id'=>$id));
+            $inspector->ocupado=0;
+            $inspector->save();
+        }
 }

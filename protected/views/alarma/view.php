@@ -23,9 +23,7 @@ $this->menu=array(
         'data' => $datos,
         'attributes' => array(
             array('name' => 'id', 'label' => 'ID Alarma'),
-            array('name' => 'descripcion', 'label' => 'Descripcion'),
-            array('name' => 'vesperado', 'label' => 'Valor Esperado'),
-            array('name' => 'vactual', 'label' => 'Valor Actual'),
+            array('name' => 'descripcion', 'label' => 'Causa de Alarma'),
             array('name' => 'sucursal', 'label' => 'Sucursal'),
             array('name' => 'empresa', 'label' => 'Empresa'),
             array('name' => 'direccion', 'label' => 'Direccion'),

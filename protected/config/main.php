@@ -34,7 +34,7 @@ return array(
 
 	// application components
 	'components'=>array(
-            
+                
                 'mail' => array(
                     'class' => 'ext.yii-mail.YiiMail',
                     'transportType' => 'smtp',
@@ -42,7 +42,7 @@ return array(
                         'host' => 'smtp.gmail.com',
                         'encryption' => 'ssl',
                         'username' => 'marcosrole@gmail.com',
-                        'password' => 'vera2834',
+                        'password' => 'river2016',
                         'port' => 465,
                     ),
                     'viewPath' => 'application.views.mails',

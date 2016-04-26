@@ -25,6 +25,7 @@
 
         $usuario = new Usuario();
         $usuario=Usuario::model()->find();
+        $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0'));
         
         $this->widget(
                 'booster.widgets.TbNavbar', array(
@@ -113,7 +114,8 @@
                             'url' => array('/site/logout'),
                             'visible' => !Yii::app()->user->isGuest),
                         array(
-                            'label' => 'Alarma (' . Alarma::model()->count() . ')',
+                            
+                            'label' => 'Alarma (' . count($alarmas) . ')',
                             'url' => array('/alarma/admin'),
                             //'visible' => !Yii::app()->user->isGuest),
                             ),

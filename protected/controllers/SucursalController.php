@@ -142,19 +142,18 @@ class SucursalController extends Controller
                 $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
                 $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
                 $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
-                $grupoSucural = Gruposucursal::model()->findByAttributes(array('id'=>$sucursal{'id_zon'}));
-                $lista_localidades=  Localidad::model()->getListNombre();
+                $lista_localidades= CHtml::listData(Localidad::model()->findAll(), 'id', 'nombre');
+                $zona = new Zona();
                 
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-                
 		$transaction = Yii::app()->db->beginTransaction();             
                  try {
                      if (isset($_POST['selectEmpresa']) || (isset($_POST['Sucursal']) ) || ( isset($_POST['Direccion']) ) ) {
                         $direccion->attributes = $_POST['Direccion'];
                         $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
-                        
+                        die();
                         $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];                                    
                         $direccion->id_loc = $_POST['Localidad']['id'];
                        
@@ -192,9 +191,11 @@ class SucursalController extends Controller
                         array(
                             'sucursal'=>$sucursal,
                             'direccion'=>$direccion,
-                            'empresa' => $empresa,
+                            'empresa' => new Empresa(),
+                            'empresaSelec'=>$empresa,
                             'localidad' => $localidad,          
-                            'grupoSucural'=>$grupoSucural,
+                            'zona'=>$zona,
+                            'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
                             'lista_localidades' => $lista_localidades,
                         ));
 	}
