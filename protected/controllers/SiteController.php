@@ -46,18 +46,10 @@ class SiteController extends Controller
             $this->render('index', array('usuario'=>$user, 'error'=>$error));
 	}
 
-	/**
-	 * This is the action to handle external exceptions.
-	 */
-	public function actionError()
+	
+	public function actionAbout()
 	{
-		if($error=Yii::app()->errorHandler->error)
-		{
-			if(Yii::app()->request->isAjaxRequest)
-				echo $error['message'];
-			else
-				$this->render('error', $error);
-		}
+		$this->render('about');
 	}
 
 	/**
@@ -66,17 +58,27 @@ class SiteController extends Controller
 	public function actionContact()
                 
 	{
-            $name='=?UTF-8?B?'.base64_encode("marcos").'?=';
-				$subject='=?UTF-8?B?'.base64_encode("pruebaa").'?=';
-				$headers="From: $name <{'marcosrole@gmail.com'}>\r\n".
-					"Reply-To: {'marcosrole@gmail.com'}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-Type: text/plain; charset=UTF-8";
-
-				if(mail(Yii::app()->params['adminEmail'],$subject,"Holaaaaaaaaaa",$headers)){
-                                    echo "se envio";
-                                }else echo "no";
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+            $contacto = new Contacto();
+            
+            if(isset($_POST['Contacto'])){
+                $contacto->attributes=$_POST['Contacto'];
+                if($contacto->validate()){
+                    $message = new YiiMailMessage;                     
+                    $message->subject = $contacto{'subject'};
+                    $message->view ='contacto';//nombre de la vista q conformara el mail            
+                    $message->setBody(array('datos'=>$contacto),'text/html');//codificar el html de la vista
+                    $message->from =($contacto{'fromEmail'}); // alias del q envia
+                    $message->setTo('marcosrole@gmail.com'); // a quien se le envia                    
+                    
+                    if(Yii::app()->mail->send($message)){
+                        Yii::app()->user->setFlash('success', "<strong>Gracias por contactarse con nosotros!</strong> Nos comunicaremos a la brevedad ");                                                            
+                        $this->redirect('contact');
+                   }else  Yii::app()->user->setFlash('error', "<strong>Error!</strong> No se ha enviado el mail ");
+                }else Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos incompletos");
+            }
+            
+            $this->render('contact',array('model'=>$contacto));
+            
         }
 
 

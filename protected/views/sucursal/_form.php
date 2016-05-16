@@ -62,19 +62,33 @@
                     
                     
                 </p>
-                <div class="row">
-                    <?php
-                    echo $form->textFieldGroup(
-                            $sucursal, 'nombre', array(
-                        'wrapperHtmlOptions' => array(
-                            'class' => 'col-sm-5',
-                        ),
-                            )
-                    );
-                    ?>
-                    <?php echo $form->error($sucursal, 'nombre'); ?>
+                <div class="sucursal">
+                    <div class="nombre-sucursal">
+                        <?php echo $form->textFieldGroup($sucursal, 'nombre', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+                    </div>           
+
+                    <div class="zona-sucursal">
+                        
+                        <?php echo $form->dropDownListGroup($zona,'id',array('id'=>'dropdown','wrapperHtmlOptions' => array('class' => 'col-sm-5',),
+                                    'widgetOptions' => array(
+                                            'data' => $listZona,
+                                            //'htmlOptions' => array('prompt'=>'Zona'),
+                                    )
+                                ),
+                                array(
+                                    'options' => array('5'=>array('selected'=>true)),
+                                )
+                        ); ?>
+                        
+                        <div class="link">
+                            <?php $link= "http://" .  $_SERVER['HTTP_HOST'] . "/SCRM/zona/index"; ?>
+                            <a href=<?php echo $link ?> >Ver zonas</a>
+                        </div>
+                            
+                        
+                    </div>           
                 </div>
-                
+                                
                 <div class="direccion">
                     <div class="calle">
                         <?php echo $form->textFieldGroup($direccion, 'calle', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>

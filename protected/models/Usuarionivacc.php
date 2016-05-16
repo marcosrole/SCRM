@@ -1,25 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "permisosusuario".
+ * This is the model class for table "usuarionivacc".
  *
- * The followings are the available columns in table 'permisosusuario':
+ * The followings are the available columns in table 'usuarionivacc':
  * @property integer $id
  * @property integer $id_usr
- * @property integer $id_per
+ * @property integer $id_nivAcc
  *
  * The followings are the available model relations:
  * @property Usuario $idUsr
- * @property Permiso $idPer
+ * @property Nivelacceso $idNivAcc
  */
-class Permisosusuario extends CActiveRecord
+class Usuarionivacc extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'permisosusuario';
+		return 'usuarionivacc';
 	}
 
 	/**
@@ -30,11 +30,11 @@ class Permisosusuario extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_usr, id_per', 'required'),
-			array('id_usr, id_per', 'numerical', 'integerOnly'=>true),
+			array('id_usr, id_nivAcc', 'required'),
+			array('id_usr, id_nivAcc', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_usr, id_per', 'safe', 'on'=>'search'),
+			array('id, id_usr, id_nivAcc', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,7 +47,7 @@ class Permisosusuario extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'idUsr' => array(self::BELONGS_TO, 'Usuario', 'id_usr'),
-			'idPer' => array(self::BELONGS_TO, 'Permiso', 'id_per'),
+			'idNivAcc' => array(self::BELONGS_TO, 'Nivelacceso', 'id_nivAcc'),
 		);
 	}
 
@@ -59,7 +59,7 @@ class Permisosusuario extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'id_usr' => 'Id Usr',
-			'id_per' => 'Id Per',
+			'id_nivAcc' => 'Id Niv Acc',
 		);
 	}
 
@@ -83,7 +83,7 @@ class Permisosusuario extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('id_usr',$this->id_usr);
-		$criteria->compare('id_per',$this->id_per);
+		$criteria->compare('id_nivAcc',$this->id_nivAcc);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -94,24 +94,8 @@ class Permisosusuario extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Permisosusuario the static model class
+	 * @return Usuarionivacc the static model class
 	 */
-        public static function GenerarPermiso($id_usr, $id_permi){
-            $permiso = new Permisosusuario();
-            $permiso->id_usr=$id_usr;
-            $permiso->id_per=$id_permi;            
-            $permiso->insert();            
-        }
-        public static function getPermisos()
-	{
-            $permisos = Permiso::model()->findAll();
-            $array_permisos = array();
-            
-            foreach ($permisos as $key=>$value){
-                $array_permisos[]=$value{'titulo'};
-            }
-                return $array_permisos;
-	}
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);

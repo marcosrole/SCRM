@@ -27,6 +27,10 @@ and open the template in the editor.
                 margin: 0 0 10px;
                 background-color: cornflowerblue;
             }
+            .ventana_emergente{
+                color: red;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -78,28 +82,52 @@ and open the template in the editor.
                         $lon_promedio=$lon_promedio+$value[2];
                         $cant_dispo++;
 
-                    // Crear Informacion de ventana de mensaje
-                        $linea1 = 'Dispositivo: ' . $value[0] . ' ' ;
-                        $linea2 = 'Coordenadas: ' . $value[1] . ', ' . $value[2] . ' ' ;
-                        $linea3 = 'Direccion: ' . $value[3] . ' ' ;
-                        $linea4 = '<a href= "http://facebook.com/rolemarcos poner" >Mi facebook</a> ';
-
-                    $info_window_a = new EGMapInfoWindow(
-                            "<div> " . $linea1 . " </div> " .
-                            "<div> " . $linea2 . " </div> " .
-                            "<div> " . $linea3 . " </div> " .
-                            "<div> " . $linea4 . " </div> "                
-                            );
-
 
                 //        *********************************
                 //                Crear un markets:   
                 //        *********************************
                     //Crear un icono para el market
-                    $icon = new EGMapMarkerImage("http://google-maps-icons.googlecode.com/files/home.png");
+                    //Verifico si hay una alarma para el dispositivo.
+                    //Si existe,=> FIRE
+                    //Sino => DRINK
+                    
+                    $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$value[0], 'solucionada'=>0));
+                    if($alarma!=null){
+                        $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/fire.png");
+                    }else $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/drink.png");
+                                     
+                    
                     $icon->setSize(32, 37);
                     $icon->setAnchor(16, 16.5);
                     $icon->setOrigin(0, 0);
+                    
+                    if($alarma!=null){
+                        // Crear Informacion de ventana de mensaje
+                        $linea1 = 'Dispositivo: ' . $value[0] . ' ' ;                        
+                        $linea2 = 'Alarma: ' . $alarma{'descripcion'} . ' ' ;                        
+                        $linea3 = 'Direccion: ' . $value[3] . ' ' ;
+                            $url = "http://" . $_SERVER['HTTP_HOST'] . "/SCRM/asignarinspector/create";
+                        $linea4 = '<a href= ' . $url . '>Solucionar</a> ';
+
+                        $info_window_a = new EGMapInfoWindow(
+                            "<div> " . $linea1 . " </div> " .
+                            "<div class='ventana_emergente'> " . $linea2 . " </div> " .
+                            "<div> " . $linea3 . " </div> " .
+                            "<div> " . $linea4 . " </div> "                
+                            );
+                    }else {
+                        // Crear Informacion de ventana de mensaje
+                        $linea1 = 'Dispositivo: ' . $value[0] . ' ' ;                                                                       
+                        $linea3 = 'Direccion: ' . $value[3] . ' ' ;                      
+
+                        $info_window_a = new EGMapInfoWindow(
+                            "<div> " . $linea1 . " </div> " .                            
+                            "<div> " . $linea3 . " </div> "                                          
+                            );
+                    }
+                    
+                     
+                    
 
                     //Crear el market
                     $marker = new EGMapMarker($value[1], $value[2], array(
@@ -143,7 +171,24 @@ and open the template in the editor.
                       </div>
                       <div id="<?php echo $id_collapse ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<?php echo $heading ?>">
                         <div class="panel-body">
-                            <?php $this->widget(
+                            <?php if($datos{'alarma'} ==""){ ?>
+                                <?php $this->widget(
+                                'booster.widgets.TbDetailView',
+                                array(
+                                    'data' => $datos,
+                                    'attributes' => array(
+                                        array('name' => 'id', 'label' => 'Dispositivo'),
+                                        array('name' => 'empresa', 'label' => 'Empresa'),
+                                        array('name' => 'sucursal', 'label' => 'Sucursal'),
+                                        array('name' => 'fechaAlta', 'label' => 'Fecha de Alta'),
+                                        array('name' => 'direccion', 'label' => 'Direccion')                                        
+                                    ),
+                                    )
+                                ); ?>
+                            
+                            <?php }else { ?>
+                            <div class="DetailAlarma">
+                                <?php $this->widget(
                                 'booster.widgets.TbDetailView',
                                 array(
                                     'data' => $datos,
@@ -153,9 +198,12 @@ and open the template in the editor.
                                         array('name' => 'sucursal', 'label' => 'Sucursal'),
                                         array('name' => 'fechaAlta', 'label' => 'Fecha de Alta'),
                                         array('name' => 'direccion', 'label' => 'Direccion'),
+                                        array('name' => 'alarma', 'label' => 'Alarma'),
                                     ),
                                     )
                                 ); ?>
+                            <?php } ?>
+                            
                         </div>
                       </div>
                     </div>

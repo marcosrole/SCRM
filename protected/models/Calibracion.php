@@ -7,12 +7,11 @@
  * @property integer $id
  * @property double $db_permitido
  * @property double $dist_permitido
- * @property integer $id_dis
- * @property integer $id_suc
+ * @property string $fecha
+ * @property integer $id_AsiDis
  *
  * The followings are the available model relations:
- * @property Dispositivo $idDis
- * @property Sucursal $idSuc
+ * @property Histoasignacion $idAsiDis
  */
 class Calibracion extends CActiveRecord
 {
@@ -32,12 +31,12 @@ class Calibracion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('db_permitido, dist_permitido, id_dis, id_suc', 'required',),
-			array('id_dis, id_suc', 'numerical', 'integerOnly'=>true),
+			array('db_permitido, dist_permitido, fecha, id_AsiDis', 'required'),
+			array('id_AsiDis', 'numerical', 'integerOnly'=>true),
 			array('db_permitido, dist_permitido', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, db_permitido, dist_permitido, id_dis, id_suc', 'safe', 'on'=>'search'),
+			array('id, db_permitido, dist_permitido, fecha, id_AsiDis', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,8 +48,7 @@ class Calibracion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
-			'idSuc' => array(self::BELONGS_TO, 'Sucursal', 'id_suc'),
+			'idAsiDis' => array(self::BELONGS_TO, 'Histoasignacion', 'id_AsiDis'),
 		);
 	}
 
@@ -61,10 +59,10 @@ class Calibracion extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'db_permitido' => 'dB Permitidos',
-			'dist_permitido' => 'Distancia Permitida',
-			'id_dis' => 'Dispositivo',
-			'id_suc' => 'Sucursal',
+			'db_permitido' => 'Db Permitido',
+			'dist_permitido' => 'Dist Permitido',
+			'fecha' => 'Fecha',
+			'id_AsiDis' => 'Id Asi Dis',
 		);
 	}
 
@@ -89,8 +87,8 @@ class Calibracion extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('db_permitido',$this->db_permitido);
 		$criteria->compare('dist_permitido',$this->dist_permitido);
-		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id_suc',$this->id_suc);
+		$criteria->compare('fecha',$this->fecha,true);
+		$criteria->compare('id_AsiDis',$this->id_AsiDis);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -103,7 +101,7 @@ class Calibracion extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Calibracion the static model class
 	 */
-        public static function verificarDatos($id_dis, $db_in, $dist_in){            
+	public static function verificarDatos($id_dis, $db_in, $dist_in){            
             $calibracion = Calibracion::model()->findByAttributes(array('id_dis'=>$id_dis));            
             
             $estado=array();

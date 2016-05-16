@@ -1,4 +1,19 @@
 <?php
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));?>
+<?php
 /* @var $this UsuarioController */
 /* @var $model Usuario */
 
@@ -46,15 +61,11 @@ $this->widget('booster.widgets.TbGridView', array(
                 array(
                     'name' => 'name',
                     'header'=>'Nombre'
-                ),                                
-                array(
-                    'name' => 'nivel',
-                    'header'=>'Nivel de Acceso'
-                ),             
+                ),                                                            
              array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{delete} {update}', // botones a mostrar
+                    'template' => '{delete} {update} {NivelAcceso}', // botones a mostrar
                     'buttons' => array(
                         'delete' => array
                         (
@@ -69,6 +80,11 @@ $this->widget('booster.widgets.TbGridView', array(
                             'label' => 'Actualizar',                                                         
                             'url'=> 'Yii::app()->createUrl("/usuario/update?id=$data->id")'
                         ),                
+                        'NivelAcceso' => array(
+                            'label' => 'Nivel Acceso',                                                         
+                            'icon'=>'glyphicon glyphicon-user',
+                            'url'=> 'Yii::app()->createUrl("/nivelesmenu/create?id_usr=$data->id")'
+                        ),
                     ),
                     //'htmlOptions'=>array('style'=>'width: 120px'),
                     ),

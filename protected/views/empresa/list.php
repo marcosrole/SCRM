@@ -9,6 +9,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Create Empresa', 'url'=>array('create')),
 	array('label'=>'Administrar Empresa', 'url'=>array('admin')),
+        array('label'=>'Listar Sucursales', 'url'=>array('sucursal/index')),
 );
 ?>
 

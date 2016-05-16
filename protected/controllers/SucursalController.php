@@ -51,8 +51,24 @@ class SucursalController extends Controller
 	 */
 	public function actionView($id)
 	{
+            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$id));
+            $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
+            $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+            $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+            $zona = Zona::model()->findByAttributes(array('id'=>$sucursal{'id_zon'}));
+                        
+            $datos['empresa']=$empresa{'razonsocial'};
+            $datos['cuit']=$empresa{'cuit'};
+            $datos['sucursal']=$sucursal{'nombre'};
+            $datos['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+            $datos['localidad']=  strtoupper($localidad{'nombre'});            
+            $datos['zona']=$zona{'nombre'};
+            
+            
+            
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+                    'datos'=>$datos,
 		));
 	}
 
@@ -66,7 +82,8 @@ class SucursalController extends Controller
                 $direccion = new Direccion();
                 $empresa = new Empresa();
                 $localidad = new Localidad();
-                $lista_localidades=  Localidad::model()->getListNombre();
+                $zona = new Zona(); 
+                $lista_localidades= CHtml::listData($localidad->findAll(), 'id', 'nombre');
                 $transaction = Yii::app()->db->beginTransaction();             
                  try {
                      if (isset($_POST['selectEmpresa']) || (isset($_POST['Sucursal']) ) || ( isset($_POST['Direccion']) ) ) {
@@ -84,26 +101,32 @@ class SucursalController extends Controller
                                 if(isset($_POST['selectEmpresa'])){
                                     $sucursal->id_dir=$direccion{'id'};
                                     $sucursal->cuit_emp=$_POST['selectEmpresa'][0];
-
-                                    if($sucursal->validate()){
-                                    $sucursal->insert();
-                                    $transaction->commit();                        
-                                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Complete el nombre de la sucursal");}
+                                    
+                                    $zona=  Zona::model()->findByAttributes(array('id'=>$_POST['Zona']['id']));
+                                    
+                                    $sucursal->id_zon = $zona{'id'};                                        
+                                    if($sucursal->validate()){                                                                                                         
+                                        $sucursal->insert();
+                                        $transaction->commit();                        
+                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+                                        $this->redirect('create');
+                                    }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Falta completar datos");}
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");}
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                
                     }                 
                  } catch (Exception $ex) {
                      Yii::app()->user->setFlash('error',$ex->getMessage());
                  }
-
+                 
                 $this->render(
                         'create',
                         array(
                             'sucursal'=>$sucursal,
                             'direccion'=>$direccion,
                             'empresa' => $empresa,
-                            'localidad' => $localidad,                        
+                            'localidad' => $localidad,          
+                            'zona'=>$zona,
+                            'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
                             'lista_localidades' => $lista_localidades,
                         ));
 	}
@@ -115,21 +138,65 @@ class SucursalController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$sucursal = Sucursal::model()->findByAttributes(array('id'=>$id));
+                $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
+                $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                $grupoSucural = Gruposucursal::model()->findByAttributes(array('id'=>$sucursal{'id_zon'}));
+                $lista_localidades=  Localidad::model()->getListNombre();
+                
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+                
+		$transaction = Yii::app()->db->beginTransaction();             
+                 try {
+                     if (isset($_POST['selectEmpresa']) || (isset($_POST['Sucursal']) ) || ( isset($_POST['Direccion']) ) ) {
+                        $direccion->attributes = $_POST['Direccion'];
+                        $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
+                        
+                        $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];                                    
+                        $direccion->id_loc = $_POST['Localidad']['id'];
+                       
+                        if($direccion->validate()){
+                            $direccion->save();
+                            $sucursal->attributes=$_POST['Sucursal'];
+                            $sucursal->nombre=  strtoupper($_POST['Sucursal']['nombre']);
 
-		if(isset($_POST['Sucursal']))
-		{
-			$model->attributes=$_POST['Sucursal'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
+                                if(isset($_POST['selectEmpresa'])){
+                                    $sucursal->id_dir=$direccion{'id'};
+                                    $sucursal->cuit_emp=$_POST['selectEmpresa'][0];
+                                    
+                                    if(isset($_POST['Gruposucursal'])){
+                                        $grupoSucural->zona=strtoupper($_POST['Gruposucursal']['zona']);                
+                                        $grupoSucural=Gruposucursal::model()->findByAttributes(array('zona'=>$grupoSucural{'zona'}));
+                                        if($grupoSucural){
+                                            $sucursal->id_zon = $grupoSucural{'id'};                                        
+                                            if($sucursal->validate()){                                                                                                         
+                                                    $sucursal->save();
+                                                    $transaction->commit();                        
+                                                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+                                                    $this->redirect('admin');
+                                                    }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Falta completar datos");}
+                                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> No existe la zona especificada");}                                                                                    
+                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Debe especificar una Zona. Por defecto: 1");}                                    
+                            }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");}
+                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                
+                    }                 
+                 } catch (Exception $ex) {
+                     Yii::app()->user->setFlash('error',$ex->getMessage());
+                 }
 
-		$this->render('update',array(
-			'model'=>$model,
-		));
+		$this->render(
+                        'update',
+                        array(
+                            'sucursal'=>$sucursal,
+                            'direccion'=>$direccion,
+                            'empresa' => $empresa,
+                            'localidad' => $localidad,          
+                            'grupoSucural'=>$grupoSucural,
+                            'lista_localidades' => $lista_localidades,
+                        ));
 	}
 
 	/**
@@ -149,50 +216,121 @@ class SucursalController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($id_zon=NULL)
 	{
+		//Listo todas las Sucursales:
+//            SUCURSAL - EMPRESA - DIRECCION - LOCALIDAD - ZONA
+            $zona = NEW Zona();
+            
+            if ($id_zon==NULL){
+                $ListSucursal = Sucursal::model()->findAll();
+                foreach ($ListSucursal as $key=>$value){                    
+                        $raw['id']=(int)$value{'id'};
+                        $raw['nombre']=$value{'nombre'};
+                            $aux=  Empresa::model()->findByAttributes(array('cuit'=>$value{'cuit_emp'}));
+                        $raw['empresa']=  $aux{'razonsocial'};
+                            $aux= Direccion::model()->findByAttributes(array('id'=>$value{'id_dir'}));
+                        $raw['direccion']=$aux{'calle'} . " " . $aux{'altura'};
+                            $aux2= Localidad::model()->findByAttributes(array('id'=>$aux{'id_loc'}));
+                        $raw['localidad']=$aux2{'nombre'};
+                            $aux=  Zona::model()->findByAttributes(array('id'=>$value{'id_zon'}));
+                        $raw['zona']=  $aux{'nombre'};                        
+                        $rawData[]=$raw;                   
+                    }
+                    $DataProviderSucursales=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                    
+                    
+                
+            }else{
+                $ListSucursal = Sucursal::model()->findAllByAttributes(array('id_zon'=>$id_zon));
+                foreach ($ListSucursal as $key=>$value){                    
+                        $raw['id']=(int)$value{'id'};
+                        $raw['nombre']=$value{'nombre'};
+                            $aux=  Empresa::model()->findByAttributes(array('cuit'=>$value{'cuit_emp'}));
+                        $raw['empresa']=  $aux{'razonsocial'};
+                            $aux= Direccion::model()->findByAttributes(array('id'=>$value{'id_dir'}));
+                        $raw['direccion']=$aux{'calle'} . " " . $aux{'altura'};
+                            $aux2= Localidad::model()->findByAttributes(array('id'=>$aux{'id_loc'}));
+                        $raw['localidad']=$aux2{'nombre'};
+                            $aux=  Zona::model()->findByAttributes(array('id'=>$value{'id_zon'}));
+                        $raw['zona']=  $aux{'nombre'};                        
+                        $rawData[]=$raw;                   
+                    }
+                    $DataProviderSucursales=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                    
+            }
+            
+            $this->render('index',array(
+			'DataProviderSucursales'=>$DataProviderSucursales,                        
+                        'zona'=>$zona,
+                        'listZona' => CHtml::listData($zona->findAll(), 'id', 'nombre')                        
+		));
+                        
+		
+	}
+        
+        public function actionIndexZona($zona)
+	{
+            
 		$dataProvider=new CActiveDataProvider('Sucursal');
+                               
+                $grupoSucural = Gruposucursal::model()->findByAttributes(array('zona'=>$zona));
+                $sucursales = Sucursal::model()->findAllByAttributes(array('id_zon'=>$grupoSucural{'id'}));
+                
+                $array_zonas=[];
+                $grupoSucural = Gruposucursal::model()->findAll();
+                foreach ($grupoSucural as $item=>$zonaaa){
+                    $array_zonas[]=$zonaaa{'zona'};
+                }
+                
+                $dataProvider->setData($sucursales);
+                
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+                        'array_zonas'=>$array_zonas,
+                        'grupoSucursal'=>new Gruposucursal(),
 		));
+//                $this->render('prueba');
 	}
+        
 
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
+	public function actionAdmin($cuit=null)
 	{
-		$rawData = array();
-                $empresas = Empresa::model()->findAll();
-                $sucursales = Sucursal::model()->findAll();
-                foreach($sucursales as $item=>$sucursal){
-                    $raw = array();
-                    $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
-                    $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
-                    $raw['id']=(int)$sucursal{'id'};
-                    $raw['nombre']=$sucursal{'nombre'};
-                    $raw['cuit']=$empresa{'cuit'};
-                    $raw['razonsocial']=$empresa{'razonsocial'};                                    
-                    $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " " . $direccion{'piso'} . " " . $direccion{'depto'};
-                    $rawData[]=$raw;            
-                                          
-                }
-                $arrayDataProvider=new CArrayDataProvider($rawData, array(
-                   'id'=>'id',
-                   'pagination'=>array(
-                       'pageSize'=>10,
-                   ),
-               ));
+                $empresa = New Empresa();
+                $sucursal = New Sucursal();
+                $data = $sucursal->search();
                 
-                if (isset($_POST['Sucursal']) || isset($_POST['Empresa'])){                    
-                                        
+                if($cuit==null){
+                    $this->render('admin',array(
+                       'empresa'=>$empresa,
+                        'data'=>$data,
+                        'sucursal_visible'=>false,
+                       ));
+                }else {
+                    $sucursal=  Sucursal::model()->findAllByAttributes(array('cuit_emp'=>$cuit));                    
+                    $data->setData($sucursal);        
+                    $this->render('admin',array(
+                       'empresa'=>$empresa,
+                        'data'=>$data,
+                        'sucursal_visible'=>true,
+                        'empresa_seleccionada'=>  Empresa::model()->findByAttributes(array('cuit'=>$cuit)),
+                       ));
                 }
+                
                
-               $this->render('admin',array(
-                   'dataProvider'=>$arrayDataProvider,
-                   'empresa'=>$empresa,
-                   'sucursal'=>$sucursal,
-                   ));
                 
 	}
 
@@ -223,4 +361,16 @@ class SucursalController extends Controller
 			Yii::app()->end();
 		}
 	}
+        public function actionVer($cuit_emp=null)
+            {
+                $model=new Empresa('search');
+                $model->unsetAttributes();  // clear any default values
+
+                if($cuit_emp != null)
+                    $model->cuit=$cuit_emp;
+
+                $this->render('admin',array(
+                   'empresa'=>$model,
+                ));
+            }
 }

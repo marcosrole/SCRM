@@ -18,10 +18,11 @@ $this->menu=array(
  <?php $this->renderPartial('_form',
                         array(
                             'usuario'=>$usuario,
-                            'persona'=>$persona,
-                            'inspector'=>$inspector,
+                            'persona'=>$persona,                            
                             'direccion'=>$direccion,
                             'localidad'=>$localidad,
+                            'array_rol'=> $array_rol,
+                            'rol'=>$rol,
                             'lista_localidades'=>$lista_localidades,
                             'update'=>false,
                             ));

@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Listar Alarmas', 'url'=>array('admin')),	
-	array('label'=>'Solucionar Inconveniente', 'url'=>array('')),
+	array('label'=>'Solucionar Inconveniente', 'url'=>array('asignarinspector/create')),
 	array('label'=>'Eliminar Alarma', 'url'=>array('eliminar', 'id'=>$model->id), 'linkOptions'=>array('confirm'=>'Desea eliminar el registro?')),
 	
 );

@@ -63,14 +63,26 @@ and open the template in the editor.
                             'class' => 'form-control', 
                             'value'=>$dispositivo{'version'}));                
             ?>
-            
-            <?php echo $form->labelEx($dispositivo,'funciona'); ?>
+                        
+            <?php echo $form->radioButtonListGroup(
+			$dispositivo,
+			'funciona',
+			array(
+				'widgetOptions' => array(
+					'data' => array(
+						'Si',
+						'No',
+					)
+				)
+			)
+		); ?>
+            <?php echo $form->labelEx($dispositivo,'tiempo'); ?>
             <?php
-                echo $form->textField($dispositivo, 'funciona', 
+                echo $form->textField($dispositivo, 'tiempo', 
                         array(
                             
                             'class' => 'form-control', 
-                            'value'=>$dispositivo{'funciona'}));                
+                            'value'=>$dispositivo{'tiempo'}));                
             ?>
             <div class="boton">
                 <?php $this->widget('booster.widgets.TbButton', 

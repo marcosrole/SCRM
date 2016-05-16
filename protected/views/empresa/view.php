@@ -16,7 +16,8 @@ $this->menu=array(
 
 ?>
 
-<h1>Detalles de Empresa CUIT:<?php echo $model->cuit; ?></h1>
+<h1>Detalles de Empresa </h1>
+
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

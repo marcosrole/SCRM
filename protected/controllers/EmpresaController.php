@@ -7,8 +7,8 @@ class EmpresaController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
-	/**
+        private $checked = false;
+        /**
 	 * @return array action filters
 	 */
 	public function filters()
@@ -18,6 +18,7 @@ class EmpresaController extends Controller
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
+        
 
 	/**
 	 * Specifies the access control rules.
@@ -83,63 +84,68 @@ class EmpresaController extends Controller
                 $direccionAUX = new Direccion();
                 $localidad = new Localidad();
                 
-
-                $lista_localidades = Localidad::model()->getListNombre();
                
+                $lista_localidades = CHtml::listData(Localidad::model()->findAll(),'id', 'nombre');
                 $transaction = Yii::app()->db->beginTransaction();
                 if (isset($_POST['Empresa'])) {
-                    try {
-                        $direccion->attributes = $_POST['Direccion'];
-                        $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
-                        $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];
-                        $direccion->id_loc = Localidad::model()->getId($localidad_seleccionada)->id;
-
-                        if ($direccion->validate()) {
-                            $direccion->insert();
-                            $persona->attributes = $_POST['Persona'];
-                            $persona->apellido = strtoupper($_POST['Persona']['apellido']);
-                            $persona->nombre = strtoupper($_POST['Persona']['nombre']);
-
-                            $persona->id_dir = $direccion{'id'};
-
+                        try {
                             $empresa->attributes = $_POST['Empresa'];
-                            $empresa->razonsocial = strtoupper($_POST['Empresa']['razonsocial']);
+                            $persona->attributes = $_POST['Persona'];
+                            $direccion->attributes = $_POST['Direccion'];
+                            
+                            $direccion->calle=  strtoupper($_POST['Direccion']['calle']);                        
+                            $direccion->id_loc = $_POST['Localidad']['id'];
 
-                            $empresa->dni_per = $_POST['Persona']['dni'];
+                            if ($direccion->validate()) {
+                                $direccion->save();
+                                $persona->attributes = $_POST['Persona'];
+                                $persona->apellido = strtoupper($_POST['Persona']['apellido']);
+                                $persona->nombre = strtoupper($_POST['Persona']['nombre']);
 
-                            if ($empresa->validate()) {
-                                if ($persona->validate()) {
-                                    $persona->insert();
-                                    $empresa->insert();
-                                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");
-                                    $transaction->commit();
-                                    $this->redirect('create');
+                                $persona->id_dir = $direccion{'id'};
+
+                                $empresa->attributes = $_POST['Empresa'];
+                                $empresa->razonsocial = strtoupper($_POST['Empresa']['razonsocial']);
+
+                                $empresa->dni_per = $_POST['Persona']['dni'];
+
+                                if ($empresa->validate()) {
+                                    if ($persona->validate()) {
+                                        $persona->save();
+                                        $empresa->save();
+                                        
+                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Se ha generado la empresa: " . "<strong><?php echo $empresa{'razonsocial'} ?></strong>" );
+                                        $transaction->commit();
+                                        $this->redirect(array('sucursal/create'));
+                                    } else {
+                                        $transaction->rollback();
+                                        Yii::app()->user->setFlash('error', "<strong>Error. Datos Peronales!</strong> Campos vacios o incorrectos");
+                                    }
                                 } else {
                                     $transaction->rollback();
-                                    Yii::app()->user->setFlash('error', "<strong>Error. Datos Peronales!</strong> Campos vacios o incorrectos");
+                                    Yii::app()->user->setFlash('error', "<strong>Error. Empresa!</strong> Campos vacios o incorrectos");
                                 }
                             } else {
                                 $transaction->rollback();
-                                Yii::app()->user->setFlash('error', "<strong>Error. Empresa!</strong> Campos vacios o incorrectos");
+                                Yii::app()->user->setFlash('error', "<strong>Error. Direccion!</strong> Campos vacios o incorrectos");
                             }
-                        } else {
-                            $transaction->rollback();
-                            Yii::app()->user->setFlash('error', "<strong>Error. Direccion!</strong> Campos vacios o incorrectos");
+                        } catch (Exception $ex) {
+                            Yii::app()->user->setFlash('error', $ex->getMessage());
                         }
-                    } catch (Exception $ex) {
-                        Yii::app()->user->setFlash('error', $ex->getMessage());
                     }
-                }
-                $this->render('create', array(
-                    'empresa' => $empresa,
-                    'persona' => $persona,
-                    'direccion' => $direccion,
-                    'localidad' => $localidad,
-                    'lista_localidades' => $lista_localidades,                    
-                ));
-
-	}
-
+                    $this->render('create', array(
+                        'empresa' => $empresa,
+                        'persona' => $persona,
+                        'direccion' => $direccion,
+                        'localidad' => $localidad,
+                        'lista_localidades' => $lista_localidades,                    
+                        'checked' => true, 
+                    ));
+                
+                
+                    
+        }
+                    
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -161,8 +167,7 @@ class EmpresaController extends Controller
                         $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
                         $direccion->depto= $_POST['Direccion']['depto'];
                         $direccion->piso= $_POST['Direccion']['piso'];
-                        $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];
-                        $direccion->id_loc = Localidad::model()->getId($localidad_seleccionada)->id;
+                        $direccion->id_loc = $_POST['Localidad']['id'];
                         
                         //Persona
                         $persona->attributes = $_POST['Persona'];
@@ -199,6 +204,34 @@ class EmpresaController extends Controller
                     'lista_localidades' => $lista_localidades,                    
                     
                 ));
+	}
+        
+        public function actionCheckPersona($dni)
+	{
+		$persona = new Persona();
+                $direccion = new Direccion();
+                $localidad = new Localidad();
+                $empresa = new Empresa();
+                $lista_localidades = CHtml::listData(Localidad::model()->findAll(),'id', 'nombre');
+                $empresa->attributes = $_POST['Empresa'];
+                
+                if(Persona::model()->findByAttributes(array('dni'=>$dni))){
+                    $persona=  Persona::model()->findByAttributes(array('dni'=>$dni));                
+                    $direccion=  Direccion::model()->findByAttributes(array('id'=>$persona{'id_dir'}));
+                    $localidad=  Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                }else{
+                    $persona->attributes=$_POST['Persona'];
+                }
+                
+                 $this->render('create', array(
+                    'empresa' => $empresa,
+                    'persona' => $persona,
+                    'direccion' => $direccion,
+                    'localidad' => $localidad,
+                    'lista_localidades' => $lista_localidades,                    
+                ));
+                
+                
 	}
 
 	/**
@@ -294,4 +327,5 @@ class EmpresaController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
 }

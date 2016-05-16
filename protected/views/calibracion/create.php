@@ -14,6 +14,7 @@ $this->menu=array(
 
 <h1>Calibracion de Dispositivo</h1>
 <p class="note">Seleccione un dispositivo a calibrar.</p>
+<p> <i>Si el dispositivo no se encuentra en la lista, por favor asigne el dispositivo a una sucursal.</i> <a href=<?php echo "http://" . $_SERVER['HTTP_HOST'] . "/SCRM/Histoasignacion/crear"?>>Haga clic aquí </a> </p>
 <div class="row">
             <?php 
                 $this->widget('booster.widgets.TbGridView', array(
@@ -22,7 +23,10 @@ $this->menu=array(
                     'filter' => $dispositivo,
                     'columns' => array(
                         array(
-                            'name' => 'id',
+                            'name'  => 'id',
+                            'value' => 'CHtml::link($data->id, Yii::app()
+                                ->createUrl("DetalleDispo/VerDetalle",array("id"=>$data->id)))',
+                            'type'  => 'raw',                            
                             'header'=>'Nro. Identificación'
                         ),
                         array(
@@ -71,3 +75,7 @@ $this->menu=array(
 ?>
 
 <?php $this->renderPartial('_form', array('calibracion'=>$calibracion)); ?>
+
+
+
+

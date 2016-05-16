@@ -134,7 +134,8 @@ class AlarmaController extends Controller
 	public function actionEliminar($id)
 	{
             $alarma = new Alarma();
-            $alarma= Alarma::model()->findByAttributes(array('id'=>$id));
+            $alarma= Alarma::model()->findByAttributes(array('id'=>$id));            
+            
             $alarma->delete();
             $this->render('admin',array(
 			'model'=>new Alarma(),
@@ -144,8 +145,20 @@ class AlarmaController extends Controller
         
         public function actionEliminarTodo()
 	{
-            $alarma = new Alarma();            
-            $alarma->deleteAll();
+            $alarmas = Alarma::model()->findAll();            
+            
+            foreach ($alarmas as $item=> $alarma){
+                 $asignacion = Asignarinspector::model()->findByAttributes(array('id_ala'=>$alarma{'id'}));
+                 if($asignacion!=null){
+                     $asignacion->delete();
+                 }else {
+                     $alarma->delete();
+                 }
+                 
+                 
+                 
+            }
+                        
             $this->render('admin',array(
 			'model'=>new Alarma(),
 		));

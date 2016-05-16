@@ -34,7 +34,7 @@ class Dispositivo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('mac', 'required'),
+			array('mac,tiempo', 'required'),
 			//array('id, funciona', 'numerical', 'integerOnly'=>true),
 			array('mac, modelo, version', 'length', 'max'=>50),
 			// The following rule is used by search().
@@ -68,6 +68,7 @@ class Dispositivo extends CActiveRecord
 			'modelo' => 'Modelo',
 			'version' => 'Version',
 			'funciona' => 'Funciona',
+                        'tiempo' => 'Tiempo de Transmisión',
 		);
 	}
 

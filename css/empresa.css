@@ -1,0 +1,74 @@
+
+.direccion {
+    display: flex;
+}
+.piso {
+    width: 8%;
+    margin-left: 1%;
+}
+.calle {
+    width: 60%;
+    
+}
+.depto {
+    width: 8%;
+    margin-left: 1%;
+}
+.altura {
+    margin-left: 1%;
+}
+.localidad {
+    width: 50%;
+    margin-left: 1%;
+}
+.tel {
+    display: inline-flex;    
+}
+.celular {
+    margin-left: 1%;
+}
+.email {
+    width: 50%;
+}
+
+.row1 {
+    display: -webkit-inline-box;
+}
+
+.row2 {
+    display: -webkit-inline-box;
+}
+
+.nombre {
+    width: 60%;
+    
+}
+.apellido {
+    width: 70%;
+    margin-left: 5px;
+}
+.sexo {
+    width: 15%;
+    margin-left: 5px;
+}
+
+.dni {
+    white-space: 20px;
+    margin-left: 1%;
+}
+.cuil {
+    margin-left: 1%;
+    width: 30%
+}
+
+.cuit {
+    margin-left: 1%;
+}
+.empresa {
+    display: -webkit-inline-box;
+}
+
+.razonsocial {
+    width: 75%;
+}
+

@@ -32,7 +32,7 @@ class DetalleDispoController extends Controller
                 Yii::app()->user->setFlash('error', "<strong>El dispositivo no se encuentra calibrado!</strong> <a href=" . "SCRM/calibracion/create?id_disp'" . ">Click para Calibrar Dispositivo</a>");
             }else{
                 //Cargo los datos al modelo   
-                DetalleDispo::model()->validarDatos($_GET['id'],$_GET['db'],$_GET['dist']);
+                DetalleDispo::model()->validarDatos($_GET['id']);
 
                 $model->setAttribute('id_dis', $_GET['id']);
                 $model->setAttribute('db', $_GET['db']);
@@ -87,6 +87,8 @@ class DetalleDispoController extends Controller
         
         $this->render('create', array('model' => $model, 'array_dispo' => $array_dispo));
     }
+    
+    
 
     public function actionVerDetalle($id){
                        
@@ -106,7 +108,7 @@ class DetalleDispoController extends Controller
         
         $detalles = DetalleDispo::model()->findAll($criteria);
         $dataProvider = DetalleDispo::model()->search();
-//        $dataProvider->setData($detalles);
+        $dataProvider->setData($detalles);
         
         
         //Genero un array con los ultimos 10 datos sensados
@@ -158,4 +160,6 @@ class DetalleDispoController extends Controller
     public function actionView(){
         $this->render('create', array('model' => $model, 'array_dispo' => $array_dispo)); 
     }
+    
+    
 }

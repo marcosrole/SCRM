@@ -49,10 +49,23 @@ class CalibracionController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionView($id_AsiDis)
 	{
+            
+            $histoasignacion = Histoasignacion::model()->findByAttributes(array('id'=>$id_AsiDis, 'fechaBaja'=>'1900-01-01'));
+            $calibracion = Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoasignacion{'id'}));
+            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoasignacion{'id_suc'}));
+            $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+            
+            $datos['id']=$calibracion{'id'};
+            $datos['db']=$calibracion{'db_permitido'};
+            $datos['dist']=$calibracion{'dist_permitido'};
+            $datos['sucursal']=$sucursal{'nombre'};
+            $datos['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+            
+            
 		$this->render('view',array(
-			'calibracion'=>$this->loadModel($id),
+			'datos'=>$datos,
 		));
 	}
         public function actionEliminar($id)
@@ -70,44 +83,38 @@ class CalibracionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate($id_disp) {
+         date_default_timezone_set('America/Buenos_Aires');
+         
         $dispositivo = new Dispositivo();
         $calibracion = new Calibracion();
         if (isset($_POST['Calibracion'])) {
             $calibracion->attributes = $_POST['Calibracion'];
-            $calibracion->id_dis=$_GET['id_disp'];            
+            $calibracion->fecha=date("Y-m-d");            
             $histoasignacion = new Histoasignacion();
             $histoasignacion = Histoasignacion::model()->findAllByAttributes(array('id_dis'=>$_GET['id_disp'],'fechaBaja'=>'1900-01-01'));
-            $calibracion->id_suc=$histoasignacion[0]['id_suc'];
+            $calibracion->id_AsiDis=$histoasignacion[0]['id'];
             
+            if(!Calibracion::model()->findByAttributes(
+                    array(
+                        'db_permitido'=>$calibracion{'db_permitido'},
+                        'dist_permitido'=>$calibracion{'dist_permitido'},
+                        'fecha'=>$calibracion{'fecha'},
+                        'id_AsiDis'=>$calibracion{'id_AsiDis'},
+                                ))){
+                            if ($calibracion->save())  $this->redirect(array('view', 'id_AsiDis' => $calibracion->id_AsiDis));
+            }            
             
-            if(Calibracion::model()->exists('id_dis=' . $calibracion{'id_dis'} . ' AND id_suc=' . $calibracion{'id_suc'} .  ' ' )){
-                    $modeloCalibracion = Calibracion::model()->findByAttributes(
-                    array(                      
-                        'id_dis'=>$calibracion{'id_dis'},
-                        'id_suc'=>$calibracion{'id_suc'}));
-                    $modeloCalibracion->db_permitido= $calibracion{'db_permitido'};
-                    $modeloCalibracion->dist_permitido= $calibracion{'dist_permitido'};
-            
-                    if($calibracion->validate()){                                
-                        if ($modeloCalibracion->save()) $this->redirect(array('view', 'id' => $modeloCalibracion->id));
-                    }          
-            }else {
-                if($calibracion->validate()){                                
-                    if ($calibracion->insert())
-                        $this->redirect(array('view', 'id' => $calibracion->id));
-                }                
-            }
-                        
-        }        
+        }                      
+                   
         if ($_GET['id_disp'] != '') { //Si NO viene vacio...
-            //Verifico cual es la sucursal en la que se encuentra instalado actualmente
+            //Muestro cuales son los datos de calibracion(si es que los tiene)
             $histoasignacion = new Histoasignacion();
             $histoasignacion = Histoasignacion::model()->findAllByAttributes(array('id_dis'=>$_GET['id_disp'],'fechaBaja'=>'1900-01-01'));
-            $calibracion->id_suc=$histoasignacion[0]['id_suc'];
             
             //Si el dispositivo ya se enceuntra calibrado, cargo los datos actuales.          
-            $calibracion_aux=Calibracion::model()->findByAttributes(array('id_suc'=>$calibracion{'id_suc'}));
-            if ($calibracion_aux){
+            $calibracion_aux=Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoasignacion[0]{'id'}));
+            
+            if ($calibracion_aux){                
                 $calibracion->db_permitido=$calibracion_aux{'db_permitido'};
                 $calibracion->dist_permitido=$calibracion_aux{'dist_permitido'};
             }

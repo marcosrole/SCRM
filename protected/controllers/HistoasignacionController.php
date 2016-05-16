@@ -121,6 +121,8 @@ class HistoasignacionController extends Controller
                 $raw['empresa']=$empresa{'razonsocial'};                
                         $direccion = Direccion::model()->findByAttributes(array('id'=>$sucural{'id_dir'}));                
                 $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+                        $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$asignacion{'id_dis'}));
+                $raw['alarma']=$alarma{'descripcion'};
                 $rawData[]=$raw;            
             }     
         $this->render('viewmap', array('array_dispo'=>$array_datos_mapa, 'rawData'=>$rawData));

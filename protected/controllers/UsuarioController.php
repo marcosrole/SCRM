@@ -51,8 +51,24 @@ class UsuarioController extends Controller
 	 */
 	public function actionView($id)
 	{
+            
+            $usuario = Usuario::model()->findByAttributes(array('id'=>$id));
+            
+            $usuarioRol = Usuariorol::model()->findAllByAttributes(array('id_usr'=>$id));
+            $roles = array();
+            foreach ($usuarioRol as $key=>$usuRol){
+                $roles[]=Rol::model()->findByAttributes(array('id'=>$usuRol{'id_rol'}));
+            }
+            
+            $string_roles="";
+            foreach ($roles as $key){                                
+                $string_roles=$string_roles . " - " . $key{'nombre'};
+            }
+            
+            $usuario->roles=$string_roles;
+                        
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$usuario,
 		));
 	}
 
@@ -65,75 +81,100 @@ class UsuarioController extends Controller
 		$persona = new Persona();
                 $usuario = new Usuario();
                 $direccion = new Direccion();
-                $localidad = new Localidad;  
-                $inspector = new Inspector; 
-                $lista_localidades=  Localidad::model()->getListNombre();
-                $permisos = Permiso::model()->findAll();
-
+                $localidad = new Localidad;                              
+                $rol = new Rol();                
+                
                 $transaction = Yii::app()->db->beginTransaction();
-                try {
-                    if(isset($_POST['Direccion'])){
+                try {                                  
+                    if(isset($_POST['Usuario'])) $usuario->attributes=$_POST['Usuario'];
+                    if(isset($_POST['Direccion'])) $direccion->attributes=$_POST['Direccion'];
+                    if(isset($_POST['Persona'])) $persona->attributes=$_POST['Persona'];
+                    if(isset($_POST['Localidad'])) $localidad->attributes=$_POST['Localidad'];
+                    if(isset($_POST['Rol'])) $rol->attributes=$_POST['Rol'];
+
+
+                    
+                    if(isset($_POST['Direccion'])){                        
+                           
                     $direccion->attributes=$_POST['Direccion'];                
                     $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
                     $direccion->depto=  strtoupper($_POST['Direccion']['depto']);                
-                    /*FK1*/$direccion->id_loc = Localidad::model()->getId($lista_localidades[$_POST['Localidad']['id']])->id;                
-
+                    /*FK1*/$direccion->id_loc = (int)$_POST['Localidad']['id']+1;
+                            if($direccion{'piso'}=='') $direccion{'piso'}=null;
+                            if($direccion{'depto'}=='') $direccion{'depto'}=null;
+                 
                     if ($direccion->validate()){ 
                         //Me fijo si ya existe para no guardar dos veces la misma direccion;
-                        $criterial = new CDbCriteria();
-                        $criterial->condition="calle='" . $direccion->calle . "' ";
-                        $criterial->addCondition(
-                                "altura='" . $direccion->altura . "' AND" .
-                                " piso='" . $direccion->piso . "' AND" .
-                                " depto='" . $direccion->depto . "' AND" .
-                                " id_loc='" . $direccion->id_loc . "' "
-                                );                    
-                        if(! (Direccion::model()->find($criterial))){//Si NO existe => GUARDO
-                            $direccion->insert();
-                        }                    
+                        $direccion_aux = Direccion::model()->findByAttributes(array(//Si NO existe => GUARDO
+                            'altura'=>$direccion{'altura'},
+                            'calle'=>$direccion{'calle'},
+                            'piso'=>$direccion{'piso'},
+                            'depto'=>$direccion{'depto'},
+                        ));   
+                        
+                        if($direccion_aux==null){$direccion->save();                          
+                        }  else {$direccion=$direccion_aux;}
+                        
                         $persona->attributes=$_POST['Persona'];                                                             
                         $persona->nombre=  strtoupper($persona{'nombre'});
-                        $persona->apellido=  strtoupper($persona{'apellido'});                    
-                        /*FK1*/ $persona->id_dir = $direccion{'id'};
-
+                        $persona->apellido=  strtoupper($persona{'apellido'});                                            
+                        /*FK1*/ $persona->id_dir = $direccion{'id'};                        
+                        
                         if($persona->validate()){
                             //Me fijo si ya existe para no guardar dos veces la misma persona;                                      
                             if(! (Persona::model()->findByAttributes(array('dni'=>$persona->dni)))){//Si NO existe => GUARDO
                                 $persona->insert();
-                            }                                                                                     
+                            }                                                                            
+                                                        
                             $usuario->attributes=$_POST['Usuario'];
-                            /*FK1*/ $usuario->dni_per=$persona{'dni'}; 
-                            $usuario->pass=  md5($_POST['Usuario']['pass']);
-
-                            if($usuario->validate()){
-                                if(!$usuario->exists("name='" . $usuario{'name'} . "' ")){
-                                    $usuario->save();                            
-                                    
-                                    //SI permiso es 2 : Inspector                                    
-                                    if ($usuario{'nivel'}==2){                                                        
-                                        $inspector->matricula=$_POST['Inspector']['matricula'];                                        
-                                        $inspector->id_usr=$usuario{'id'};                                            
+                                                                                                      
+                            /*FK1*/ $usuario->dni_per=$persona{'dni'};                                                        
+//                            $usuario->pass=  md5($_POST['Usuario']['pass']);
+                             $usuario->pass= $_POST['Usuario']['pass'];
+                             $usuario->name= strtoupper($_POST['Usuario']['name']);
+                            
+                            if($usuario->validate()){  
+                                $aux = Usuario::model()->findByAttributes(array('name'=>$usuario{'name'}));                                
+                                if( ($aux == NULL)){
+                                    $usuario->insert(); 
+  
+                                    if( ((int)($_POST['Rol']['id'])) != 0 ){
                                         
-                                        if ($inspector->validate()){
-                                            $inspector->matricula=$_POST['Inspector']['matricula'];
-                                            $inspector->ocupado=0;
-                                            $inspector->id_usr=$usuario{'id'};                                            
-                                            $inspector->insert();
-                                            
-                                            Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                            $transaction->commit();                                 
-                                            //Generar los permisos por default
-                                            $usuario->darPermiso($usuario{'nivel'}, $usuario{'id'});
-                                            $this->redirect(Yii::app()->createUrl('usuario/view', array('id'=>$usuario{'id'})));
-                                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Matricula de Inspector");}                                                                            
-                                    }else{
-                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                        $transaction->commit();                                 
+                                        //Asigno el ROL del Usuario
+                                        $i = count(($_POST['Rol']['id']));
+                                        
+                                        for ($j=0; $j<$i; $j++ ){
+                                            if($_POST['Rol']['id'][$j]==2){ //INSPECTOR
+                                                $inspector = new Inspector();
+                                                $inspector->ocupado=0;
+                                                /*FK1*/ $inspector->id_rol=2;
+                                                /*FK2*/ $inspector->id_zon=1;
+                                                /*FK3*/ $inspector->id_usr=$usuario{'id'};
+                                                $inspector->save();
+                                                
+                                                $UsuarioRol = new Usuariorol();
+                                                $UsuarioRol->id_rol=2;
+                                                $UsuarioRol->id_usr=$usuario{'id'};
+                                                $UsuarioRol->save();                                            
+                                            }
+                                            $UsuarioRol = new Usuariorol();
+                                            $UsuarioRol->id_rol=$_POST['Rol']['id'][$j];
+                                            $UsuarioRol->id_usr=$usuario{'id'};
+                                            $UsuarioRol->save();                                            
+                                        }                                                                                
+                                            /*
                                         //Generar los permisos por default
-                                        $usuario->darPermiso($usuario{'nivel'}, $usuario{'id'});
+                                        $usuario->darPermiso($usuario{'id_niv'}, $usuario{'id'});                                    
+                                         */
+                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+                                        $transaction->commit();  
                                         $this->redirect(Yii::app()->createUrl('usuario/view', array('id'=>$usuario{'id'})));
-                                    }                                
-                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Ya existe usuario con el mismo nombre");}                                                                            
+                                    }  else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error. Rol de Usuario!</strong> Debe asignarle un rol al Usuario");}
+                                    
+                                    
+                                }else {      die("existe")                              ;
+                                    $transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Ya existe usuario con el mismo nombre");
+                                }                                                                       
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                                                
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios");}                                                
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                        
@@ -142,15 +183,16 @@ class UsuarioController extends Controller
                     catch (Exception $ex) {
                     Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
                 }
-
+                                
                 $this->render('create',
                         array(
-                            'usuario'=>$usuario,
-                            'inspector'=>$inspector,
+                            'usuario'=>$usuario,                            
                             'persona'=>$persona,
                             'direccion'=>$direccion,
                             'localidad'=>$localidad,
-                            'lista_localidades'=>$lista_localidades,
+                            'array_rol'=> CHtml::listData(Rol::model()->findAll(), 'id', 'nombre'),
+                            'rol'=>$rol,
+                            'lista_localidades'=>CHtml::listData(Localidad::model()->findAll(),'id', 'nombre'),
                             'update'=>false,
                             ));
 
@@ -166,27 +208,34 @@ class UsuarioController extends Controller
 		$persona = new Persona();
                 $usuario = new Usuario();
                 $direccion = new Direccion();
-                $localidad = new Localidad;  
-                $lista_localidades=  Localidad::model()->getListNombre();
+                $localidad = new Localidad; 
                 $inspector = new Inspector();
+                $rol = new Rol();                
                   
                 $usuario = Usuario::model()->findByAttributes(array('id'=>$id));
                 $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
                 $direccion = Direccion::model()->findByAttributes(array('id'=>$persona{'id_dir'}));
                 $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
-                $inspector = Inspector::model()->findByAttributes(array('id_usr'=>$id));
+                $UsuarioRol = Usuariorol::model()->findAllByAttributes(array('id_usr'=>$usuario{'id'}));
                 
-                if($inspector==null){ //Si no es un Inspector, genero un Model de cero, Sino quedaba en NULL
-                    $inspector = new Inspector();
+                $array_rol=array();
+
+                foreach ($UsuarioRol as $key=>$value){
+                    $array_rol[]=$value{'id_rol'};                        
                 }
+                $rol['id']=$array_rol;
+
+                
                 
                 $transaction = Yii::app()->db->beginTransaction();
                 try {
                     if(isset($_POST['Direccion'])){
-                    $direccion->attributes=$_POST['Direccion'];                
+                        
+                    $direccion->attributes=$_POST['Direccion'];
                     $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
-                    $direccion->depto=  strtoupper($_POST['Direccion']['depto']);                
-                    /*FK1*/$direccion->id_loc = Localidad::model()->getId($lista_localidades[$_POST['Localidad']['id']])->id;                
+                    $direccion->depto=  strtoupper($_POST['Direccion']['depto']);
+                    /*FK1*/$direccion->id_loc = $_POST['Localidad']['id'];
+                    
                     
                     if ($direccion->validate()){
                         //Me fijo si ya existe para no guardar dos veces la misma direccion;
@@ -197,49 +246,64 @@ class UsuarioController extends Controller
                                     'depto'=>$_POST['Direccion']['depto'],
                                     'id_loc'=>$direccion{'id_loc'})))){//Si NO existe => GUARDO
                             $direccion->save();
+                            $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                         }                                            
+                        
                         $persona->attributes=$_POST['Persona']; 
                         $persona->nombre=  strtoupper($_POST['Persona']['nombre']);
                         $persona->apellido=  strtoupper(($_POST['Persona']['apellido']));
                         
                         if($persona->validate()){
                             //Me fijo si ya existe para no guardar dos veces la misma persona;                                      
-                            if(! (Persona::model()->findByAttributes(array('dni'=>$persona->dni)))){//Si NO existe => GUARDO
-                                $persona->insert();
-                            }                                                                                     
+//                            if(! (Persona::model()->findByAttributes(array('dni'=>$persona->dni)))){//Si NO existe => GUARDO
+                                $persona->save();
+//                            }
+                            
                             $usuario->attributes=$_POST['Usuario'];
                             /*FK1*/ $usuario->dni_per=$persona{'dni'}; 
-                            $usuario->pass=  md5($_POST['Usuario']['pass']);
+                                $aux = Usuario::model()->findByAttributes(array('name'=>$usuario{'id'}));
 
                             if($usuario->validate()){
-                                if(!$usuario->exists("name='" . $usuario{'name'} . "' ")){
-                                    $usuario->save();                            
-                                    
-                                    //SI permiso es 2 : Inspector                                    
-                                    if ($usuario{'nivel'}==2){                                                        
-                                        $inspector->matricula=$_POST['Inspector']['matricula'];                                        
-                                        $inspector->id_usr=$usuario{'id'};                                            
+//                                if(!$usuario->exists("name='" . $usuario{'name'} . "' ")){
+                                    $usuario->save();                                             
+                                    if( ((int)($_POST['Rol']['id'])) != 0 ){
                                         
-                                        if ($inspector->validate()){
-                                            $inspector->matricula=$_POST['Inspector']['matricula'];
-                                            $inspector->ocupado=0;
-                                            $inspector->id_usr=$usuario{'id'};                                            
-                                            $inspector->insert();
-                                            
-                                            Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                            $transaction->commit();                                 
-                                            //Generar los permisos por default
-                                            $usuario->darPermiso($usuario{'nivel'}, $usuario{'id'});
-                                            $this->redirect(Yii::app()->createUrl('usuario/view', array('id'=>$usuario{'id'})));
-                                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Matricula de Inspector");}                                                                            
-                                    }else{
-                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                        $transaction->commit();                                 
+                                        //Asigno el ROL del Usuario
+                                        $i = count(($_POST['Rol']['id']));
+                                        
+                                        //Borro los UsuarioRol e Inpesvores del USUARIO
+                                        Usuariorol::model()->deleteAllByAttributes(array('id_usr'=>$usuario{'id'}));
+                                        Inspector::model()->deleteAllByAttributes(array('id_usr'=>$usuario{'id'}));
+                                        
+                                        for ($j=0; $j<$i; $j++ ){
+                                            if($_POST['Rol']['id'][$j]==2){ //INSPECTOR
+                                                $inspector = new Inspector();
+                                                $inspector->ocupado=0;
+                                                /*FK1*/ $inspector->id_rol=2;
+                                                /*FK2*/ $inspector->id_zon=1;
+                                                /*FK3*/ $inspector->id_usr=$usuario{'id'};
+                                                $inspector->save();
+                                                
+                                                $UsuarioRol = new Usuariorol();
+                                                $UsuarioRol->id_rol=2;
+                                                $UsuarioRol->id_usr=$usuario{'id'};
+                                                $UsuarioRol->save();                                            
+                                            }
+                                            $UsuarioRol = new Usuariorol();
+                                            $UsuarioRol->id_rol=$_POST['Rol']['id'][$j];
+                                            $UsuarioRol->id_usr=$usuario{'id'};
+                                            $UsuarioRol->save();                                            
+                                        }                                                                                
+                                            /*
                                         //Generar los permisos por default
-                                        $usuario->darPermiso($usuario{'nivel'}, $usuario{'id'});
+                                        $usuario->darPermiso($usuario{'id_niv'}, $usuario{'id'});                                    
+                                         */
+                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han actualizado ");                                                
+                                        $transaction->commit();  
                                         $this->redirect(Yii::app()->createUrl('usuario/view', array('id'=>$usuario{'id'})));
-                                    }                                
-                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Ya existe usuario con el mismo nombre");}                                                                            
+                                    }  else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error. Rol de Usuario!</strong> Debe asignarle un rol al Usuario");}
+                                    
+//                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Ya existe usuario con el mismo nombre");}                                                                            
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                                                
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios");}                                                
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                        
@@ -249,18 +313,16 @@ class UsuarioController extends Controller
                     Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
                 }
                 
-                
-                
-                                
 		$this->render('update',
                         array(
-                            'usuario'=>$usuario,
-                            'inspector'=>$inspector,
-                            'persona'=>$persona,
+                            'usuario'=>$usuario,                            
+                            'persona'=>$persona,                            
                             'direccion'=>$direccion,
                             'localidad'=>$localidad,
-                            'lista_localidades'=>$lista_localidades,
-                            'update'=>true
+                            'array_rol'=> CHtml::listData(Rol::model()->findAll(), 'id', 'nombre'),
+                            'rol'=>$rol,
+                            'lista_localidades'=>CHtml::listData(Localidad::model()->findAll(),'id', 'nombre'),
+                            'update'=>true,
                             ));
 	}
         
@@ -292,29 +354,22 @@ class UsuarioController extends Controller
 	public function actionEliminar($id){
             
         $usuario = new Usuario();
-        $permisoUsuario = new Permisosusuario();
+        
         try {
              $transaction = Yii::app()->db->beginTransaction();             
-             $usuario= Usuario::model()->findByAttributes(array('id'=>$id));
-             $permisoUsuario = Permisosusuario::model()->findAllByAttributes(array('id_usr'=>$id));
-             $online = Online::model()->findByAttributes(array('id_usr'=>$id));
+             //POR EL MOMENTO NO SE PUEDEN ELIMINAR INSPECTORES.
              
-             foreach ($permisoUsuario as $key=>$permisos){
-                 $permisos->delete();
-             }
-             if($usuario{'nivel'}==2){//Inspector
-                 $inspector = new Inspector();
-                 $inspector=  Inspector::model()->findByAttributes(array('id_usr'=>$id));
-                 $inspector->delete();
-             }
-                 if($usuario->delete()){
-                     $transaction->commit();
-                     Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Usuario eliminado ");                         
-                 }else{
+             if(!Inspector::model()->findByAttributes(array('id_usr'=>$id))){
+                 Usuarionivacc::model()->deleteAllByAttributes(array('id_usr'=>$id));
+                 Usuariorol::model()->deleteAllByAttributes(array('id_usr'=>$id));
+                 Usuario::model()->deleteAllByAttributes(array('id'=>$id));
+                 $transaction->commit();
+                 Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Usuario eliminado ");                         
+                 $this->redirect(Yii::app()->createUrl('usuario/admin'));
+             }else{
                      $transaction->rollback();
-                     Yii::app()->user->setFlash('error', "<strong>Error en la base de datos!</strong> No se pudo eliminar");
+                     Yii::app()->user->setFlash('error', "<strong> El usuario es un Inspector!</strong> Por el momento el sistema no permite eliminar un Inspector");
                  }
-             
         } catch (Exception $ex) {
             Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
         }
@@ -329,12 +384,90 @@ class UsuarioController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($rol=null)
 	{
-		$dataProvider=new CActiveDataProvider('Usuario');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+            $rawData=array();
+            $roles = Rol::model()->findAll();
+            $usuario=array();
+            $modelRol = new Rol();
+            if($rol!=null){
+                if($rol==0){//Son todos los usuarios
+                    $usuario = Usuario::model()->findAll();                    
+                }else{
+                    $modelRol = Rol::model()->findByAttributes(array('id'=>$rol));
+                    //Todos los usuarios con el rol: $rol
+                    $UsuarioRol = Usuariorol::model()->findAllByAttributes(array('id_rol'=>$modelRol{'id'}));                                
+                    $usuario=[];
+                    foreach ($UsuarioRol as $key=>$valor){
+                        $usuario[]=Usuario::model()->findByAttributes(array('id'=>$valor{'id_usr'}));
+                    }
+                }                
+                if(count($usuario)!=0){                    
+                    foreach ($usuario as $key){
+                    $persona=Persona::model()->findByAttributes(array('dni'=>$key{'dni_per'}));                     
+                    $key->nombre = $persona{'nombre'};
+                    $key->apellido = $persona{'apellido'};
+                    if($rol!=0) $key->roles=$modelRol{'nombre'};                    
+                    }                
+                    
+                    foreach ($usuario as $key){                    
+                        $raw['id']=(int)$key{'id'};
+                        $raw['name']=$key{'name'};
+                        $raw['nombre']=$key{'nombre'};
+                        $raw['apellido']=$key{'apellido'};
+                        if($rol!=0) $raw['roles']=$key{'roles'};
+                        else $raw['roles']="Todos";
+                        $rawData[]=$raw;                   
+                    }
+
+                    $DataProviderUsuario=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }else{
+                    $raw['id']=1;
+                    $raw['name']="";
+                    $raw['nombre']="";
+                    $raw['apellido']="";
+                    $raw['roles']="";
+                    $rawData[]=null;                   
+                    $DataProviderUsuario=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }
+                
+                
+                 
+            }else{
+                $raw['id']=1;
+                $raw['name']="";
+                $raw['nombre']="";
+                $raw['apellido']="";
+                $raw['roles']="";
+                $rawData[]=null;                   
+                $DataProviderUsuario=new CArrayDataProvider($rawData, array(
+                   'id'=>'id',
+                   'pagination'=>array(
+                       'pageSize'=>10,
+                   ),
+                 ));
+                
+            }
+            
+            $list_roles = CHtml::listData($roles, 'id', 'nombre');
+            array_unshift($list_roles, 'Todos');            
+            $rol = new Rol();
+            $this->render('index',array( 
+                    'DataProviderUsuario'=>$DataProviderUsuario,
+                    'usuario'=>new Usuario(),
+                    'rol'=>$modelRol,
+                    'roles'=>  $list_roles,
+            ));
 	}
 
 	/**

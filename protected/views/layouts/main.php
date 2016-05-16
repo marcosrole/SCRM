@@ -63,7 +63,8 @@
                                 array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'empresa/admin'),
                                 array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
                                 '--------------------------',
-                                array('label' => 'Añadir Sucursal', 'url' => Yii::app()->homeUrl . 'sucursal/crear'),
+                                array('label' => 'Añadir Sucursal', 'url' => Yii::app()->homeUrl . 'sucursal/create'),
+                                array('label' => 'Listar Sucursales', 'url' => Yii::app()->homeUrl . 'sucursal/index'),
                             )
                         ),
                         array(
@@ -87,7 +88,7 @@
                             'url' => '#',
                             'items' => array(
                                 array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),                                
-                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . "permisosusuario/crear?name=" . $usuario{'name'}),
+                                array('label' => 'Permisos', 'url' => Yii::app()->homeUrl . "usuario/index/rol/0"),
                                 '----------',
                                 array('label' => 'Listar Usuarios', 'url' => Yii::app()->homeUrl . 'usuario/index'),
 //                                array(
@@ -116,12 +117,44 @@
                             'url' => array('/alarma/admin'),
                             //'visible' => !Yii::app()->user->isGuest),
                             ),
+                        array(
+                            'label' => 'Ayuda',
+//                            'visible' => !Yii::app()->user->isGuest,
+                            'url' => '#',
+                            'items' => array(
+                                array('label' => 'Acerca de', 'url' => array('site/about#openModal')),
+                                array('label' => 'Contáctenos', 'url' => Yii::app()->homeUrl . "site/contact"),                                
+                            )
+                        ),
+                        
                     ),
                 ),
             ),
                 )
         );
         ?>
+        
+        
+        <!-- View Popup   -->
+            <?php $this->beginWidget('booster.widgets.TbModal', array('id'=>'viewModal')); ?>
+                <!-- Popup Header -->
+                <div class="modal-header">
+                <div class="modal-header" style="padding:10px 10px;">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4><span class="glyphicon glyphicon-pencil"></span> Modificar</h4>
+                </div>
+                </div>
+                <!-- Popup Content -->
+                <div class="modal-body">
+                <p>  <?php  ?></p>
+                </div>
+                <!-- Popup Footer -->
+                <div class="modal-footer">
+                <!-- close button -->
+                <!-- close button ends-->
+                </div>
+            <?php $this->endWidget(); ?>
+            <!-- View Popup ends -->          
 
         <div class="container" id="page">
 

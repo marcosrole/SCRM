@@ -98,14 +98,8 @@ class DetalleDispo extends CActiveRecord
 	 * @return DetalleDispo the static model class
 	 */
         
-        public static function validarDatos($id,$db, $dist){
-            date_default_timezone_set('UTC');
-            //Verifico dB y distancia            
-            $estado = Calibracion::model()->verificarDatos($id, $db, $dist);            
-            $calibracion = Calibracion::model()->findByAttributes(array('id_dis'=>$id));
-            
-            if(!$estado['db']) Alarma::model ()->crearAlarma ($calibracion{'id_dis'},$calibracion{'id_suc'}, $calibracion{'db_permitido'}, $db, 1);
-            if(!$estado['dist']) Alarma::model ()->crearAlarma ($calibracion{'id_dis'},$calibracion{'id_suc'}, $calibracion{'dist_permitido'}, $dist, 2);
+        public static function validarDatos($id_dis){
+            Registroalarma::model()->determinarRuidoContinuo(20, 90, 180, $id_dis);            
         }
         public static function model($className=__CLASS__)
 	{

@@ -69,9 +69,11 @@ class DispositivoController extends Controller {
                 $criterial = new CDbCriteria();
                 $criterial->addCondition("id='".$id."'");
                 $dispositivo = Dispositivo::model()->find($criterial);                               
+                $dispositivo->attributes=$_POST['Dispositivo'];
                 $dispositivo->modelo=$_POST['Dispositivo']['modelo'];;
                 $dispositivo->version=$_POST['Dispositivo']['version'];
                 $dispositivo->funciona=$_POST['Dispositivo']['funciona'];                
+                
                 if($dispositivo->validate()){
                     $dispositivo->save();
                     $transaction->commit(); 
@@ -191,7 +193,8 @@ class DispositivoController extends Controller {
             $model->setAttribute('mac', strtoupper($_POST['Dispositivo']['mac']));
             $model->setAttribute('modelo', strtoupper($_POST['Dispositivo']['modelo']));
             $model->setAttribute('version', strtoupper($_POST['Dispositivo']['version']));
-            $model->setAttribute('funciona', true);
+            $model->setAttribute('funciona', 0);
+            $model->setAttribute('tiempo', $_POST['Dispositivo']['tiempo']);
             
             if ($model->validate()) {
                 $validacion=true;

@@ -1,3 +1,18 @@
+<?php
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/usuario.css" media="screen, projection">
 <?php
 /* @var $this UsuarioController */
@@ -39,8 +54,7 @@
             </div>
             <?php if(!$update){?>
                 <div class="pass">
-                    <?php echo $form->textFieldGroup($usuario, 'pass', array ('wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>
-                    
+                    <?php echo $form->textFieldGroup($usuario, 'pass', array ('wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>                    
                 </div>            
             <?php }?>
             
@@ -48,10 +62,17 @@
         
         <div class="clumna2">
             <div class="nivel">
-                <?php echo $form->radioButtonListGroup($usuario, 'nivel', array ('widgetOptions' => array('data' =>  array(
-                    'Administrador',
-                    'Jefe de Inspectores',
-                    'Inspector'))));?>                
+                <?php echo $form->checkboxListGroup(
+			$rol,
+			'id',
+			array(
+				'widgetOptions' => array(
+					'data' => $array_rol,
+				),
+				'hint' => '<strong>Note:</strong> Roles habilitados. Puede seleccionar mas de un rol para un usuario.'
+			)
+		); ?>
+                
             </div>        
         </div>
     </div>
@@ -85,11 +106,8 @@
 
             <div class="cuil">
                 <?php echo $form->textFieldGroup($persona, 'cuil', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-            </div>            
+            </div>  
             
-            <div class="matricula">
-                <?php echo $form->textFieldGroup($inspector, 'matricula', array('hint' => 'Solo para Inspectores','style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>                
-            </div> 
         </div>
     </div>
    
@@ -140,4 +158,18 @@
     <?php $this->endWidget(); ?>        
 </div>
 
-
+<?php
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));?>

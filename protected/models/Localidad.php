@@ -73,8 +73,10 @@ class Localidad extends CActiveRecord
             foreach ($localidades as $key => $value) {            
                 $lista_localidades2[]= [$value{'id'}=>$value{'nombre'}];
             }  
+            
             foreach ($localidades as $key => $value) {            
-               $lista_localidades[]= $value{'nombre'};
+               $lista_localidades[$count]= $value{'nombre'};
+               
             }  
             return $lista_localidades;
         }

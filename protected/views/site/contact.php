@@ -1,3 +1,10 @@
+<style>
+    .form {
+        width: 50%;
+    margin-left: 25%;
+}
+
+</style>
 <?php
 /* @var $this SiteController */
 /* @var $model ContactForm */
@@ -9,77 +16,64 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<h1>Contact Us</h1>
+<h1>Contáctenos</h1>
 
-<?php if(Yii::app()->user->hasFlash('contact')): ?>
-
-<div class="flash-success">
-	<?php echo Yii::app()->user->getFlash('contact'); ?>
-</div>
-
-<?php else: ?>
 
 <p>
-If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
+Por cualquier inconveniente o consulta,por favor complete el siguiente formulario. Gracias
 </p>
 
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'contact-form',
-	'enableClientValidation'=>true,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
-)); ?>
+    <?php
+            $this->widget('booster.widgets.TbAlert', array(
+                'fade' => true,
+                'closeText' => '&times;', // false equals no close link
+                'events' => array(),
+                'htmlOptions' => array(),
+                'userComponentId' => 'user',
+                'alerts' => array( // configurations per alert type
+                    // success, info, warning, error or danger
+                    'success' => array('closeText' => '&times;'),
+                    'info', // you don't need to specify full config
+                    'warning' => array('closeText' => false),
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+                ),
+            ));
+    ?>
+    
+    <?php $form = $this->beginWidget('booster.widgets.TbActiveForm',array(
+                'id' => 'UsuarioForm',
+                'htmlOptions' => array('class' => 'well'), )); ?>
+        <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
+        <div class="fromEmail">
+            <?php echo $form->textFieldGroup($model, 'fromEmail', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            <?php echo $form->error($model, 'fromEmail'); ?>
+        </div>
+        <div class="subject">
+            <?php echo $form->textFieldGroup($model, 'subject', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            <?php echo $form->error($model, 'subject'); ?>
+        </div>
+        <div class="message">
+            <?php echo $form->textAreaGroup(
+			$model,
+			'message',
+			array(
+				'wrapperHtmlOptions' => array(
+					'class' => 'col-sm-5',
+				),
+				'widgetOptions' => array(
+					'htmlOptions' => array('rows' => 5),
+				)
+			)
+		); ?>
+        </div>
 
-	<?php echo $form->errorSummary($model); ?>
+        <div class="boton">
+            <?php $this->widget('booster.widgets.TbButton', array('label' => 'Enviar', 'context' => 'success','buttonType' => 'submit',));?>
+        </div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name'); ?>
-		<?php echo $form->error($model,'name'); ?>
-	</div>
+    <?php $this->endWidget(); ?>        
+</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email'); ?>
-		<?php echo $form->error($model,'email'); ?>
-	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'subject'); ?>
-		<?php echo $form->textField($model,'subject',array('size'=>60,'maxlength'=>128)); ?>
-		<?php echo $form->error($model,'subject'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'body'); ?>
-		<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'body'); ?>
-	</div>
-
-	<?php if(CCaptcha::checkRequirements()): ?>
-	<div class="row">
-		<?php echo $form->labelEx($model,'verifyCode'); ?>
-		<div>
-		<?php $this->widget('CCaptcha'); ?>
-		<?php echo $form->textField($model,'verifyCode'); ?>
-		</div>
-		<div class="hint">Please enter the letters as they are shown in the image above.
-		<br/>Letters are not case-sensitive.</div>
-		<?php echo $form->error($model,'verifyCode'); ?>
-	</div>
-	<?php endif; ?>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Submit'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- form -->
-
-<?php endif; ?>

@@ -64,5 +64,19 @@
 .matricula {
     margin-left: 1%;
 }
-
+.nombre-sucursal {
+    width: 56%;
+}
+.sucursal {
+    display: -webkit-box;
+}
+.zona-sucursal{
+    width: 17%;
+    margin-left: 1%;
+    display: flex;
+}
+.link {
+    margin-left: 7%;
+    margin-top: 16%;
+}
 

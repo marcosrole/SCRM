@@ -8,22 +8,26 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Sucursal', 'url'=>array('index')),
-	array('label'=>'Create Sucursal', 'url'=>array('create')),
-	array('label'=>'Update Sucursal', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Sucursal', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Sucursal', 'url'=>array('admin')),
+	array('label'=>'Listar Sucursal', 'url'=>array('index')),
+	array('label'=>'Crear Sucursal', 'url'=>array('create')),
+//	array('label'=>'Actualizar datos', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>'Eliminar Sucursal', 'url'=>'#', 'linkOptions'=>array('confirm'=>'¿Esta seguro que desea eliminar la sucursal?')),
+	array('label'=>'Administrar Sucursal', 'url'=>array('admin')),
 );
 ?>
 
-<h1>View Sucursal #<?php echo $model->id; ?></h1>
+<h1>Detalles Sucursal: <strong><?php echo $model->nombre; ?></strong> </h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'nombre',
-		'cuit_emp',
-		'id_dir',
-	),
-)); ?>
+<?php $this->widget(
+        'booster.widgets.TbDetailView',
+        array(
+            'data' => $datos,
+            'attributes' => array(
+                array('name' => 'cuit', 'label' => 'CUIT'),
+                array('name' => 'empresa', 'label' => 'Empresa'),
+                array('name' => 'sucursal', 'label' => 'Sucursal'),
+                array('name' => 'zona', 'label' => 'Zona'),
+                array('name' => 'direccion', 'label' => 'Direccion'),
+                array('name' => 'localidad', 'label' => 'Localidad') ),
+            )
+); ?>

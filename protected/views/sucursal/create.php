@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Listar Sucursales', 'url'=>array('empresa/list')),
+	array('label'=>'Listar Sucursales', 'url'=>array('sucursal/index')),
 	array('label'=>'Modificar Sucursal', 'url'=>array('admin')),
 );
 ?>
@@ -22,5 +22,7 @@ $this->menu=array(
                             'direccion'=>$direccion,
                             'empresa' => $empresa,
                             'localidad' => $localidad,                        
+                            'zona' => $zona,
+                            'listZona'=> $listZona,
                             'lista_localidades' => $lista_localidades,
                         )); ?>

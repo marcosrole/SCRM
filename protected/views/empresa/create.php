@@ -9,6 +9,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Listar Empresas', 'url'=>array('list')),
+        array('label'=>'Listar Sucursales', 'url'=>array('sucursal/index')),
 	array('label'=>'Administrar Empresas', 'url'=>array('admin')),
         array('label'=>'Crear Sucursal', 'url'=>array('sucursal/create')),
 );
@@ -21,5 +22,6 @@ $this->menu=array(
                     'persona' => $persona,
                     'direccion' => $direccion,
                     'localidad' => $localidad,
-                    'lista_localidades' => $lista_localidades,                                        
+                    'lista_localidades' => $lista_localidades,
+    'checked' => $checked, 
                 )); ?>

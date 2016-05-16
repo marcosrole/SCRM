@@ -38,19 +38,28 @@ $this->widget('booster.widgets.TbGridView', array(
     'columns' => array(
         array(
             'name' => 'id',
-            'header'=>'Nro. Identificación'
+            'header'=>'ID',
+            'htmlOptions'=>array('width'=>'10%px'),            
         ),
         array(
             'name' => 'mac',
-            'header'=>'MAC'
+            'header'=>'MAC',
+            'htmlOptions'=>array('width'=>'40%'),           
         ),
         array(
             'name' => 'modelo',
-            'header'=>'Modelo'
+            'header'=>'Modelo',
+            'htmlOptions'=>array('width'=>'2O%'),                      
         ),
         array(
             'name' => 'version',
-            'header'=>'Version'
+            'header'=>'Version',
+            'htmlOptions'=>array('width'=>'2O%'),
+        ),
+         array(
+            'name' => 'tiempo',
+            'header'=>'tiempo',
+             'htmlOptions'=>array('width'=>'10%'),
         ),
         array(
             'class' => 'booster.widgets.TbButtonColumn',

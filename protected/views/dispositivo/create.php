@@ -1,3 +1,18 @@
+<style>
+    .mac {
+    width: 50%;
+}
+.modelo {
+    width: 50%;
+}
+.version {
+    width: 50%;
+}
+.tiempo {
+        width: 20%;
+}
+
+</style>
 <?php
         $this->widget('booster.widgets.TbAlert', array(
             'fade' => true,
@@ -35,46 +50,21 @@ $this->menu=array(
 <div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     
-        <div class="row">            
-            <?php echo $form->textFieldGroup(
-			$model,
-			'mac',
-			array(
-				'wrapperHtmlOptions' => array(
-					'class' => 'col-sm-5',
-				),
-                            'width' => '40',
-                            
-			)
-		); ?>
-            <?php echo $form->error($model,'mac'); ?>
+        <div class="mac">            
+            <?php echo $form->textFieldGroup($model,'mac',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
         </div>   
     
 
-        <div class="row">
-		<?php echo $form->textFieldGroup(
-			$model,
-			'modelo',
-			array(
-				'wrapperHtmlOptions' => array(
-					'class' => 'col-sm-5',
-				),                            
-			)
-		); ?>
-		<?php echo $form->error($model,'modelo'); ?>
+        <div class="modelo">
+		<?php echo $form->textFieldGroup($model,'modelo',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
 	</div>
     
-        <div class="row">
-		<?php echo $form->textFieldGroup(
-			$model,
-			'version',
-			array(
-				'wrapperHtmlOptions' => array(
-					'class' => 'col-sm-5',
-				),                            
-			)
-		); ?>
-		<?php echo $form->error($model,'version'); ?>
+        <div class="version">
+		<?php echo $form->textFieldGroup($model,'version',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>		
+	</div>
+    
+        <div class="tiempo">
+		<?php echo $form->textFieldGroup($model,'tiempo',array(	'wrapperHtmlOptions' => array('class' => 'col-sm-5',),'append' => 'minutos')		); ?>
 	</div>
         
     <div class="boton">

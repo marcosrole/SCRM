@@ -1,25 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "permiso".
+ * This is the model class for table "nivelesmenu".
  *
- * The followings are the available columns in table 'permiso':
+ * The followings are the available columns in table 'nivelesmenu':
  * @property integer $id
- * @property string $titulo
- * @property string $descripcion
+ * @property integer $id_men
+ * @property integer $id_nivAcc
  *
  * The followings are the available model relations:
- * @property Asignarpermiso[] $asignarpermisos
- * @property Permisosusuario[] $permisosusuarios
+ * @property Menu $idMen
+ * @property Nivelacceso $idNivAcc
  */
-class Permiso extends CActiveRecord
+class Nivelesmenu extends CActiveRecord
 {
+        
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'permiso';
+		return 'nivelesmenu';
 	}
 
 	/**
@@ -30,11 +31,11 @@ class Permiso extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('titulo', 'required'),
-			array('titulo, descripcion', 'length', 'max'=>50),
+			array('id_men, id_nivAcc', 'required'),
+			array('id_men, id_nivAcc', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, titulo, descripcion', 'safe', 'on'=>'search'),
+			array('id, id_men, id_nivAcc', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,8 +47,8 @@ class Permiso extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'asignarpermisos' => array(self::HAS_MANY, 'Asignarpermiso', 'id_per'),
-			'permisosusuarios' => array(self::HAS_MANY, 'Permisosusuario', 'id_per'),
+			'idMen' => array(self::BELONGS_TO, 'Menu', 'id_men'),
+			'idNivAcc' => array(self::BELONGS_TO, 'Nivelacceso', 'id_nivAcc'),
 		);
 	}
 
@@ -58,8 +59,8 @@ class Permiso extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'titulo' => 'Titulo',
-			'descripcion' => 'Descripcion',
+			'id_men' => 'Id Men',
+			'id_nivAcc' => 'Id Niv Acc',
 		);
 	}
 
@@ -82,8 +83,8 @@ class Permiso extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('titulo',$this->titulo,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('id_men',$this->id_men);
+		$criteria->compare('id_nivAcc',$this->id_nivAcc);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -94,7 +95,7 @@ class Permiso extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Permiso the static model class
+	 * @return Nivelesmenu the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

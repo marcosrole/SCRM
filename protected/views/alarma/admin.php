@@ -46,6 +46,7 @@ $this->menu=array(
         array('label'=>'Calibrar Dispositivo', 'url'=>array('Calibracion/create?id_disp=')),
 	array('label'=>'Agregar Sucursal', 'url'=>array('sucursal/create')),
         array('label'=>'Eliminar todo', 'url'=>'#', 'linkOptions'=>array('onclick'=>'show_confirm()')),
+        array('label'=>'Solucionar Inconveniente', 'url'=>array('asignarinspector/create')),
         
 );
 ?>

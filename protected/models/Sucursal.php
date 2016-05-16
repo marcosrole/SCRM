@@ -32,12 +32,12 @@ class Sucursal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, cuit_emp, id_dir', 'required'),
+			array('nombre, cuit_emp, id_dir, id_zon', 'required'),
 			array('id_dir', 'numerical', 'integerOnly'=>true),
 			array('nombre, cuit_emp', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, cuit_emp, id_dir', 'safe', 'on'=>'search'),
+			array('id, nombre, cuit_emp, id_dir, id_zon', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,6 +52,7 @@ class Sucursal extends CActiveRecord
 			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id_suc'),
 			'direccion' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
 			'empresa' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp'),
+                    'idZon' => array(self::BELONGS_TO, 'Gruposucursal', 'id_zon'),
 		);
 	}
 
@@ -65,6 +66,7 @@ class Sucursal extends CActiveRecord
 			'nombre' => 'Nombre de Sucursal',
 			'cuit_emp' => 'Cuit Emp',
 			'id_dir' => 'Id Dir',
+                        'id_zon'=>'ID Zona',
 		);
 	}
 
@@ -90,6 +92,7 @@ class Sucursal extends CActiveRecord
 		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('cuit_emp',$this->cuit_emp,true);
 		$criteria->compare('id_dir',$this->id_dir);
+                $criteria->compare('id_zon',$this->id_zon);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

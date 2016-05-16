@@ -26,7 +26,8 @@ class Persona extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+        public $checked = false;
+        public function tableName()
 	{
 		return 'persona';
 	}

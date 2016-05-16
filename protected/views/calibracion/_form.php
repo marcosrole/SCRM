@@ -1,3 +1,8 @@
+<style>
+    form#verticalForm {
+    display: inline-block;
+}
+</style>
 <?php
 /* @var $this CalibracionController */
 /* @var $model Calibracion */
@@ -12,9 +17,8 @@
 
 	<?php echo $form->errorSummary($calibracion); ?>
         
-	<div class="row">
-            <?php echo $form->labelEx($calibracion,'id_suc'); ?>
-            <?php echo $form->textField($calibracion,'id_suc',array('disabled'=>'true', 'class' => 'form-control', )); ?>
+	<div class="row" style="display:none;">
+            
 	</div>
         
 	<div class="row">

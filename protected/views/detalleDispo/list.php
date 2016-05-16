@@ -49,9 +49,10 @@
     <?php $this->renderPartial('_table',array(
             'dataProvider'=>$dataProvider,            
     )); ?>
-
-
 </div>
+
+
+
 <div class="grafico">
     <?php $this->renderPartial('_graph1',array(
             'id_dis'=>$id_dis,

@@ -26,41 +26,79 @@ $('.search-button').click(function(){
 <p>
 
 </p>
-
-<?php echo CHtml::link('Busqueda Avanzada','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-    <?php $this->renderPartial('_search',array(
-            'sucursal'=>new Sucursal(),
-            'empresa'=>new Empresa(),
-    )); ?>
-</div><!-- search-form -->
-
+<h2>Empresa:</h2>
 <?php 
         $this->widget('booster.widgets.TbGridView', array(
             'id' => 'sucursal-grid',
-            'dataProvider' => $dataProvider, 
+            'dataProvider' => $empresa->search(), 
+            
+            'columns' => array(                                                       
+                
+                array(
+                    'name' => 'razonsocial',
+                    'header'=>'Razon Social',
+                    'htmlOptions'=>array('width'=>'3O%'), 
+                ),                                                
+                array(
+                    'class' => 'booster.widgets.TbButtonColumn',
+                   // 'htmlOptions' => array('width' => '10'), //ancho de la columna
+                    'template' => '{view} ', // botones a mostrar
+                    'buttons' => array(
+                        'view' => array(
+                            'label' => 'Ver sucursales',                                                         
+                            'icon' => 'glyphicon glyphicon-ok',
+                            'url'=> 'Yii::app()->createUrl("sucursal/admin?cuit=$data->cuit")'
+                        ),                          
+                    ),
+                    'htmlOptions'=>array('width'=>'4O%'), 
+                    ),                           
+            ),
+              
+        ));
+    ?> 
+
+
+<?php 
+
+if($sucursal_visible){ ?>
+
+<h3>Empresa seleccionada: <?php echo $empresa_seleccionada{'razonsocial'}; ?></h3>
+    <?php
+        $this->widget('booster.widgets.TbGridView', array(
+            'id' => 'sucursal-grid',
+            'dataProvider' => $data, 
             
             'columns' => array(                                                       
                 array(
-                    'name' => 'cuit',
-                    'header'=>'CUIT'
-                ),
-                array(
-                    'name' => 'razonsocial',
-                    'header'=>'Razon Social'
-                ),                                                
-                array(
                     'name' => 'nombre',
-                    'header'=>'Sucursal'
-                ),                 
+                    'header'=>'Nombre',
+                    'htmlOptions'=>array('width'=>'80%'), 
+                ), 
                 array(
-                    'name' => 'direccion',
-                    'header'=>'Direccion'
-                ),
-                array(
-            'class'=>'CButtonColumn',
-        ),
-            ),
+                    'class' => 'booster.widgets.TbButtonColumn',
+                    'template' => '{view}  {update}  {delete}', // botones a mostrar
+                    'buttons' => array(
+                        'view' => array(
+                            'label' => 'Detalles',                                                         
+                            'url'=> 'Yii::app()->createUrl("sucursal/view?id=$data->id")'
+                        ),  
+                        'delete' => array
+                        (
+                            'label'=>'Eliminar',
+                            'icon'=>'glyphicon glyphicon-trash',
 
+                            'click' => 'function(){return confirm("Desea eliminar la sucursal?");}',
+                            'url'=> 'Yii::app()->createUrl("sucursal/delete?id=$data->id")',                                                    
+                            
+                        ),                        
+                        'update' => array(
+                            'label' => 'Actualizar',                                                         
+                            'url'=> 'Yii::app()->createUrl("sucursal/update?id=$data->id")'
+                        ),
+                    ),
+                    'htmlOptions'=>array('width'=>'20%'), 
+                    ),  
+                ),
         ));
+}
     ?> 

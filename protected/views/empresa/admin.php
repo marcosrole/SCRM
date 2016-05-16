@@ -9,6 +9,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Listar Empresa', 'url'=>array('list')),
+        array('label'=>'Listar Sucursales', 'url'=>array('sucursal/index')),
 	array('label'=>'Crear Empresa', 'url'=>array('create')),
 );
 
@@ -40,16 +41,18 @@ Nota:
             'columns' => array(                                                       
                 array(
                     'name' => 'cuit',
-                    'header'=>'CUIT'
+                    'header'=>'CUIT',
+                    'htmlOptions'=>array('width'=>'3O%'), 
                 ),
                 array(
                     'name' => 'razonsocial',
-                    'header'=>'Razon Social'
+                    'header'=>'Razon Social',
+                    'htmlOptions'=>array('width'=>'3O%'), 
                 ),                                                
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{view}{update}{delete}', // botones a mostrar
+                    'template' => '{view} {update} {delete}', // botones a mostrar
                     'buttons' => array(
                         'view' => array(
                             'label' => 'Detalles',                                                         
@@ -69,7 +72,7 @@ Nota:
                             'url'=> 'Yii::app()->createUrl("empresa/update?cuit=$data->cuit")'
                         ),
                     ),
-                    //'htmlOptions'=>array('style'=>'width: 120px'),
+                    'htmlOptions'=>array('width'=>'4O%'), 
                     ),
             ),
 

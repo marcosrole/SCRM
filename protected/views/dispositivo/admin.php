@@ -40,27 +40,33 @@ $this->widget('booster.widgets.TbExtendedGridView', array(
          'filter' => $dispositivo,
          'columns' => array(
                 array(
-                    'name' => 'id',
-                    'header' => 'ID',
-                ),
-                array(
-                    'name' => 'mac',
-                    'header' => 'MAC',
-                ),
-                array(
-                    'name' => 'modelo',
-                    'header' => 'Modelo',
-                ),
-                array(
-                    'name' => 'version',
-                    'header' => 'Version',
-                    'htmlOptions' => array('width' => 10),
-                ),
-                array(
-                    'name' => 'funciona',
-                    'header' => 'Funciona',
-                    'htmlOptions' => array('width' => 10),
-                ),  
+            'name' => 'id',
+            'header'=>'ID',
+            'htmlOptions'=>array('width'=>'10%px'),            
+        ),
+        array(
+            'name' => 'mac',
+            'header'=>'MAC',
+            'htmlOptions'=>array('width'=>'40%'),
+            
+            
+        ),
+        array(
+            'name' => 'modelo',
+            'header'=>'Modelo',
+            'htmlOptions'=>array('width'=>'2O%'),            
+            
+        ),
+        array(
+            'name' => 'version',
+            'header'=>'Version',
+            'htmlOptions'=>array('width'=>'2O%'),
+        ),
+         array(
+            'name' => 'tiempo',
+            'header'=>'tiempo',
+             'htmlOptions'=>array('width'=>'10%'),
+        ),
              
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
@@ -129,5 +135,6 @@ $this->widget(
                 <!-- close button ends-->
                 </div>
             <?php $this->endWidget(); ?>
-            <!-- View Popup ends -->          </div>
+            <!-- View Popup ends -->          
           
+             
