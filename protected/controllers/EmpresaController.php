@@ -24,28 +24,42 @@ class EmpresaController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-//	public function accessRules()
-//	{
-//                                
-//                if(Yii::app()->user->getState('roles') == 0){//Administrador
-//                    $action = ['create','update','view','delete','list','admin'];
-//                }
-//                if(Yii::app()->user->getState('roles') == 1){//Jefe Inspectores
-//                    $action = ['create'];
-//                }
-//                if(Yii::app()->user->getState('roles') == 2){//Inspectores
-//                    $action = ['create'];
-//                }                    
-//		return array(                    
-//			array('allow',  // Permitir todos los usaurios logeados
-//				'actions'=>$action,
-//				'users'=>array('@'),
-//			),
-//                        array('deny',  // deny all users
-//                                'users'=>array('*'),
-//                        ),
-//		);
-//	}
+        
+        public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
 
 	/**
 	 * Displays a particular model.

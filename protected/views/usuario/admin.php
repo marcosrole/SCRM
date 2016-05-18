@@ -59,13 +59,9 @@ $this->widget('booster.widgets.TbGridView', array(
         'filter' => $model,
          'columns' => array(                
                 array(
-                    'name' => 'name',
-                    'header'=>'Nombre'
-                ),                                                            
-             array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{delete} {update} {NivelAcceso}', // botones a mostrar
+                    'template' => '{delete} {update} {NivelAcceso} ', // botones a mostrar
                     'buttons' => array(
                         'delete' => array
                         (
@@ -84,6 +80,24 @@ $this->widget('booster.widgets.TbGridView', array(
                             'label' => 'Nivel Acceso',                                                         
                             'icon'=>'glyphicon glyphicon-user',
                             'url'=> 'Yii::app()->createUrl("/nivelesmenu/create?id_usr=$data->id")'
+                        ),
+                      
+                    ),
+                    //'htmlOptions'=>array('style'=>'width: 120px'),
+                    ),   
+             array(
+                    'name' => 'name',
+                    'header'=>'Nombre'
+                ),                                                            
+             array(
+                    'class' => 'booster.widgets.TbButtonColumn',
+                   // 'htmlOptions' => array('width' => '10'), //ancho de la columna
+                    'template' => '{password}', // botones a mostrar
+                    'buttons' => array(                        
+                        'password' => array(
+                            'label' => 'Password',                                                         
+                            'icon'=>'glyphicon glyphicon-asterisk',
+                            'url'=> 'Yii::app()->createUrl("/usuario/password?id=$data->id")'
                         ),
                     ),
                     //'htmlOptions'=>array('style'=>'width: 120px'),

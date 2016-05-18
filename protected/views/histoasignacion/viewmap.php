@@ -31,6 +31,9 @@ and open the template in the editor.
                 color: red;
                 font-weight: bold;
             }
+            .span-19 {
+                width: 100%;
+            }
         </style>
     </head>
     <body>
@@ -95,7 +98,7 @@ and open the template in the editor.
                     //Si existe,=> FIRE
                     //Sino => DRINK
                     
-                    $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$value[0], 'solucionado'=>0));
+                    $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$value[0], 'solucionado'=>0, 'preAlarma'=>0));
                     
                     if($alarma!=null){
                         $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/fire.png");
@@ -172,6 +175,7 @@ and open the template in the editor.
                 <?php $cont=0; ?>
                 
                  <?php foreach ($rawData as $datos){ $cont++;?>
+                <BR>
                     <?php $heading = "heading".$cont ;?>
                    <?php $href = "#collapse".$cont ;?>
                    <?php $id_collapse = "collapse".$cont ;?>

@@ -1,3 +1,15 @@
+
+  <style>
+  .modal-header, h4, .close {
+      background-color: #19A3FF;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+  }
+  .modal-footer {
+      background-color: #19A3FF;
+  }
+  </style>
 <?php ?>
 
  <?php
@@ -71,6 +83,28 @@ $this->menu=array(
                     'header'=>'Solucionado',
                     'value'=>'$data["solucionado"]== 0 ? "NO" : "SI"',  
                 ),
+                array(
+                    'class' => 'booster.widgets.TbButtonColumn',
+                   // 'htmlOptions' => array('width' => '10'), //ancho de la columna
+                    'template' => '{view}', // botones a mostrar
+                    'htmlOptions'=>array('width'=>'10%'),
+                    'buttons' => array(
+                       
+                        "view"=>array(
+                            'label'=>'Detalles', 
+                              'url'=> 'Yii::app()->createUrl("alarma/view", array("id"=> ' . '$data["id"])) ',                                  
+                                'options'=>array(
+                                    'ajax'=>array(
+                                        'type'=>'POST',
+                                        'url'=>"js:$(this).attr('href')",
+                                        'success'=>'function(data) { $("#myModal .modal-body").html(data); $("#myModal").modal(); }'
+                                    ),
+                                ),  
+                            ),
+                      
+                    ),
+                    //'htmlOptions'=>array('style'=>'width: 120px'),
+                    ),
                 
             ),
 
@@ -79,3 +113,24 @@ $this->menu=array(
 </div>
     
 
+<?php $this->beginWidget('booster.widgets.TbModal', array('id'=>'myModal')); ?>
+
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4> Detalles de Alarma </h4>
+    </div>
+    <div class="modal-body">
+
+    </div>
+    <div class="modal-footer">
+        <?php $this->widget(
+            'booster.widgets.TbButton',
+            array(
+                'label' => 'Cerrar',
+                'url' => '#',
+                'htmlOptions' => array('data-dismiss' => 'modal'),
+            )
+        ); ?>
+    </div>
+
+<?php $this->endWidget(); ?>

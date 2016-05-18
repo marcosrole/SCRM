@@ -35,9 +35,9 @@ class Configalarma extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('segCont, porcCont, segInt, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'required'),
+			array('segCont, porcCont, segInt, segMuerto, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, recibirAlaMuerto, tolResponsable', 'required'),
 			array('segCont, segInt', 'numerical', 'integerOnly'=>true),
-			array('porcCont, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'numerical'),
+			array('porcCont, porcInt, division, segDis, segMuerto, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaMuerto, recibirAlaContinuo, tolResponsable', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, segCont, porcCont, segInt, porcInt, division, segDis, porcDis, recibirAlaDistancia, recibirAlaIntermitente, recibirAlaContinuo, tolResponsable', 'safe', 'on'=>'search'),
@@ -73,6 +73,8 @@ class Configalarma extends CActiveRecord
 			'recibirAlaIntermitente' => 'Recibir Alarma de R. Intermitente',
 			'recibirAlaContinuo' => 'Recibir Alarma de R. Continuo',
 			'tolResponsable' => 'Tol Responsable',
+                        'segMuerto' => 'Tiempo muerto de aceptación (seg)',
+			'recibirAlaMuerto' => 'Recibir Alarma Dispositivo Muerto',
 		);
 	}
 
@@ -106,6 +108,8 @@ class Configalarma extends CActiveRecord
 		$criteria->compare('recibirAlaIntermitente',$this->recibirAlaIntermitente);
 		$criteria->compare('recibirAlaContinuo',$this->recibirAlaContinuo);
 		$criteria->compare('tolResponsable',$this->tolResponsable);
+                $criteria->compare('segMuerto',$this->segMuerto);
+		$criteria->compare('recibirAlaMuerto',$this->recibirAlaMuerto);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

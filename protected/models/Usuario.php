@@ -72,8 +72,8 @@ class Usuario extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'pass' => 'Pass',
+			'name' => 'Usuario',
+			'pass' => 'Contraseña',
 			'id_nivAcc' => 'Id Niv Acc',
 			'dni_per' => 'Dni Per',
 		);

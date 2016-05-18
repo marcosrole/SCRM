@@ -31,11 +31,11 @@ class Menu extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('menu, controller, view', 'required'),
-			array('menu, submenu, controller, view', 'length', 'max'=>20),
+			array('menu, controller, action', 'required'),
+			array('menu, submenu, controller, action', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, menu, submenu, controller, view', 'safe', 'on'=>'search'),
+			array('id, menu, submenu, controller, action', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +61,7 @@ class Menu extends CActiveRecord
 			'menu' => 'Menu',
 			'submenu' => 'Submenu',
 			'controller' => 'Controller',
-			'view' => 'View',
+			'action' => 'Action',
 		);
 	}
 
@@ -87,8 +87,8 @@ class Menu extends CActiveRecord
 		$criteria->compare('menu',$this->menu,true);
 		$criteria->compare('submenu',$this->submenu,true);
 		$criteria->compare('controller',$this->controller,true);
-		$criteria->compare('view',$this->view,true);
-
+		$criteria->compare('action',$this->action,true);
+                
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

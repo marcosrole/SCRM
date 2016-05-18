@@ -7,8 +7,7 @@ class NivelesmenuController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
-	/**
+        /**
 	 * @return array action filters
 	 */
 	public function filters()
@@ -18,32 +17,49 @@ class NivelesmenuController extends Controller
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
+        
 
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-//	public function accessRules()
-//	{
-//		return array(
-//			array('allow',  // allow all users to perform 'index' and 'view' actions
-//				'actions'=>array('index','view'),
-//				'users'=>array('*'),
-//			),
-//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-//				'actions'=>array('create','update'),
-//				'users'=>array('@'),
-//			),
-//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-//				'actions'=>array('admin','delete'),
-//				'users'=>array('admin'),
-//			),
-//			array('deny',  // deny all users
-//				'users'=>array('*'),
-//			),
-//		);
-//	}
+        
+        public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
 
         public function actionCreate($id=null, $id_usr=null){
             $menu = new Menu();
@@ -121,7 +137,7 @@ class NivelesmenuController extends Controller
                     
                 }
                 $this->redirect(array('create','id_usr'=>$id_usr));
-                
+//                'url' => array('/site/logout'),
             }
             
 //            --------------------------------------------------------------
@@ -164,10 +180,31 @@ class NivelesmenuController extends Controller
 	public function actionAdmin($id_nivacc=null)
 	{
             
-            $Menu = new Menu();
+            
             $NivAccSeleccionado = 'Seleccione un nivel de acceso';
             $NivelesAcceso = new Nivelacceso();
             
+            $Menu = Menu::model()->findAll();
+            
+            foreach ($Menu as $item=> $value){
+                $raw['id']=(int)$value{'id'};
+                $raw['menu']=$value{'menu'}; 
+                $raw['submenu']=$value{'submenu'};    
+                $raw['descripcion']=$value{'descripcion'};    
+                $raw['controller']=$value{'controller'};    
+                $raw['action']=$value{'action'};    
+                
+                $rawData[]=$raw;  
+            }
+            
+            $DataMenu=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>100,
+                       ),
+                     ));
+            
+                   
             $ListMenu = Menu::model()->findAll();
             $ListNivelesAcceso = CHtml::listData($NivelesAcceso->findAll(array('order' => 'nombre')),'id','nombre');                        
             
@@ -191,7 +228,7 @@ class NivelesmenuController extends Controller
                             }                            
                             Yii::app()->user->setFlash('success', "<strong>Datos guardados!</strong>" );
                             $transaction->commit();
-                            $this->redirect(array('nivelesmenu/admin'));
+                             $this->redirect(array('/site/logout'));
                             
                         }else{
                         $transaction->rollback();
@@ -222,7 +259,7 @@ class NivelesmenuController extends Controller
                 $this->render('admin',array(
                             'ListNivelesAcceso'=>$ListNivelesAcceso,
                             'NivelesAcceso'=>$NivelesAcceso,
-                            'ListMenu'=>$Menu,
+                            'ListMenu'=>$DataMenu,
                             'MenuSelecionado'=>$MenuSeleccionados,
                             'NivAccSeleccionado' => $NivAccSeleccionado,
                     ));
@@ -231,7 +268,7 @@ class NivelesmenuController extends Controller
                 $this->render('admin',array(
                             'ListNivelesAcceso'=>$ListNivelesAcceso,
                             'NivelesAcceso'=>$NivelesAcceso,
-                            'ListMenu'=>$Menu,
+                            'ListMenu'=>$DataMenu,
                             'MenuSelecionado'=>[],
                             'NivAccSeleccionado' => $NivAccSeleccionado,
                     ));

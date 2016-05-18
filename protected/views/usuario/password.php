@@ -1,3 +1,19 @@
+<?php
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/usuario.css" media="screen, projection">
 <style>
   .usuario {
@@ -61,12 +77,17 @@ $this->menu=array(
     <div class="usuario">
         <div class="columna1">
             <div class="name">
-                <?php echo $form->textFieldGroup($usuario, 'name', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                <?php echo $form->error($usuario, 'name'); ?>
+                Usuario seleccionado: <strong><?php echo $usuario->name; ?></strong>
+                <p> 
+                    
+                    
+                    
+                    
+                </p>
             </div>
             
             <div class="pass">
-                <?php echo $form->textFieldGroup($usuario, 'pass', array ('wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>
+                <?php echo $form->textFieldGroup($usuario, 'pass', array ('hint' => 'Nueva Contraseña', 'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>
                 <?php echo $form->error($usuario, 'pass'); ?>
             </div>            
 

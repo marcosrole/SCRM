@@ -10,10 +10,13 @@
  * @property integer $id_tipAla
  * @property integer $id_dis
  * @property string $fechahs
+ * @property integer $timeOutEspera
+ * @property integer $preAlarma
  *
  * The followings are the available model relations:
  * @property Tipoalarma $idTipAla
  * @property Dispositivo $idDis
+ * @property Asignarinspector[] $asignarinspectors
  * @property Registroalarma[] $registroalarmas
  */
 class Alarma extends CActiveRecord
@@ -35,11 +38,11 @@ class Alarma extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_tipAla', 'required'),
-			array('solucionado, enviarSMS, id_tipAla, id_dis', 'numerical', 'integerOnly'=>true),
+			array('solucionado, enviarSMS, id_tipAla, id_dis, timeOutEspera, preAlarma', 'numerical', 'integerOnly'=>true),
 			array('fechahs', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, solucionado, enviarSMS, id_tipAla, id_dis, fechahs', 'safe', 'on'=>'search'),
+			array('id, solucionado, enviarSMS, id_tipAla, id_dis, fechahs, timeOutEspera, preAlarma', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +56,7 @@ class Alarma extends CActiveRecord
 		return array(
 			'idTipAla' => array(self::BELONGS_TO, 'Tipoalarma', 'id_tipAla'),
 			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
+			'asignarinspectors' => array(self::HAS_MANY, 'Asignarinspector', 'id_ala'),
 			'registroalarmas' => array(self::HAS_MANY, 'Registroalarma', 'id_ala'),
 		);
 	}
@@ -69,6 +73,8 @@ class Alarma extends CActiveRecord
 			'id_tipAla' => 'Id Tip Ala',
 			'id_dis' => 'Id Dis',
 			'fechahs' => 'Fechahs',
+			'timeOutEspera' => 'Time Out Espera',
+			'preAlarma' => 'Pre Alarma',
 		);
 	}
 
@@ -96,6 +102,8 @@ class Alarma extends CActiveRecord
 		$criteria->compare('id_tipAla',$this->id_tipAla);
 		$criteria->compare('id_dis',$this->id_dis);
 		$criteria->compare('fechahs',$this->fechahs,true);
+		$criteria->compare('timeOutEspera',$this->timeOutEspera);
+		$criteria->compare('preAlarma',$this->preAlarma);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -112,7 +120,7 @@ class Alarma extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-        public static function setSolucionada($id){
+         public static function setSolucionada($id){
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id));
             $alarma->solucionado=1;
             $alarma->save();

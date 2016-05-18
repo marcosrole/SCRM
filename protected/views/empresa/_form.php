@@ -43,27 +43,12 @@ $(function () {
 <button id="btn">Abrir Dialogo</button> !-->
 
 <div class="form">
-    <?php
-$this->widget('booster.widgets.TbAlert', array(
-    'fade' => true,
-    'closeText' => '&times;', // false equals no close link
-    'events' => array(),
-    'htmlOptions' => array(),
-    'userComponentId' => 'user',
-    'alerts' => array(// configurations per alert type
-        // success, info, warning, error or danger
-        'success' => array('closeText' => '&times;'),
-        'info', // you don't need to specify full config
-        'warning' => array('closeText' => false),
-        'error' => array('closeText' => false),
-    ),
-));
-
-?>
+ 
 
 
 <?php $form = $this->beginWidget('booster.widgets.TbActiveForm',array(
                 'id' => 'UsuarioForm',
+                'focus'=>array($empresa,'razonsocial'),
                 'htmlOptions' => array('class' => 'well'), )); ?>
             
         <h3>Datos de la empresa</h3>

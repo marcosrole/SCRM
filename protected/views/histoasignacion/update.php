@@ -9,6 +9,9 @@
   .modal-footer {
       background-color: #19A3FF;
   }
+  .modal.in .modal-dialog {
+    width: 60%;
+  }
   </style>
 </head>
 
@@ -41,10 +44,10 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Histoasignacion', 'url'=>array('index')),
-	array('label'=>'Create Histoasignacion', 'url'=>array('create')),
+//	array('label'=>'List Histoasignacion', 'url'=>array('index')),
+	array('label'=>'Generar Asignacion', 'url'=>array('create')),
 //	array('label'=>'View Histoasignacion', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Histoasignacion', 'url'=>array('admin')),
+	array('label'=>'Historico de Asignacion', 'url'=>array('list')),
 );
 ?>
 

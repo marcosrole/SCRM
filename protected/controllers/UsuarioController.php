@@ -24,26 +24,42 @@ class UsuarioController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-//	public function accessRules()
-//	{
-//		return array(
-//			array('allow',  // allow all users to perform 'index' and 'view' actions
-//				'actions'=>array('index','view'),
-//				'users'=>array('*'),
-//			),
-//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-//				'actions'=>array('create','update'),
-//				'users'=>array('@'),
-//			),
-//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-//				'actions'=>array('admin','delete'),
-//				'users'=>array('admin'),
-//			),
-//			array('deny',  // deny all users
-//				'users'=>array('*'),
-//			),
-//		);
-//	}
+        
+         public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
 
 	/**
 	 * Displays a particular model.
@@ -88,12 +104,11 @@ class UsuarioController extends Controller
                 try {                                  
                     if(isset($_POST['Usuario'])) $usuario->attributes=$_POST['Usuario'];
                     if(isset($_POST['Direccion'])) $direccion->attributes=$_POST['Direccion'];
-                    if(isset($_POST['Persona'])) $persona->attributes=$_POST['Persona'];
+                    if(isset($_POST['Persona'])){ $persona->attributes=$_POST['Persona']; $persona->celular="+54" . $_POST['Persona']['celular'];}
                     if(isset($_POST['Localidad'])) $localidad->attributes=$_POST['Localidad'];
                     if(isset($_POST['Rol'])) $rol->attributes=$_POST['Rol'];
 
 
-                    
                     if(isset($_POST['Direccion'])){                        
                            
                     $direccion->attributes=$_POST['Direccion'];                
@@ -183,7 +198,7 @@ class UsuarioController extends Controller
                     catch (Exception $ex) {
                     Yii::app()->user->setFlash('error', "<strong>Error!</strong> " .  $ex->getMessage());                  
                 }
-                                
+                              
                 $this->render('create',
                         array(
                             'usuario'=>$usuario,                            

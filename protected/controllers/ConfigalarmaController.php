@@ -24,26 +24,42 @@ class ConfigalarmaController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-//	public function accessRules()
-//	{
-//		return array(
-//			array('allow',  // allow all users to perform 'index' and 'view' actions
-//				'actions'=>array('index','view'),
-//				'users'=>array('*'),
-//			),
-//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-//				'actions'=>array('create','update'),
-//				'users'=>array('@'),
-//			),
-//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-//				'actions'=>array('admin','delete'),
-//				'users'=>array('admin'),
-//			),
-//			array('deny',  // deny all users
-//				'users'=>array('*'),
-//			),
-//		);
-//	}
+        
+        public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
 
 	/**
 	 * Displays a particular model.
@@ -72,7 +88,7 @@ class ConfigalarmaController extends Controller
 		{
 			$model->attributes=$_POST['Configalarma'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				 Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos actualizados ");   
 		}
 
 		$this->render('create',array(

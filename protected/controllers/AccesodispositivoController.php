@@ -26,25 +26,39 @@ class AccesodispositivoController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
 	}
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

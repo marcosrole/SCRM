@@ -24,27 +24,47 @@ class AlarmaController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-//	public function accessRules()
-//	{
-//		return array(
-//			array('allow',  // allow all users to perform 'index' and 'view' actions
-//				'actions'=>array('index','view'),
-//				'users'=>array('*'),
-//			),
-//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-//				'actions'=>array('create','update'),
-//				'users'=>array('@'),
-//			),
-//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-//				'actions'=>array('admin','delete'),
-//				'users'=>array('admin'),
-//			),
-//			array('deny',  // deny all users
-//				'users'=>array('*'),
-//			),
-//		);
-//	}
-
+        
+        public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>array('ValidarEstado','PREadmin'),                             
+                                    'users'=>array('*'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
+        
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -83,32 +103,47 @@ class AlarmaController extends Controller
                 
 	public function actionView($id)
 	{
-            $datos = array();
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id));
-            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$alarma{'id_suc'}));
+            $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
+            $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+            $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
             $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
             $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
+            $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
             
-            
-            $date = date_create($alarma{'fecha'});
-            $datos['fecha']= date_format($date, 'd-m-Y');
+            $datos = array();
+            $date = $alarma{'fechahs'};
+            $date = explode(" ", $date);
+            $date[0] = date_create($date[0]);
+            $datos['fecha']= date_format($date[0], 'd-m-Y');
             
             
             $datos['id']= $alarma{'id'};
-            $datos['descripcion']= $alarma{'descripcion'};
-            $datos['vesperado']=$alarma{'valorEsperado'};
-            $datos['vactual']=$alarma{'valorActual'};
-//            $datos['fecha']=$alarma{'fecha'};
-            $datos['hs']=$alarma{'hs'};
+            $datos['descripcion']= $tipoAlarma{'descripcion'};
+            $datos['hs']= $date[1];
             $datos['sucursal']=$sucursal{'nombre'};
             $datos['empresa']=$empresa{'razonsocial'};
             $datos['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " Piso:" . $direccion{'piso'} . " Depto:" . $direccion{'depto'};
+            $datos['localidad']=$localidad{'nombre'};
+                
             
+             if( Yii::app()->request->isAjaxRequest )
+            {
+
+                $this->renderPartial('view', array(
+                    'datos'=>$datos,
+                ), false, true);
+            }
+            else
+            {
+                $this->render('view', array(
+                     'datos'=>$datos,
+
+                ));
+            }
             
-            $this->render('view',array(
-			'datos'=>$datos,
-                        'model'=>$alarma
-		));
+           
 	}
 
 	/**
@@ -196,7 +231,8 @@ class AlarmaController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0'));
+		$alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0'));
+               
                 
                 $rawData=[];
                 if(count($alarmas)==0){
@@ -206,7 +242,82 @@ class AlarmaController extends Controller
                            'pageSize'=>10,
                        ),
                      ));
-                }elseif (count($alarmas)>1) {
+                }elseif (count($alarmas)>=1) {
+                    foreach ($alarmas as $item=>$value){ 
+                        $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$value{'id_dis'}));
+                        $histoAisg = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+                        $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAisg{'id_suc'}));
+                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                        $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                        
+                        $raw['id']=(int)$value{'id'};
+                        $raw['id_dis']=$dispositivo{'id'};
+                        $raw['solucionado']=$value{'solucionado'}; 
+                           $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                        $raw['alarma']=$tipoAlarma{'descripcion'};
+                        $fechahs=explode(" ", $value['fechahs']);
+                        $raw['fecha']=$fechahs[0];  
+                        $raw['hs']=$fechahs[1];  
+                        $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " - " . $localidad{'nombre'};
+                        $raw['dispositivo']=$dispositivo{'id'};
+                        $rawData[]=$raw;                   
+                }    
+
+                    $DataProviderAlarma=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                 }else{
+                        $value=$alarmas; 
+                        $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$value{'id_dis'}));
+                        $histoAisg = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+                        $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAisg{'id_suc'}));
+                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                        $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
+                        
+                        $raw['id']=(int)$value{'id'};
+                         $raw['id_dis']=$dispositivo{'id'};
+                        $raw['solucionado']=$value{'solucionado'}; 
+                            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
+                        $raw['alarma']=$tipoAlarma{'descripcion'};                                               
+                        $fechahs=explode(" ", $value['fechahs']);
+                        $raw['fecha']=$fechahs[0];  
+                        $raw['hs']=$fechahs[1];  
+                        $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " - " . $localidad{'nombre'};
+                        $raw['dispositivo']=$dispositivo{'id'};
+                        $rawData[]=$raw;                   
+                   
+
+                    $DataProviderAlarma=new CArrayDataProvider($rawData, array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     )); 
+                 }
+                 
+                $this->render('admin',array(
+			'DataProviderAlarma'=>$DataProviderAlarma,
+		));
+                                     
+	}
+        
+        public function actionPREAdmin()
+	{
+            
+            $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'1'));
+                
+                $rawData=[];
+                if(count($alarmas)==0){
+                    $DataProviderAlarma=new CArrayDataProvider([], array(
+                       'id'=>'id',
+                       'pagination'=>array(
+                           'pageSize'=>10,
+                       ),
+                     ));
+                }elseif (count($alarmas)>=1) {
                     foreach ($alarmas as $item=>$value){                                      
                         $raw['id']=(int)$value{'id'};
                         $raw['solucionado']=$value{'solucionado'}; 
@@ -244,7 +355,7 @@ class AlarmaController extends Controller
                      )); 
                  }
                  
-                $this->render('admin',array(
+                $this->render('PREadmin',array(
 			'DataProviderAlarma'=>$DataProviderAlarma,
 		));
                                      
@@ -265,7 +376,10 @@ class AlarmaController extends Controller
 		return $model;
 	}
 
-	public function actionSendemail($id_alarma){
+        
+        
+        
+    public function actionSendemail($id_alarma){
             
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id_alarma));
             $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
@@ -310,4 +424,8 @@ class AlarmaController extends Controller
             $this->redirect(array('alarma/admin')); 
 
         }
+        
+        
+    
+    
 }

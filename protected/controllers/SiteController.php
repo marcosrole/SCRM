@@ -25,24 +25,26 @@ class SiteController extends Controller
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
+        
+        public function actionVerificarAlarma()
+	{
+            var_dump("Daleee");
+	}
+        
 	public function actionIndex()
 	{
             $user = new Usuario();
             $error=false;
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
-                $identity = new UserIdentity(($_POST['Usuario']['name']),md5($_POST['Usuario']['pass']));
-               
-//                if ($user->validate()){
-                    if ($identity->authenticate()){
-                        
-                        Yii::app()->user->login($identity);                        
-                        $this->redirect(Yii::app()->user->returnUrl);
-                    }else $error=true;
-//                }
                 
-
-            }            
+                $identity = new UserIdentity(($_POST['Usuario']['name']),($_POST['Usuario']['pass']));
+                
+                    if (!$identity->authenticate()){
+                        Yii::app()->user->login($identity);                          
+                        $this->redirect(Yii::app()->user->returnUrl);
+                        }else $error=true;
+                    }            
             $this->render('index', array('usuario'=>$user, 'error'=>$error));
 	}
 
@@ -68,8 +70,7 @@ class SiteController extends Controller
                     $message->view ='contacto';//nombre de la vista q conformara el mail            
                     $message->setBody(array('datos'=>$contacto),'text/html');//codificar el html de la vista
                     $message->from =($contacto{'fromEmail'}); // alias del q envia
-                    $message->setTo('marcosrole@gmail.com'); // a quien se le envia                    
-                    
+                    $message->setTo('marcosrole@gmail.com'); // a quien se le envia 
                     if(Yii::app()->mail->send($message)){
                         Yii::app()->user->setFlash('success', "<strong>Gracias por contactarse con nosotros!</strong> Nos comunicaremos a la brevedad ");                                                            
                         $this->redirect('contact');
@@ -88,18 +89,22 @@ class SiteController extends Controller
         public function actionLogin()
 	{            
             $user = new Usuario();
-            $error=false;
-            
+            $error=false;   
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
                 
-                $identity = new UserIdentity(($_POST['Usuario']['name']),md5($_POST['Usuario']['pass']));
-                    if ($identity->authenticate()){                      
+                $identity = new UserIdentity(($_POST['Usuario']['name']),($_POST['Usuario']['pass']));
+                
+                    if (!$identity->authenticate()){
                         Yii::app()->user->login($identity);                          
-                        $this->redirect(Yii::app()->user->returnUrl);
-                        }else $error=true;
+                        $this->redirect(Yii::app()->user->returnUrl);                         
+                        }else {
+                            $error=true;
+                             Yii::app()->user->setFlash('error', "Usuario o contraseña incorrectos "); 
+                        }
+                        
                     } 
-            
+              
             $this->render('login',array('usuario'=>$user, 'error'=>$error));
             
 //            $identity = new UserIdentity($username,$password);
@@ -155,4 +160,11 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+        
+        public function actionContarAlarmas(){
+            echo count(Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0')));
+        }
+        public function actionContarPREAlarmas(){
+            echo count(Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'1')));
+        }
 }

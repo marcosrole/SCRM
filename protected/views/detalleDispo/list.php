@@ -32,7 +32,22 @@
 //header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
 //?>
 
-
+<?php
+$this->widget('booster.widgets.TbAlert', array(
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'events' => array(),
+    'htmlOptions' => array(),
+    'userComponentId' => 'user',
+    'alerts' => array(// configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'),
+        'info', // you don't need to specify full config
+        'warning' => array('closeText' => false),
+        'error' => array('closeText' => false),
+    ),
+));
+?>
 <?php $this->menu=array(
 	array('label'=>'Listar Empresa', 'url'=>array('list')),
 	array('label'=>'Crear Empresa', 'url'=>array('create')),

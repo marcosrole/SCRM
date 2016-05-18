@@ -24,31 +24,42 @@ class CalibracionController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	/*public function accessRules()
+       public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}*/
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
 	public function actionView($id)
 	{
             $calibracion = Calibracion::model()->findByAttributes(array('id'=>$id));
@@ -77,12 +88,7 @@ class CalibracionController extends Controller
                 'calibracion'=>new Calibracion(),
                 )); 
 	}
-
-	/**
-     * Creates a new model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     */
-    public function actionCreate($id_disp) {
+        public function actionCreate($id_disp) {
          date_default_timezone_set('America/Buenos_Aires');
          
         $dispositivo = new Dispositivo();
@@ -205,15 +211,9 @@ class CalibracionController extends Controller
         
         
     }
-
-    /**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
 	public function actionUpdate($id)
 	{
-		$calibracion=$this->loadModel($id);
+		$calibracion=  Calibracion::model()->findByAttributes(array('id'=>$id));
                 $model = new Calibracion();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -233,17 +233,7 @@ class CalibracionController extends Controller
 		$this->render('update',array(
 			'calibracion'=>$calibracion,
 		));
-	}
-        
-        /** Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	
-
-	/**
-	 * Listar calibraciones realizadas	 
-	 */
+	}  
 	public function actionList()
 	{
             $calibraciones = Calibracion::model()->findAll();
@@ -299,29 +289,16 @@ class CalibracionController extends Controller
                     'DataProviderCalibracion'=>$DataProviderCalibracion,
             ));   
 	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return Calibracion the loaded model
-	 * @throws CHttpException
-	 */
-	public function loadModel($id)
+        public function loadModel($id)
 	{
-		$model=Calibracion::model()->findByPk($id);
+		$model=Asignarinspector::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
-
-	/**
-	 * Performs the AJAX validation.
-	 * @param Calibracion $model the model to be validated
-	 */
-	protected function performAjaxValidation($model)
+        protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='calibracion-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='asignarinspector-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

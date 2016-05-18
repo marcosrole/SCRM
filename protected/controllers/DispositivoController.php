@@ -14,7 +14,7 @@ class DispositivoController extends Controller {
     public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
+//            'postOnly + delete', // we only allow deletion via POST request
         );
     }
 
@@ -23,42 +23,59 @@ class DispositivoController extends Controller {
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    /*public function accessRules() {
-        return array(
-            array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view','list','prueba',
-                    'create', 'update','read','deleteall','viewmap',
-                    'admin', 'delete','eliminar', 'asignar', 'listar'),
-                'users' => array('*'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array(''),
-                'users' => array('*'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array(''),
-                'users' => array('*'),
-            ),
-            array('deny', // deny all users
-                'users' => array('*'),
-            ),
-        );
-    }
-*/
-    /**
-     * Displays a particular model.
-     * @param integer $id the ID of the model to be displayed
-     */
+     public function accessRules()
+	{
+		 $funcionesAxu = new funcionesAux();
+                 $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
+                 
+                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 if(count($arr)!=0){
+                        return array(                    
+                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                    'actions'=>$arr,                             
+                                    'users'=>array('@'),
+                            ),
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }else{
+                     return array(
+                            array('deny',  // deny all users
+                                    'users'=>array('*'),
+                                    'deniedCallback' => function() { 
+                                            Yii::app()->user->setFlash('error', "Usted no tiene permiso para relizar la acción solicitada. Inicie sesión con el usuario correspondiente ");  
+    //                                        Yii::app()->controller->redirect(array ('/site/index'));
+                                            Yii::app()->controller->redirect(Yii::app()->request->urlReferrer);                                        
+                                            }
+                            ),
+                            );
+                 }
+                
+	}
+
     
-    public function actionRead(){
-        echo $this->createUrl('dispositivo/create',array('txt'=>'Hola','id'=>'1212'));
-    }
           
     public function actionView($id) {
-        
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
+    }
+    public function actionHabilitarDispositivo($id=NULL) {
+        $lista = Dispositivo::getListado();     
+        if($id!=NULL){
+            $Dispo =  Dispositivo::model()->findByAttributes(array('id'=>$id));
+            if($Dispo{'funciona'}){
+                $Dispo{'funciona'}=0;
+            }else $Dispo{'funciona'}=1;
+            $Dispo->save();
+        }
+        $this->render('HabilitarDispositivo', array('dispositivos'=>$lista));
     }
     
      public function actionModificar($id,$mac,$modelo,$version,$funciona){
@@ -110,7 +127,6 @@ class DispositivoController extends Controller {
     }
     
     public function actionAsignar() {
-        
         $model = new Dispositivo;
         $model->unsetAttributes();
         

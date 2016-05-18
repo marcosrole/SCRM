@@ -1,6 +1,20 @@
 <?php
 
-
+/**
+ * This is the model class for table "detalle_dispo".
+ *
+ * The followings are the available columns in table 'detalle_dispo':
+ * @property integer $id
+ * @property double $db
+ * @property double $distancia
+ * @property integer $id_dis
+ * @property string $fechahs
+ *
+ * The followings are the available model relations:
+ * @property Accesodispositivo[] $accesodispositivos
+ * @property Accesodispositivo[] $accesodispositivos1
+ * @property Dispositivo $idDis
+ */
 class DetalleDispo extends CActiveRecord
 {
 	/**
@@ -19,13 +33,12 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_dis, db, distancia, fecha, hs', 'required'),
-			array('id_dis,db,distancia', 'numerical', 'integerOnly'=>true),
+			array('db, distancia, id_dis, fechahs', 'required'),
+			array('id_dis', 'numerical', 'integerOnly'=>true),
 			array('db, distancia', 'numerical'),
-			array('', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dis, id, db, distancia, fecha, hs', 'safe', 'on'=>'search'),
+			array('id, db, distancia, id_dis, fechahs', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -37,7 +50,9 @@ class DetalleDispo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dispositivo' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),			
+			'accesodispositivos' => array(self::HAS_MANY, 'Accesodispositivo', 'id_detDis'),
+			'accesodispositivos1' => array(self::HAS_MANY, 'Accesodispositivo', 'id_dis_detDis'),
+			'idDis' => array(self::BELONGS_TO, 'Dispositivo', 'id_dis'),
 		);
 	}
 
@@ -47,12 +62,11 @@ class DetalleDispo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dis' => 'ID Dispositivo',
-			'id' => 'ID Detalle Dispositivo',			
-			'db' => 'dB',
+			'id' => 'ID',
+			'db' => 'Db',
 			'distancia' => 'Distancia',
-			'fecha' => 'Fecha',
-			'hs' => 'Hs',
+			'id_dis' => 'Id Dis',
+			'fechahs' => 'Fechahs',
 		);
 	}
 
@@ -74,19 +88,13 @@ class DetalleDispo extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dis',$this->id_dis);
-		$criteria->compare('id',$this->id);		
+		$criteria->compare('id',$this->id);
 		$criteria->compare('db',$this->db);
 		$criteria->compare('distancia',$this->distancia);
-		$criteria->compare('fecha',$this->fecha,true);
-		$criteria->compare('hs',$this->hs,true);
-                $criteria->order = 'fecha DESC, hs DESC';
-                
+		$criteria->compare('id_dis',$this->id_dis);
+		$criteria->compare('fechahs',$this->fechahs,true);
 
 		return new CActiveDataProvider($this, array(
-                        'pagination' => array(
-                             'pageSize' => 20,
-                        ),
 			'criteria'=>$criteria,
 		));
 	}
@@ -101,7 +109,7 @@ class DetalleDispo extends CActiveRecord
         public static function validarDatos($id_dis){
             Registroalarma::model()->determinarRuidoContinuo(20, 90, 180, $id_dis);            
         }
-        public static function model($className=__CLASS__)
+	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}

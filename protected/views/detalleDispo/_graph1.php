@@ -5,7 +5,7 @@ header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
             'booster.widgets.TbHighCharts',
             array(
                 'options' => array(
-                    'title' => array('text' => 'Presion Sonora (dB) - Dispositivo: ' . $id_dis . " "),
+                    'title' => array('text' => 'Presion Sonora (dB)'),
                     'xAxis' => array(
                        'categories' => $datos_grafico['hs'],
                         'title' => array('text' => 'Tiempo')
@@ -14,8 +14,8 @@ header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
                        'title' => array('text' => 'Presion Sonora')
                     ),
                     'series' => array(
-                       array('name' => 'dB Dispositivo: ' . $id_dis . " ", 'data' => $datos_grafico['db'],),
-                       array('name' => 'dB Permitido: ' . $id_dis . " ", 'data' => $datos_grafico['db_permitido'],),
+                       array('name' => 'dB Sensado ' , 'data' => $datos_grafico['db'],),
+                       array('name' => 'dB Permitido ', 'data' => $datos_grafico['db_permitido'],),
 
                     )
                  )

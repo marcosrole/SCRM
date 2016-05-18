@@ -47,6 +47,9 @@
             <div class="porcCont">
                 <?php echo $form->textFieldGroup($model, 'porcCont', array('hint' => '% de aceptación', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
             </div> 
+            <div class="porcCont">
+                <?php echo $form->textFieldGroup($model, 'recibirAlaContinuo', array('hint' => '(seg) Recibir Alarma Continua', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div> 
         </div>
         
         <div class="row2">
@@ -57,6 +60,9 @@
             <div class="porcInt">
                 <?php  echo $form->textFieldGroup($model, 'porcInt', array('hint' => '% de aceptacion', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
             </div>
+            <div class="porcCont">
+                <?php echo $form->textFieldGroup($model, 'recibirAlaIntermitente', array('hint' => '(seg) Recibir Alarma Intermitente', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div> 
              
         </div>
         
@@ -67,6 +73,30 @@
             </div>
             <div class="porcDis">
                 <?php  echo $form->textFieldGroup($model, 'porcDis', array('hint' => '% de aceptacion', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div>
+            <div class="porcCont">
+                <?php echo $form->textFieldGroup($model, 'recibirAlaDistancia', array('hint' => '(seg) Recibir Alarma Distancia', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div> 
+             
+        </div>
+        
+        <div class="row2">
+            <h4>Dispositivo Muerto: </h4>
+            <div class="segMuerto">
+                <?php  echo $form->textFieldGroup($model, 'segMuerto', array('hint' => 'distancia permitida (seg.)', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div>
+           <div class="porcCont">
+                <?php echo $form->textFieldGroup($model, 'recibirAlaMuerto', array('hint' => '(seg) Recibir Alarma Continua', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div> 
+             
+        </div>
+        <div class="row2">
+            <h4>Tiempo de espera para responsable: </h4>
+            <div class="segMuerto">
+                <?php  echo $form->textFieldGroup($model, 'tolResponsable', array('hint' => 'distancia permitida (seg.)', 'style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
+            </div>
+            <div class="porcDis">
+               
             </div>
              
         </div>

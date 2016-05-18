@@ -17,8 +17,8 @@
 
 <?php
 $this->menu=array(
-	array('label'=>'Listar Empresas', 'url'=>array('list')),
-	array('label'=>'Administrar Empresas', 'url'=>array('admin')),
+	array('label'=>'Listar Asignaciones', 'url'=>array('list')),
+	array('label'=>'Administrar Empresas', 'url'=>array('update')),
         array('label'=>'Crear Sucursal', 'url'=>array('sucursal/create')),
 );
 ?>

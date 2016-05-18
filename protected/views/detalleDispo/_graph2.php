@@ -5,17 +5,17 @@ header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
             'booster.widgets.TbHighCharts',
             array(
                 'options' => array(
-                    'title' => array('text' => 'Sensor Distancia - Dispositivo: ' . $id_dis . " "),
+                    'title' => array('text' => 'Sensor Distancia' ),
                     'xAxis' => array(
                        'categories' => $datos_grafico['hs'],
                         'title' => array('text' => 'Tiempo')
                     ),
                     'yAxis' => array(
-                       'title' => array('text' => 'Presion Sonora')
+                       'title' => array('text' => 'Distancia')
                     ),
                     'series' => array(
-                       array('name' => 'Distancia Dispositivo: ' . $id_dis . " ", 'data' => $datos_grafico['dist'],),
-                       array('name' => 'Distancia Permitida: ' . $id_dis . " ", 'data' => $datos_grafico['dist_permitido'],),
+                       array('name' => 'Distancia Sensada', 'data' => $datos_grafico['dist'],),
+                       array('name' => 'Distancia Permitida' , 'data' => $datos_grafico['dist_permitido'],),
 
                     )
                  )
