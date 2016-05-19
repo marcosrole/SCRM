@@ -463,8 +463,8 @@ class HistoasignacionController extends Controller
        
     }
   
-    public function actionDelete($id){
-        
+    
+    public function actionDeleteHisAsi($id){
         date_default_timezone_set('UTC');
         $histoasignacion=new Histoasignacion();
         $newHistoAsignacion=new Histoasignacion();
@@ -494,10 +494,8 @@ class HistoasignacionController extends Controller
         }
         $this->redirect(array('update'));
     }
-    public function actionModal(){
-        
-        $this->render('modal');
-    }
+    
+    
     public function actionList(){
         $histoasignacion = Histoasignacion::model()->findAll();
         

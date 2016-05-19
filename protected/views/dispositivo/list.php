@@ -34,7 +34,6 @@ $modelo = new Dispositivo();
 $this->widget('booster.widgets.TbGridView', array(
     'id' => 'dispositivo-grid-list',
     'dataProvider' => $modelo->search(),
-    'filter' => $modelo,
     'columns' => array(
         array(
             'name' => 'id',

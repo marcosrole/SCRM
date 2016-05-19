@@ -236,8 +236,12 @@ class CalibracionController extends Controller
 	}  
 	public function actionList()
 	{
+            
             $calibraciones = Calibracion::model()->findAll();
-            if(count($calibraciones)>1){
+            if(count($calibraciones)==0){
+                 Yii::app()->user->setFlash('warning', "<strong>Advertencia!</strong> No existen dispositivos calibrados a mostrar ");
+                 $this->redirect(array('create?id_disp'));
+            }elseif(count($calibraciones)>1){
                 foreach($calibraciones as $item=>$value){
                     $raw = array();                
                     $raw['id']=(int)$value{'id'};
@@ -284,7 +288,7 @@ class CalibracionController extends Controller
                 
             }
             
-            
+          
             $this->render('list',array(
                     'DataProviderCalibracion'=>$DataProviderCalibracion,
             ));   

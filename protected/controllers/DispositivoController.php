@@ -29,6 +29,8 @@ class DispositivoController extends Controller {
                  $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
                  
                  $arr =$funcionesAxu->actiones;  // give all access to admin
+                 $arr[]='eliminar';
+                 $arr[]='modificar';
                  if(count($arr)!=0){
                         return array(                    
                             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -227,6 +229,8 @@ class DispositivoController extends Controller {
                     $transaction->commit();
                     Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos guardados ");                                                
                     Yii::app()->user->setFlash('info', "<strong>Número de Identificación: </strong> <FONT SIZE=6>" . $model{'id'} . "</FONT> ");                                                
+                    
+                    Yii::app()->request->redirect($this->createUrl('Dispositivo/list'));
                 }
             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos ");}
         }

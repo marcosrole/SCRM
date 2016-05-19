@@ -20,6 +20,8 @@ $this->menu=array(
                             'localidad' => $localidad,                        
                             'zona' => $zona,
                             'listZona'=> $listZona,
+                            'persona'=>$persona,
+                            'checked'=>true,
                             'lista_localidades' => $lista_localidades,
                             'EmpresaSeleccionada' => $EmpresaSeleccionada,
                         )); ?>

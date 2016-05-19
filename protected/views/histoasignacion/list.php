@@ -20,15 +20,18 @@
                         ), 
                         array(
                             'name' => 'fechaAlta',
-                            'header'=>'Fecha de Alta'
+                            'header'=>'Fecha de Alta',
+                            'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fechaAlta"]))'
                         ),
                         array(
                             'name' => 'fechaModif',
-                            'header'=>'Fecha de Modificacion'
+                            'header'=>'Fecha de Modificacion',
+                            'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fechaModif"]))'
                         ),
                         array(
                             'name' => 'fechaBaja',
-                            'header'=>'Fecha de Baja'
+                            'header'=>'Fecha de Baja',
+                            'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fechaBaja"]))'
                         ),
                         array(
                             'name' => 'observacion',

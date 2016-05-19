@@ -34,11 +34,6 @@ $this->menu=array(
 <h1>Crear Empresa</h1>
 
 <?php $this->renderPartial('_form', array(
-                    'empresa' => $empresa,
-                    'persona' => $persona,
-                    'direccion' => $direccion,
-                    'localidad' => $localidad,
-                    'lista_localidades' => $lista_localidades,
-                    'checked'=>$checked
+                    'empresa' => $empresa,                    
     
                 )); ?>

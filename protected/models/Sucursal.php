@@ -8,11 +8,15 @@
  * @property string $nombre
  * @property string $cuit_emp
  * @property integer $id_dir
+ * @property integer $id_zon
+ * @property integer $dni_per
  *
  * The followings are the available model relations:
  * @property Histoasignacion[] $histoasignacions
+ * @property Persona $dniPer
  * @property Direccion $idDir
  * @property Empresa $cuitEmp
+ * @property Zona $idZon
  */
 class Sucursal extends CActiveRecord
 {
@@ -32,12 +36,12 @@ class Sucursal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, cuit_emp, id_dir, id_zon', 'required'),
-			array('id_dir', 'numerical', 'integerOnly'=>true),
+			array('nombre, cuit_emp, id_dir, id_zon, dni_per', 'required'),
+			array('id_dir, id_zon, dni_per', 'numerical', 'integerOnly'=>true),
 			array('nombre, cuit_emp', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, cuit_emp, id_dir, id_zon', 'safe', 'on'=>'search'),
+			array('id, nombre, cuit_emp, id_dir, id_zon, dni_per', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,9 +54,10 @@ class Sucursal extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id_suc'),
-			'direccion' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
-			'empresa' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp'),
-                    'idZon' => array(self::BELONGS_TO, 'Gruposucursal', 'id_zon'),
+			'dniPer' => array(self::BELONGS_TO, 'Persona', 'dni_per'),
+			'idDir' => array(self::BELONGS_TO, 'Direccion', 'id_dir'),
+			'cuitEmp' => array(self::BELONGS_TO, 'Empresa', 'cuit_emp'),
+			'idZon' => array(self::BELONGS_TO, 'Zona', 'id_zon'),
 		);
 	}
 
@@ -62,11 +67,12 @@ class Sucursal extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID Sucursal',
-			'nombre' => 'Nombre de Sucursal',
+			'id' => 'ID',
+			'nombre' => 'Nombre',
 			'cuit_emp' => 'Cuit Emp',
 			'id_dir' => 'Id Dir',
-                        'id_zon'=>'ID Zona',
+			'id_zon' => 'Id Zon',
+			'dni_per' => 'Dni Per',
 		);
 	}
 
@@ -92,7 +98,8 @@ class Sucursal extends CActiveRecord
 		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('cuit_emp',$this->cuit_emp,true);
 		$criteria->compare('id_dir',$this->id_dir);
-                $criteria->compare('id_zon',$this->id_zon);
+		$criteria->compare('id_zon',$this->id_zon);
+		$criteria->compare('dni_per',$this->dni_per);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -105,10 +112,6 @@ class Sucursal extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Sucursal the static model class
 	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
         public static function getID($cuit){
             $criterial = new CDbCriteria();
             $criterial->condition="cuit_emp='" . $cuit . "' ";
@@ -117,4 +120,8 @@ class Sucursal extends CActiveRecord
             var_dump($sucursal);
             return $sucursal{'id'};            
         }
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
 }

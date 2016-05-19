@@ -31,6 +31,9 @@ class SucursalController extends Controller
                  $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
                  
                  $arr =$funcionesAxu->actiones;  // give all access to admin
+                 $arr[]='view';
+                 $arr[]='update';
+                 $arr[]='delete';
                  if(count($arr)!=0){
                         return array(                    
                             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -92,17 +95,35 @@ class SucursalController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreate($checked = FALSE)
 	{
 		$sucursal = new Sucursal();
                 $direccion = new Direccion();
                 $empresa = new Empresa();
                 $localidad = new Localidad();
+                $localidadPER = new Localidad();
+                $persona = new Persona();
+                
+                
                 $zona = new Zona(); 
+                 if (isset($_POST['Persona'])){
+                    if(strlen($_POST['Persona']['dni'])!=0){
+                          $personaAux = Persona::model()->findByAttributes(array('dni'=>$_POST['Persona']['dni']));
+                            if($personaAux){
+                                $checked=true;
+                                $persona=$personaAux;                              
+                           }else{$checked=true; $persona->attributes=$_POST['Persona'];}                         
+                    }
+                }
+                
+                
                 $lista_localidades= CHtml::listData($localidad->findAll(), 'id', 'nombre');
                 $transaction = Yii::app()->db->beginTransaction();             
-                 try {
-                     if (isset($_POST['selectEmpresa']) || (isset($_POST['Sucursal']) ) || ( isset($_POST['Direccion']) ) ) {
+                 try { 
+                     if ( isset($_POST['Sucursal'])  ){
+                         if(isset($_POST['selectEmpresa']) || ( isset($_POST['Direccion']) ) ){
+                             
+                         }
                         $direccion->attributes = $_POST['Direccion'];
                         $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
 
@@ -113,6 +134,7 @@ class SucursalController extends Controller
                             $direccion->insert();
                             $sucursal->attributes=$_POST['Sucursal'];
                             $sucursal->nombre=  strtoupper($_POST['Sucursal']['nombre']);
+                            $sucursal->dni_per=$_POST['Persona']['dni'];
 
                                 if(isset($_POST['selectEmpresa'])){
                                     $sucursal->id_dir=$direccion{'id'};
@@ -122,10 +144,27 @@ class SucursalController extends Controller
                                     
                                     $sucursal->id_zon = $zona{'id'};                                        
                                     if($sucursal->validate()){                                                                                                         
-                                        $sucursal->insert();
-                                        $transaction->commit();                        
-                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                        $this->redirect('create');
+                                       
+                                        $persona->attributes=$_POST['Persona'];
+                                        if($persona->validate()){
+                                            $persona->apellido = strtoupper($_POST['Persona']['apellido']);
+                                            $persona->nombre = strtoupper($_POST['Persona']['nombre']);
+                                            $persona->tipo_dni = strtoupper($_POST['Persona']['tipo_dni']);
+                                            $persona->cuil = strtoupper($_POST['Persona']['cuil']);
+                                            $persona->dni = strtoupper($_POST['Persona']['dni']);
+                                            $persona->sexo = strtoupper($_POST['Persona']['sexo']);
+                                            $persona->email = ($_POST['Persona']['email']);
+                                            $persona->telefono = strtoupper($_POST['Persona']['telefono']);
+                                            $persona->celular = "+54" . strtoupper($_POST['Persona']['celular']);
+                                            
+                                       
+                                            $persona->insert();
+                                             $sucursal->insert();
+                                        
+                                            $transaction->commit();                        
+                                            Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+                                            $this->redirect('create');
+                                        }else {$transaction->rollback (); Yii::app()->user->setFlash('warning', "Asegure de completar todos los datos para el Responsable");}
                                     }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Falta completar datos");}
                             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");}
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                
@@ -140,8 +179,10 @@ class SucursalController extends Controller
                             'sucursal'=>$sucursal,
                             'direccion'=>$direccion,
                             'empresa' => $empresa,
-                            'localidad' => $localidad,          
+                            'localidad' => $localidad, 
                             'zona'=>$zona,
+                            'checked' => $checked,
+                            'persona' => $persona,
                             'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
                             'lista_localidades' => $lista_localidades,
                         ));
@@ -160,6 +201,7 @@ class SucursalController extends Controller
                 $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                 $lista_localidades= CHtml::listData(Localidad::model()->findAll(), 'id', 'nombre');
                 $zona = new Zona();
+                $persona = Persona::model()->findByAttributes(array('dni'=>$sucursal{'dni_per'}));
                 
 
 		// Uncomment the following line if AJAX validation is needed
@@ -169,7 +211,6 @@ class SucursalController extends Controller
                      if (isset($_POST['selectEmpresa']) || (isset($_POST['Sucursal']) ) || ( isset($_POST['Direccion']) ) ) {
                         $direccion->attributes = $_POST['Direccion'];
                         $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
-                        die();
                         $localidad_seleccionada = $lista_localidades[$_POST['Localidad']['id']];                                    
                         $direccion->id_loc = $_POST['Localidad']['id'];
                        
@@ -177,27 +218,32 @@ class SucursalController extends Controller
                             $direccion->save();
                             $sucursal->attributes=$_POST['Sucursal'];
                             $sucursal->nombre=  strtoupper($_POST['Sucursal']['nombre']);
-
-                                if(isset($_POST['selectEmpresa'])){
-                                    $sucursal->id_dir=$direccion{'id'};
-                                    $sucursal->cuit_emp=$_POST['selectEmpresa'][0];
-                                    
-                                    if(isset($_POST['Gruposucursal'])){
-                                        $grupoSucural->zona=strtoupper($_POST['Gruposucursal']['zona']);                
-                                        $grupoSucural=Gruposucursal::model()->findByAttributes(array('zona'=>$grupoSucural{'zona'}));
-                                        if($grupoSucural){
-                                            $sucursal->id_zon = $grupoSucural{'id'};                                        
-                                            if($sucursal->validate()){                                                                                                         
-                                                    $sucursal->save();
-                                                    $transaction->commit();                        
-                                                    Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                                    $this->redirect('admin');
-                                                    }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Falta completar datos");}
-                                        }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> No existe la zona especificada");}                                                                                    
-                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Debe especificar una Zona. Por defecto: 1");}                                    
-                            }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");}
+                            if(isset($_POST['selectEmpresa'])){
+                                $sucursal->cuit_emp=$_POST['selectEmpresa'][0];
+                                if($sucursal->validate()){
+                                    $sucursal->save();
+                                    $persona->attributes=$_POST['Persona'];                                    
+                                    if($persona->validate()){
+                                        $persona->apellido = strtoupper($_POST['Persona']['apellido']);
+                                        $persona->nombre = strtoupper($_POST['Persona']['nombre']);
+                                        $persona->tipo_dni = strtoupper($_POST['Persona']['tipo_dni']);
+                                        $persona->cuil = strtoupper($_POST['Persona']['cuil']);
+                                        $persona->dni = strtoupper($_POST['Persona']['dni']);
+                                        $persona->sexo = strtoupper($_POST['Persona']['sexo']);
+                                        $persona->email = strtolower($_POST['Persona']['email']);
+                                        $persona->telefono = strtoupper($_POST['Persona']['telefono']);
+                                        $persona->celular = "+54" + strtoupper($_POST['Persona']['celular']);
+                                        $persona->save();
+                                        
+                                        $transaction->commit();
+                                        Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
+                                        $this->redirect('admin');
+                                        
+                                    }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Datos del Responsables incompletos");}                          
+                                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");}                          
+                            }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Seleccione una empresa");} 
                         }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos");}                
-                    }                 
+                    }
                  } catch (Exception $ex) {
                      Yii::app()->user->setFlash('error',$ex->getMessage());
                  }
@@ -209,7 +255,9 @@ class SucursalController extends Controller
                             'direccion'=>$direccion,
                             'empresa' => new Empresa(),
                             'empresaSelec'=>$empresa,
-                            'localidad' => $localidad,          
+                            'localidad' => $localidad, 
+                            'persona'=>$persona,
+                            'checked'=>true,
                             'zona'=>$zona,
                             'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
                             'lista_localidades' => $lista_localidades,

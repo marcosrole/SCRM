@@ -79,106 +79,11 @@ $(function () {
                 <?php echo $form->error($empresa, 'cuit'); ?>
             </div>
         </div>
-        
-
-
-        <h3>Datos del dueño</h3>
-
-        <div class="persona">
-                
+       
             
-            <div class="row1">
-                <div class="tipodni">
-                    <?php echo $form->dropDownListGroup($persona, 'tipo_dni', array ('wrapperHtmlOptions' => array( 'class' => 'col-sm-5',),'widgetOptions' => array( 
-                        'data' => array('DNI', 'LE', 'LC'),'htmlOptions' => array(),) )); ?>
-                </div>
-                <div class="dni">            
-                    <?php echo $form->textFieldGroup($persona, 'dni', array ('hint' => 'sin punto (.) ej: 23456545', 'widgetOption'  =>  'Checsdasadut', 'wrapperHtmlOptions' => array('class' => 'col-sm-5',),'width' => '40', )); ?>
-                </div>
-            
-                
-                <?php //$this->widget('booster.widgets.TbButton', array('label' => 'Validar', 'context' => 'info','buttonType' => 'submit',));?>
-            
-            </div>
-            
-     <?php if($checked){?>       
-<div id="oculto">
-            <div class="row2">
-                    <div class="nombre">
-                        <?php echo $form->textFieldGroup($persona, 'nombre', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>                
-                    </div>
-
-                    <div class="apellido">
-                        <?php echo $form->textFieldGroup($persona, 'apellido', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>                
-                    </div>
-
-                    <div class="sexo">
-                        <?php echo $form->dropDownListGroup($persona, 'sexo', array('wrapperHtmlOptions' => array('class' => 'col-sm-5', ),'widgetOptions' => array(
-                            'data' => array('M', 'F'),
-                            'htmlOptions' => array(),)));?>
-                    </div>
-            </div>
-                <div class="cuil">
-                        <?php echo $form->textFieldGroup($persona, 'cuil', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>            
-            
-
-            <div class="direccion">
-                <div class="calle">
-                    <?php echo $form->textFieldGroup($direccion, 'calle', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>           
-
-                <div class="altura">
-                    <?php echo $form->textFieldGroup($direccion, 'altura', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>           
-
-                <div class="piso">
-                    <?php echo $form->textFieldGroup($direccion, 'piso', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>           
-                <div class="depto">
-                    <?php echo $form->textFieldGroup($direccion, 'depto', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div> 
-
-                <div class="localidad">
-                    <?php echo $form->dropDownListGroup($localidad, 'id', array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),'widgetOptions' => array(
-                        'data' => $lista_localidades,
-                    'htmlOptions' =>  array(),)));?>
-                </div>
-            </div>
-
-            <div class="tel">
-                <div class="telefono">
-                    <?php echo $form->textFieldGroup($persona, 'telefono', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>
-
-                <div class="celular">
-                    <?php echo $form->textFieldGroup($persona, 'celular', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                </div>
-            </div>
-
-
-
-            <div class="email">
-                <?php echo $form->textFieldGroup($persona, 'email', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-                <?php echo $form->error($persona, 'email'); ?>
-            </div>
-    
-            <div class="boton">
+        <div class="boton">
                 <?php $this->widget('booster.widgets.TbButton', array('label' => 'Cargar', 'context' => 'success','buttonType' => 'submit',));?>
             </div>
-            
-        </div>
-          <?php }?>
-          <?php if(!$checked){?> 
-            <div class="boton">
-                <?php $this->widget('booster.widgets.TbButton', array('label' => 'Verificar', 'context' => 'success','buttonType' => 'submit',));?>
-            </div>
-          <?php }?>
-            
-   
-        </div>
-            
-
 <?php $this->endWidget(); ?>
 
 </div>    

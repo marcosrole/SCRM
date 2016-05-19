@@ -39,7 +39,7 @@ class Empresa extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cuit, razonsocial, dni_per', 'required'),
+			array('cuit, razonsocial', 'required'),
 			array('cuit, dni_per', 'numerical', 'integerOnly'=>true),
 			array('razonsocial', 'length', 'max'=>50),
 			// The following rule is used by search().

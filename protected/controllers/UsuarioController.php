@@ -30,13 +30,17 @@ class UsuarioController extends Controller
 		 $funcionesAxu = new funcionesAux();
                  $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
                  
-                 $arr =$funcionesAxu->actiones;  // give all access to admin
+                 $arr =$funcionesAxu->actiones; 
+                 $arr[]='view';
+                 $arr[]='eliminar';
+                 $arr[]='update';
                  if(count($arr)!=0){
                         return array(                    
-                            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                            array('allow', 
                                     'actions'=>$arr,                             
                                     'users'=>array('@'),
                             ),
+                           
                             array('deny',  // deny all users
                                     'users'=>array('*'),
                                     'deniedCallback' => function() { 
@@ -132,7 +136,8 @@ class UsuarioController extends Controller
                         
                         $persona->attributes=$_POST['Persona'];                                                             
                         $persona->nombre=  strtoupper($persona{'nombre'});
-                        $persona->apellido=  strtoupper($persona{'apellido'});                                            
+                        $persona->apellido=  strtoupper($persona{'apellido'});
+                        $persona->celular= "+54" .  strtoupper($persona{'celular'}); 
                         /*FK1*/ $persona->id_dir = $direccion{'id'};                        
                         
                         if($persona->validate()){
@@ -158,20 +163,7 @@ class UsuarioController extends Controller
                                         //Asigno el ROL del Usuario
                                         $i = count(($_POST['Rol']['id']));
                                         
-                                        for ($j=0; $j<$i; $j++ ){
-                                            if($_POST['Rol']['id'][$j]==2){ //INSPECTOR
-                                                $inspector = new Inspector();
-                                                $inspector->ocupado=0;
-                                                /*FK1*/ $inspector->id_rol=2;
-                                                /*FK2*/ $inspector->id_zon=1;
-                                                /*FK3*/ $inspector->id_usr=$usuario{'id'};
-                                                $inspector->save();
-                                                
-                                                $UsuarioRol = new Usuariorol();
-                                                $UsuarioRol->id_rol=2;
-                                                $UsuarioRol->id_usr=$usuario{'id'};
-                                                $UsuarioRol->save();                                            
-                                            }
+                                        for ($j=0; $j<$i; $j++ ){                                            
                                             $UsuarioRol = new Usuariorol();
                                             $UsuarioRol->id_rol=$_POST['Rol']['id'][$j];
                                             $UsuarioRol->id_usr=$usuario{'id'};

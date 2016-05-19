@@ -187,8 +187,9 @@ $this->menu=array(
                                     'eliminar' => array
                                     (
                                         'label'=>'Modificar Sucursal',
-                                        'icon'=>'glyphicon glyphicon-trash',                                                                               
-                                        'url'=> 'Yii::app()->createUrl("/histoasignacion/Delete",array("id"=> ' . '$data["id"]))',                                       
+                                        'icon'=>'glyphicon glyphicon-trash',   
+                                        'click' => 'function(){return confirm("Desea eliminar la asignacion realizada?");}',
+                                        'url'=> 'Yii::app()->createUrl("/Histoasignacion/DeleteHisAsi",array("id"=> ' . '$data["id"]))',                                       
                                     ),                                                                                                
                                 ),
                         ),
