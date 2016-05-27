@@ -32,6 +32,7 @@ class HistoasignacionController extends Controller
                  $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
                  
                  $arr =$funcionesAxu->actiones;  // give all access to admin
+                 $arr[]='view';
                  if(count($arr)!=0){
                         return array(   
                             
@@ -107,6 +108,8 @@ class HistoasignacionController extends Controller
                         if($histasignacion->validate()){
                            
                             $histasignacion->insert();
+                            $dispositivo->disponible=0;
+                            $dispositivo->save();
                             $transaction->commit();                        
                             Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                                
                             $this->redirect(array('view',"id_suc"=>$sucursal{'id'}));
@@ -270,9 +273,11 @@ class HistoasignacionController extends Controller
                         $direccion = Direccion::model()->findByAttributes(array('id'=>$sucural{'id_dir'})); 
                         $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                 $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'} . " - " . $localidad{'nombre'};
-                        $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$asignacion{'id_dis'}));
+                        $alarma = Alarma::model()->findByAttributes(array('id_dis'=>$asignacion{'id_dis'}, 'preAlarma'=>'0'));
                         $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
-                $raw['alarma']=$tipoAlarma{'descripcion'};
+                        if($alarma==null){
+                            $raw['alarma']="";
+                        }else $raw['alarma']=$tipoAlarma{'descripcion'};
                 $rawData[]=$raw;            
             }  
              
@@ -430,6 +435,12 @@ class HistoasignacionController extends Controller
                     $histoasignacionNEW->observacion="Cambio de dispositivo: BAJA: " .  $histoasignacion{'id_dis'} . " - ALTA: " . $_POST['selectedDispositivo'][0];
                 }else {$histoasignacionNEW->observacion="Cambio de dispositivo: BAJA: " .  $histoasignacion{'id_dis'} . " - ALTA: " . $_POST['selectedDispositivo'][0] . ". NOTA: " . $_POST['Histoasignacion']['observacion'];}
                 
+                $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$histoasignacion{'id_dis'}));
+                $dispositivo->disponible=1;
+                
+                $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$histoasignacionNEW{'id_dis'}));
+                $dispositivo->disponible=0;
+                $dispositivo->save();
                 
                 $histoasignacionNEW->insert();
                 $histoasignacion->save();
@@ -482,7 +493,9 @@ class HistoasignacionController extends Controller
             $newHistoAsignacion->observacion="Registro eliminado";   
             $Calibracion = Calibracion::model()->findByAttributes(array('id_AsiDis'=>$histoasignacion{'id'}));
             if($Calibracion!=null)$Calibracion->delete();
-            
+            $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$histoasignacion{'id_dis'}));
+            $dispositivo->disponible=1;
+            $dispositivo->save();
             $histoasignacion->delete();
             
             $newHistoAsignacion->insert();

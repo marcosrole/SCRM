@@ -123,6 +123,7 @@ class Alarma extends CActiveRecord
          public static function setSolucionada($id){
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id));
             $alarma->solucionado=1;
+            $alarma->preAlarma=-1;
             $alarma->save();
         }
 }

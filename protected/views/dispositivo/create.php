@@ -51,6 +51,10 @@ $this->menu=array(
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     
         <div class="mac">            
+            <?php echo $form->textFieldGroup($model,'id',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
+        </div>
+    
+        <div class="mac">            
             <?php echo $form->textFieldGroup($model,'mac',array('wrapperHtmlOptions' => array('class' => 'col-sm-5',),)); ?>
         </div>   
     

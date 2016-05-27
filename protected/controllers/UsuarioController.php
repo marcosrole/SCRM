@@ -102,19 +102,21 @@ class UsuarioController extends Controller
                 $usuario = new Usuario();
                 $direccion = new Direccion();
                 $localidad = new Localidad;                              
-                $rol = new Rol();                
+                $rol = new Rol();   
+                $zona = new Zona();
                 
                 $transaction = Yii::app()->db->beginTransaction();
                 try {                                  
                     if(isset($_POST['Usuario'])) $usuario->attributes=$_POST['Usuario'];
                     if(isset($_POST['Direccion'])) $direccion->attributes=$_POST['Direccion'];
-                    if(isset($_POST['Persona'])){ $persona->attributes=$_POST['Persona']; $persona->celular="+54" . $_POST['Persona']['celular'];}
+                    if(isset($_POST['Persona'])){ $persona->attributes=$_POST['Persona']; }
                     if(isset($_POST['Localidad'])) $localidad->attributes=$_POST['Localidad'];
                     if(isset($_POST['Rol'])) $rol->attributes=$_POST['Rol'];
 
 
                     if(isset($_POST['Direccion'])){                        
-                           
+                      
+                              
                     $direccion->attributes=$_POST['Direccion'];                
                     $direccion->calle=  strtoupper($_POST['Direccion']['calle']);
                     $direccion->depto=  strtoupper($_POST['Direccion']['depto']);                
@@ -137,7 +139,7 @@ class UsuarioController extends Controller
                         $persona->attributes=$_POST['Persona'];                                                             
                         $persona->nombre=  strtoupper($persona{'nombre'});
                         $persona->apellido=  strtoupper($persona{'apellido'});
-                        $persona->celular= "+54" .  strtoupper($persona{'celular'}); 
+                        $persona->celular= strtoupper($persona{'celular'}); 
                         /*FK1*/ $persona->id_dir = $direccion{'id'};                        
                         
                         if($persona->validate()){
@@ -152,7 +154,6 @@ class UsuarioController extends Controller
 //                            $usuario->pass=  md5($_POST['Usuario']['pass']);
                              $usuario->pass= $_POST['Usuario']['pass'];
                              $usuario->name= strtoupper($_POST['Usuario']['name']);
-                            
                             if($usuario->validate()){  
                                 $aux = Usuario::model()->findByAttributes(array('name'=>$usuario{'name'}));                                
                                 if( ($aux == NULL)){
@@ -162,12 +163,27 @@ class UsuarioController extends Controller
                                         
                                         //Asigno el ROL del Usuario
                                         $i = count(($_POST['Rol']['id']));
-                                        
                                         for ($j=0; $j<$i; $j++ ){                                            
                                             $UsuarioRol = new Usuariorol();
                                             $UsuarioRol->id_rol=$_POST['Rol']['id'][$j];
                                             $UsuarioRol->id_usr=$usuario{'id'};
-                                            $UsuarioRol->save();                                            
+                                            $UsuarioRol->save(); 
+                                            
+                                            if($UsuarioRol{'id_rol'}=='2'){
+                                                date_default_timezone_set('America/Buenos_Aires');
+                                                $hoy = getdate();
+
+                                                $fechahoy=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'];
+                                                $hshoy=$hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds']; 
+                                                
+                                                $inspector = new Inspector();
+                                                $inspector->ocupado=0;
+                                                $inspector->id_rol=2;
+                                                $inspector->id_zon=$_POST['Zona']['id']; 
+                                                $inspector->id_usr=$usuario{'id'};
+                                                $inspector->fechaDesocupado=$fechahoy . " " . $hshoy;
+                                                $inspector->insert();
+                                            }
                                         }                                                                                
                                             /*
                                         //Generar los permisos por default
@@ -200,6 +216,8 @@ class UsuarioController extends Controller
                             'array_rol'=> CHtml::listData(Rol::model()->findAll(), 'id', 'nombre'),
                             'rol'=>$rol,
                             'lista_localidades'=>CHtml::listData(Localidad::model()->findAll(),'id', 'nombre'),
+                            'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
+                            'zona'=>$zona,
                             'update'=>false,
                             ));
 
@@ -217,13 +235,19 @@ class UsuarioController extends Controller
                 $direccion = new Direccion();
                 $localidad = new Localidad; 
                 $inspector = new Inspector();
-                $rol = new Rol();                
+                $rol = new Rol();  
+                $zona = new Zona();
                   
                 $usuario = Usuario::model()->findByAttributes(array('id'=>$id));
                 $persona = Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
                 $direccion = Direccion::model()->findByAttributes(array('id'=>$persona{'id_dir'}));
                 $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                 $UsuarioRol = Usuariorol::model()->findAllByAttributes(array('id_usr'=>$usuario{'id'}));
+                
+                $inspector=  Inspector::model()->findByAttributes(array('id_usr'=>$usuario{'id'}));
+                if($inspector==null){
+                    $zona=  Zona::model()->find();
+                }else $zona = Zona::model()->findByAttributes(array('id'=>$inspector{'id_zon'}));
                 
                 $array_rol=array();
 
@@ -287,7 +311,7 @@ class UsuarioController extends Controller
                                                 $inspector = new Inspector();
                                                 $inspector->ocupado=0;
                                                 /*FK1*/ $inspector->id_rol=2;
-                                                /*FK2*/ $inspector->id_zon=1;
+                                                /*FK2*/ $inspector->id_zon=$_POST['Zona']['id'];
                                                 /*FK3*/ $inspector->id_usr=$usuario{'id'};
                                                 $inspector->save();
                                                 
@@ -329,6 +353,8 @@ class UsuarioController extends Controller
                             'array_rol'=> CHtml::listData(Rol::model()->findAll(), 'id', 'nombre'),
                             'rol'=>$rol,
                             'lista_localidades'=>CHtml::listData(Localidad::model()->findAll(),'id', 'nombre'),
+                            'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
+                            'zona'=>$zona,
                             'update'=>true,
                             ));
 	}
@@ -370,6 +396,9 @@ class UsuarioController extends Controller
                  Usuarionivacc::model()->deleteAllByAttributes(array('id_usr'=>$id));
                  Usuariorol::model()->deleteAllByAttributes(array('id_usr'=>$id));
                  Usuario::model()->deleteAllByAttributes(array('id'=>$id));
+                 
+                 
+                 
                  $transaction->commit();
                  Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Usuario eliminado ");                         
                  $this->redirect(Yii::app()->createUrl('usuario/admin'));
@@ -408,7 +437,8 @@ class UsuarioController extends Controller
                     foreach ($UsuarioRol as $key=>$valor){
                         $usuario[]=Usuario::model()->findByAttributes(array('id'=>$valor{'id_usr'}));
                     }
-                }                
+                }  
+                
                 if(count($usuario)!=0){                    
                     foreach ($usuario as $key){
                     $persona=Persona::model()->findByAttributes(array('dni'=>$key{'dni_per'}));                     

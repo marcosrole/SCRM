@@ -5,6 +5,7 @@ header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
             'booster.widgets.TbHighCharts',
             array(
                 'options' => array(
+                    'credits' => array('enabled' => false),
                     'title' => array('text' => 'Sensor Distancia' ),
                     'xAxis' => array(
                        'categories' => $datos_grafico['hs'],

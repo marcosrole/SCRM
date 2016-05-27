@@ -69,7 +69,7 @@ class DispositivoController extends Controller {
         ));
     }
     public function actionHabilitarDispositivo($id=NULL) {
-        $lista = Dispositivo::getListado();     
+        
         if($id!=NULL){
             $Dispo =  Dispositivo::model()->findByAttributes(array('id'=>$id));
             if($Dispo{'funciona'}){
@@ -77,7 +77,29 @@ class DispositivoController extends Controller {
             }else $Dispo{'funciona'}=1;
             $Dispo->save();
         }
-        $this->render('HabilitarDispositivo', array('dispositivos'=>$lista));
+        $Dispositivos = Dispositivo::model()->findAllByAttributes(array('disponible'=>'0'));
+        
+        if(count($Dispositivos)!=0){
+           foreach ($Dispositivos as $key=>$dispositivo){  
+               $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}));
+               $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
+               $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                $raw['id']=(int)$dispositivo{'id'};
+                $raw['mac']=$dispositivo{'mac'};
+                $raw['sucursal']=$sucursal{'nombre'};
+                $raw['direccion']=$direccion{'calle'} . " " . $direccion{'altura'};
+                $raw['funciona']=$dispositivo{'funciona'};                
+                $rawData[]=$raw;                   
+            }
+
+            $DataProviderDispositivos=new CArrayDataProvider($rawData, array(
+               'id'=>'id',
+               'pagination'=>array(
+                   'pageSize'=>10,
+               ),
+             ));
+        }
+        $this->render('HabilitarDispositivo', array('dispositivos'=>$DataProviderDispositivos));
     }
     
      public function actionModificar($id,$mac,$modelo,$version,$funciona){
@@ -207,31 +229,24 @@ class DispositivoController extends Controller {
         $model = new Dispositivo;
         $model->unsetAttributes();
         if (isset($_POST['Dispositivo'])) {
-            $model->setAttribute('id', rand(1, 1000));
+            $model->setAttribute('id', strtoupper($_POST['Dispositivo']['id']));
             $model->setAttribute('mac', strtoupper($_POST['Dispositivo']['mac']));
             $model->setAttribute('modelo', strtoupper($_POST['Dispositivo']['modelo']));
             $model->setAttribute('version', strtoupper($_POST['Dispositivo']['version']));
             $model->setAttribute('funciona', 0);
             $model->setAttribute('tiempo', $_POST['Dispositivo']['tiempo']);
             
-            if ($model->validate()) {
-                $validacion=true;
-                while ($validacion) {
-                    if (Dispositivo::exitsMAC($model->{'mac'})) {
-                        $validacion = false;
-                    }elseif (Dispositivo::exitsid($model->{'id'})) {
-                        $model->setAttribute('id', rand(1, 1000));
-                    }else $validacion=false;
-                }
+            if ($model->validate()) {                
                 if (Dispositivo::exitsMAC($model->{'mac'})){
                     {Yii::app()->user->setFlash('info', "<strong>Advertencia!</strong> Ya existe un dispositivo con la misma MAC ");}
-                }elseif ($model->insert()) { //Si se guardo Correctamente.. insert() devuelve un boolean                            
+                }elseif (!Dispositivo::exitsid($model->{'id'})) { //Si se guardo Correctamente.. insert() devuelve un boolean                            
+                    $model->insert();
                     $transaction->commit();
                     Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos guardados ");                                                
                     Yii::app()->user->setFlash('info', "<strong>Número de Identificación: </strong> <FONT SIZE=6>" . $model{'id'} . "</FONT> ");                                                
                     
                     Yii::app()->request->redirect($this->createUrl('Dispositivo/list'));
-                }
+                }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Existe un dispositivo con el mismo ID ");}
             }else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error!</strong> Campos vacios o incorrectos ");}
         }
         } catch (Exception $ex) {
@@ -250,8 +265,41 @@ class DispositivoController extends Controller {
      */
     
     public function actionList(){
-        $lista = Dispositivo::getListado();                
-        $this->render('list', array('dispositivos'=>$lista));
+        $rawData=array();
+        $Dispositivos = Dispositivo::model()->findAllByAttributes(array('disponible'=>'0'));
+        if(count($Dispositivos)!=0){
+           foreach ($Dispositivos as $key=>$dispositivo){                    
+                $raw['id']=(int)$dispositivo{'id'};
+                $raw['mac']=$dispositivo{'mac'};
+                $raw['modelo']=$dispositivo{'modelo'};
+                $raw['version']=$dispositivo{'version'};
+                $raw['funciona']=$dispositivo{'funciona'}; 
+                $raw['disponible']=$dispositivo{'disponible'};
+                $rawData[]=$raw;                   
+            }
+        }
+        
+        $Dispositivos = Dispositivo::model()->findAllByAttributes(array('disponible'=>'1'));
+        if(count($Dispositivos)!=0){
+           foreach ($Dispositivos as $key=>$dispositivo){                    
+                $raw['id']=(int)$dispositivo{'id'};
+                $raw['mac']=$dispositivo{'mac'};
+                $raw['modelo']=$dispositivo{'modelo'};
+                $raw['version']=$dispositivo{'version'};
+                $raw['funciona']=$dispositivo{'funciona'};  
+                $raw['disponible']=$dispositivo{'disponible'};
+                $rawData[]=$raw;                   
+            }
+        }
+        
+        $DataProviderDispositivos=new CArrayDataProvider($rawData, array(
+           'id'=>'id',
+           'pagination'=>array(
+               'pageSize'=>10,
+           ),
+         ));
+        
+        $this->render('list', array('dispositivos'=>$DataProviderDispositivos));
     }
     
     public function actionDeleteAll() {

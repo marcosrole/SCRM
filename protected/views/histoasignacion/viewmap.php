@@ -170,64 +170,46 @@ and open the template in the editor.
             
         <div class="detalle">
                     
-        
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                <?php $cont=0; ?>
-                
-                 <?php foreach ($rawData as $datos){ $cont++;?>
-                <BR>
-                    <?php $heading = "heading".$cont ;?>
-                   <?php $href = "#collapse".$cont ;?>
-                   <?php $id_collapse = "collapse".$cont ;?>
-                    <div class="panel panel-default">
-                      <div class="panel-heading" role="tab" id="<?php echo $heading ?>">
-                        <h4 class="panel-title">
-                          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="<?php echo $href ?>" aria-expanded="false" aria-controls="<?php echo $id_collapse ?>">
-                            Dispositivo: <?php echo $datos{'id'}?> - <?php echo $datos{'direccion'}?>
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="<?php echo $id_collapse ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<?php echo $heading ?>">
-                        <div class="panel-body">
-                            <?php if($datos{'alarma'} ==""){ ?>
-                                <?php $this->widget(
-                                'booster.widgets.TbDetailView',
-                                array(
-                                    'data' => $datos,
-                                    'attributes' => array(
-                                        array('name' => 'id', 'label' => 'Dispositivo'),
-                                        array('name' => 'empresa', 'label' => 'Empresa'),
-                                        array('name' => 'sucursal', 'label' => 'Sucursal'),
-                                        array('name' => 'fechaAlta', 'label' => 'Fecha de Alta'),
-                                        array('name' => 'direccion', 'label' => 'Direccion')                                        
-                                    ),
-                                    )
-                                ); ?>
-                            
-                            <?php }else { ?>
-                            <div class="DetailAlarma">
-                                <?php $this->widget(
-                                'booster.widgets.TbDetailView',
-                                array(
-                                    'data' => $datos,
-                                    'attributes' => array(
-                                        array('name' => 'id', 'label' => 'Dispositivo'),
-                                        array('name' => 'empresa', 'label' => 'Empresa'),
-                                        array('name' => 'sucursal', 'label' => 'Sucursal'),
-                                        array('name' => 'fechaAlta', 'label' => 'Fecha de Alta'),
-                                        array('name' => 'direccion', 'label' => 'Direccion'),
-                                        array('name' => 'alarma', 'label' => 'Alarma'),
-                                    ),
-                                    )
-                                ); ?>
-                            <?php } ?>
-                            
-                        </div>
-                      </div>
-                    </div>
-                <?php }?>
-          </div>
-        </div>
+            <?php $collapse = $this->beginWidget('booster.widgets.TbCollapse'); $cont=0;?>
+                <div class="panel-group" id="accordion">
+
+                    <?php foreach ($rawData as $datos){ $cont++;?>
+
+                        <?php $id='item' . $cont; ?>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $id; ?>">
+                                  Dispositivo: <?php echo $datos{'id'}?> - <?php echo $datos{'direccion'}?>
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="<?php echo $id; ?>" class="panel-collapse collapse ">
+                            <div class="panel-body">
+                              <?php $this->widget(
+                                    'booster.widgets.TbDetailView',
+                                    array(
+                                        'data' => $datos,
+                                        'attributes' => array(
+                                            array('name' => 'id', 'label' => 'Dispositivo'),
+                                            array('name' => 'empresa', 'label' => 'Empresa'),
+                                            array('name' => 'sucursal', 'label' => 'Sucursal'),
+                                            array('name' => 'fechaAlta', 'label' => 'Fecha de Alta'),
+                                            array('name' => 'direccion', 'label' => 'Direccion'),
+                                            array('name' => 'alarma', 'label' => 'Alarma'),
+                                        ),
+                                        )
+                                    ); ?>
+                            </div>
+                          </div>
+                        </div>  
+
+                    <?php }?>
+                </div>
+                <?php $this->endWidget(); ?>
+            
+            
+            
         
         
         

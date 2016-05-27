@@ -10,6 +10,7 @@
  * @property integer $id_ins
  * @property integer $id_ala
  * @property string $observacion
+ * @property integer $finalizado
  *
  * The followings are the available model relations:
  * @property Inspector $idIns
@@ -34,11 +35,11 @@ class Asignarinspector extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('fechahsIns, fechahsDue, id_ins, id_ala', 'required'),
-			array('id_ins, id_ala', 'numerical', 'integerOnly'=>true),
+			array('id_ins, id_ala, finalizado', 'numerical', 'integerOnly'=>true),
 			array('observacion', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, fechahsIns, fechahsDue, id_ins, id_ala, observacion', 'safe', 'on'=>'search'),
+			array('id, fechahsIns, fechahsDue, id_ins, id_ala, observacion, finalizado', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class Asignarinspector extends CActiveRecord
 			'id_ins' => 'Id Ins',
 			'id_ala' => 'Id Ala',
 			'observacion' => 'Observacion',
+			'finalizado' => 'Finalizado',
 		);
 	}
 
@@ -94,6 +96,7 @@ class Asignarinspector extends CActiveRecord
 		$criteria->compare('id_ins',$this->id_ins);
 		$criteria->compare('id_ala',$this->id_ala);
 		$criteria->compare('observacion',$this->observacion,true);
+		$criteria->compare('finalizado',$this->finalizado);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

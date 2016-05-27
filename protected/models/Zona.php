@@ -56,7 +56,7 @@ class Zona extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'Zona',
 			'nombre' => 'Nombre',
 		);
 	}

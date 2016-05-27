@@ -62,18 +62,18 @@ class Configalarma extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'segCont' => 'Ruido Continuo (seg)',
-			'porcCont' => 'Porcentaje aceptacion ruido continuo',
-			'segInt' => 'Ruido Intermitente (seg)',
-			'porcInt' => 'Porcentaje aceptacion ruido intermitente',
+			'segCont' => 'Ruido Continuo',
+			'porcCont' => 'Porcentaje aceptacion',
+			'segInt' => 'Ruido Intermitente',
+			'porcInt' => 'Porcentaje aceptacion',
 			'division' => 'Division',
 			'segDis' => 'Tiempo de obstrucción aceptable',
-			'porcDis' => 'Porcentaje de aceptacion dispositivo obstruido',
+			'porcDis' => 'Porcentaje de aceptacion',
 			'recibirAlaDistancia' => 'Recibir Alarma de Distancia',
 			'recibirAlaIntermitente' => 'Recibir Alarma de R. Intermitente',
 			'recibirAlaContinuo' => 'Recibir Alarma de R. Continuo',
-			'tolResponsable' => 'Tol Responsable',
-                        'segMuerto' => 'Tiempo muerto de aceptación (seg)',
+			'tolResponsable' => 'Tiempo para el encargado',
+                        'segMuerto' => 'Tiempo muerto de aceptación',
 			'recibirAlaMuerto' => 'Recibir Alarma Dispositivo Muerto',
 		);
 	}

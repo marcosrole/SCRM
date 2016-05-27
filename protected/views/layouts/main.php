@@ -86,11 +86,12 @@
         
         $PREalarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'1'));
         $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0'));
-        
+        $asiganciones = Asignarinspector::model()->findAllByAttributes(array('finalizado'=>'0'));
         ?>
       <script type="text/javascript">
           $(document).ready(function(){
                     setInterval(alertFunc, 3000);
+                    setInterval(asignarInspector, 3000);
 //                      setInterval(contarAlarmas, 3000);
 //                      setInterval(contarPREAlarmas, 3000);
 //                      setInterval(asignarCantAlarmas, 3500);
@@ -110,6 +111,22 @@
                     }
                   });                
             }
+            function asignarInspector() {
+                $.ajax({
+                    type: "POST",
+                    url:    '<?php echo Yii::app()->createUrl('alarma/AsignarInspector'); ?>',
+//                    data:  {val1:1,val2:2},
+                    
+                    complete: function(msg){                 
+                         
+                        },
+                    error: function(xhr){
+//                    alert("failure"+xhr.readyState+this.url)
+
+                    }
+                  });                
+            }
+            
             function contarAlarmas() {
                 $.ajax({
                     type: "POST",
@@ -243,6 +260,13 @@
                             'visible' => !Yii::app()->user->isGuest,
                             'itemOptions'=>array('id' => 'itemAlarma')
                             ),
+                        array(
+                            'label' => 'Asignaciones (' . count($asiganciones) . ')',
+                            'icon'=>'download-alt',
+                            'url' => Yii::app()->homeUrl . 'asignarinspector/index',
+                            'visible' => !Yii::app()->user->isGuest
+                        ),
+                        
                         array(
                             'visible' => !Yii::app()->user->isGuest,
                             'label' => 'Configuracion',

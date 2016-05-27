@@ -106,7 +106,29 @@ $this->widget('booster.widgets.TbAlert', array(
 
             <div class="cuil">
                 <?php echo $form->textFieldGroup($persona, 'cuil', array('style' => 'text-transform: uppercase','wrapperHtmlOptions' => array('class' => 'col-sm-5', ),)); ?>
-            </div>  
+            </div> 
+            
+            <div class="zona-sucursal">
+                        
+                        <?php echo $form->dropDownListGroup($zona,'id',array('hint' => 'Inspectores', 'id'=>'dropdown','wrapperHtmlOptions' => array('class' => 'col-sm-5',),
+                                    'widgetOptions' => array(
+                                            'data' => $listZona,
+                                            //'htmlOptions' => array('prompt'=>'Zona'),
+                                    )
+                                ),
+                                array(
+                                    'options' => array('5'=>array('selected'=>true)),
+                                )
+                        ); ?>
+                        
+                        <div class="link">
+                            <?php $link= "http://" .  $_SERVER['HTTP_HOST'] . "/SCRM/zona/index"; ?>
+                            <a href=<?php echo $link ?> >Ver zonas</a>
+                        </div>
+                
+                            
+                        
+                    </div> 
             
         </div>
     </div>

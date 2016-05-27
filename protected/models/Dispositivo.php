@@ -9,12 +9,15 @@
  * @property string $modelo
  * @property string $version
  * @property integer $funciona
+ * @property integer $tiempo
+ * @property integer $disponible
  *
  * The followings are the available model relations:
+ * @property Acta[] $actas
+ * @property Alarma[] $alarmas
  * @property DetalleDispo[] $detalleDispos
- * @property DetalleDispo[] $detalleDispos1
- * @property Histoasignacion[] $Histoasignacions
- * @property Histoasignacion[] $Histoasignacions1
+ * @property Histoasignacion[] $histoasignacions
+ * @property Registroalarma[] $registroalarmas
  */
 class Dispositivo extends CActiveRecord
 {
@@ -34,12 +37,12 @@ class Dispositivo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('mac,tiempo', 'required'),
-			//array('id, funciona', 'numerical', 'integerOnly'=>true),
+			array('id, mac, tiempo', 'required'),
+			array('id, funciona, tiempo, disponible', 'numerical', 'integerOnly'=>true),
 			array('mac, modelo, version', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, mac, modelo, version, funciona', 'safe', 'on'=>'search'),
+			array('id, mac, modelo, version, funciona, tiempo, disponible', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,9 +54,11 @@ class Dispositivo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id'),
-			'detalleDispos1' => array(self::HAS_MANY, 'DetalleDispo', 'mac_dis'),
-			'Histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id'),			
+			'actas' => array(self::HAS_MANY, 'Acta', 'id_dis'),
+			'alarmas' => array(self::HAS_MANY, 'Alarma', 'id_dis'),
+			'detalleDispos' => array(self::HAS_MANY, 'DetalleDispo', 'id_dis'),
+			'histoasignacions' => array(self::HAS_MANY, 'Histoasignacion', 'id_dis'),
+			'registroalarmas' => array(self::HAS_MANY, 'Registroalarma', 'id_dis'),
 		);
 	}
 
@@ -63,12 +68,13 @@ class Dispositivo extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Id',
+			'id' => 'ID',
 			'mac' => 'Mac',
 			'modelo' => 'Modelo',
 			'version' => 'Version',
 			'funciona' => 'Funciona',
-                        'tiempo' => 'Tiempo de Transmisión',
+			'tiempo' => 'Tiempo',
+			'disponible' => 'Disponible',
 		);
 	}
 
@@ -95,6 +101,8 @@ class Dispositivo extends CActiveRecord
 		$criteria->compare('modelo',$this->modelo,true);
 		$criteria->compare('version',$this->version,true);
 		$criteria->compare('funciona',$this->funciona);
+		$criteria->compare('tiempo',$this->tiempo);
+		$criteria->compare('disponible',$this->disponible);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -107,12 +115,8 @@ class Dispositivo extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Dispositivo the static model class
 	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-                
-        public static function getListado(){
+        
+          public static function getListado(){
             return Dispositivo::model()->findAll();
         }
         
@@ -153,4 +157,8 @@ class Dispositivo extends CActiveRecord
         public static function disponible(){            
             var_dump(Histoasignacion::model()->findAll());
         }
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
 }

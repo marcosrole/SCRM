@@ -100,12 +100,12 @@ class AsignarinspectorController extends Controller
 	{
             $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0'), array('order'=>'fechahs ASC'));
             
-                if(isset($_POST['selectInspector']) || isset($_POST['selectAlarma'])){                  
+            if(isset($_POST['selectInspector']) || isset($_POST['selectAlarma'])){                  
                 $AasignarInspector = new Asignarinspector();
                 
                 $transaction = Yii::app()->db->beginTransaction();
-                if (! (isset($_POST['selectInspector']) && !isset($_POST['selectAlarma']))){
-                    if (!(!isset($_POST['selectInspector']) && isset($_POST['selectAlarma']))){
+                if (isset($_POST['selectInspector'])){
+                    if (isset($_POST['selectAlarma'])){
                         
                         date_default_timezone_set('America/Buenos_Aires');
                         $alarma = Alarma::model()->findByAttributes(array('id'=>$_POST['selectAlarma'][0]));
@@ -117,22 +117,22 @@ class AsignarinspectorController extends Controller
 //                        var_dump($AasignarInspector); die();
                         $AasignarInspector->insert();
                             $inspector = new Inspector();
-                        $inspector->estoyOcupado($AasignarInspector{'id_ins'});                                
+                        $inspector->estoyOcupado($AasignarInspector{'id_ins'},date("Y-m-d H:i:s"));                                
                         $alarma->setSolucionada($alarma{'id'});
                         $transaction->commit();
                         Yii::app()->user->setFlash('success', "<strong>Asignacion correcta!</strong>  ");
                     }else 
                         {
                         $transaction->rollback();
-                        Yii::app()->user->setFlash('error', "<strong>Error. Inspector!</strong> Debe Seleccionar un inspector");
+                        Yii::app()->user->setFlash('error', "<strong>Error. Inspector!</strong> Debe Seleccionar una alarma a solucionar");
                         }
                 }else 
                     {
                     $transaction->rollback();
-                    Yii::app()->user->setFlash('error', "<strong>Error.!</strong> Debe seleccionar una alarma a solucionar");
+                    Yii::app()->user->setFlash('error', "<strong>Error.!</strong> Debe seleccionar un inspector");
                     }   
                 }
-                
+             $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0'), array('order'=>'fechahs ASC'));  
              $rawData = array();
              
              foreach ($alarmas as $item=>$value){
@@ -140,8 +140,7 @@ class AsignarinspectorController extends Controller
                     $tipoAlaram = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
                  $raw['alarma']=$tipoAlaram{'descripcion'};
                     $fecha = explode(" ",$value{'fechahs'});
-                    $aux = new DateTime($fecha[0]);
-                        
+                    $aux = new DateTime($fecha[0]); 
                  $raw['fecha']=$aux->format('d-m-Y');                       
                  $raw['hs']=$fecha[1];
                     $dispositivo=  Dispositivo::model()->findByAttributes(array('id'=>$value{'id_dis'}));
@@ -179,6 +178,7 @@ class AsignarinspectorController extends Controller
                         $raw['nombre']=$persona{'apellido'} . " " . $persona{'nombre'};
                         $raw['sexo']=$persona{'sexo'};                        
                         $raw['zona']=$zona{'nombre'};
+                         $raw['usuario']=$usuario{'name'};
                         $rawData[]=$raw;                                                   
                 }
                 
@@ -205,7 +205,7 @@ class AsignarinspectorController extends Controller
 	public function actionIndex()
 	{
             $datos = array();
-            $asignaciones= Asignarinspector::model()->findAll();
+            $asignaciones= Asignarinspector::model()->findAllByAttributes(array('finalizado'=>'0'));
             
             foreach ($asignaciones as $item=>$asignacion){                
                 $alarma = Alarma::model()->findByAttributes(array('id'=>$asignacion{'id_ala'}));
@@ -215,7 +215,7 @@ class AsignarinspectorController extends Controller
                 $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}));
                 $sucursal= Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
                 $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
-                $encargado = Persona::model()->findByAttributes(array('dni'=>$empresa{'dni_per'}));
+                $encargado = Persona::model()->findByAttributes(array('dni'=>$sucursal{'dni_per'}));
                 $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
                 $localidad = Localidad::model()->findByAttributes(array('id'=>$direccion{'id_loc'}));
                 $inspector = Inspector::model()->findByAttributes(array('id'=>$asignacion{'id_ins'}));

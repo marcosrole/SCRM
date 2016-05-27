@@ -42,7 +42,7 @@ return array(
                         'host' => 'smtp.gmail.com',
                         'encryption' => 'ssl',
                         'username' => 'marcosrole@gmail.com',
-                        'password' => 'river2016',
+                        'password' => 'vera2016',
                         'port' => 465,
                     ),
                     'viewPath' => 'application.views.mails',

@@ -29,11 +29,11 @@
 
 <div class="form">
 <?php
-$modelo = new Dispositivo();
+
 
 $this->widget('booster.widgets.TbGridView', array(
     'id' => 'dispositivo-grid-list',
-    'dataProvider' => $modelo->search(),
+    'dataProvider' => $dispositivos,
     'columns' => array(
         array(
             'name' => 'id',
@@ -54,10 +54,12 @@ $this->widget('booster.widgets.TbGridView', array(
             'name' => 'version',
             'header'=>'Version',
             'htmlOptions'=>array('width'=>'2O%'),
-        ),
-         array(
-            'name' => 'tiempo',
-            'header'=>'tiempo',
+        ),   
+        array(
+            'name' => 'disponible',
+            'header'=>'Asignado',
+//            'value'=> '($data->anAttribute > 10) ? "<a href=\"#\";><span class=\"icon-gift\"></span></a>" : "<a href=\"#\";><span class=\"icon-camera\"></span></a>"',
+            'value'=>'$data["disponible"]== 0 ? "Asignado" : "Disponible"', 
              'htmlOptions'=>array('width'=>'10%'),
         ),
         array(
@@ -67,7 +69,7 @@ $this->widget('booster.widgets.TbGridView', array(
             'buttons'=>array(
                 "view"=>array(
                     'label'=>'Detalles',                    
-                    'url'=> 'Yii::app()->createUrl("/DetalleDispo/VerDetalle?id=$data->id")'
+                    'url'=> 'Yii::app()->createUrl("DetalleDispo/VerDetalle", array("id"=> ' . '$data["id"])) ',
                     )),
         ),
     ),

@@ -80,19 +80,57 @@ class ConfigalarmaController extends Controller
 	{
 		$model=new Configalarma;
                 $model = Configalarma::model()->find();
+                
+                $minutosDisponibles=['1','3','5','10','30','60','120','180','300','1440','2880'];
+                $porcentajeAceptacion=['10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
+		
 		if(isset($_POST['Configalarma']))
 		{
 			$model->attributes=$_POST['Configalarma'];
+                        
+                        $model{'segCont'}=$minutosDisponibles[$_POST['Configalarma']['segCont']]*60;
+                        $model{'porcCont'}=(int)str_replace('%', '', $porcentajeAceptacion[$_POST['Configalarma']['porcCont']])/100.0;
+                        $model{'recibirAlaContinuo'}=$minutosDisponibles[$_POST['Configalarma']['recibirAlaContinuo']]*60;
+                        
+                        $model{'segInt'}=$minutosDisponibles[$_POST['Configalarma']['segInt']]*60;
+                        $model{'porcInt'}=(int)str_replace('%', '', $porcentajeAceptacion[$_POST['Configalarma']['porcInt']])/100.0;
+                        $model{'recibirAlaIntermitente'}=$minutosDisponibles[$_POST['Configalarma']['recibirAlaIntermitente']]*60;
+                        
+                        $model{'segDis'}=$minutosDisponibles[$_POST['Configalarma']['segDis']]*60;
+                        $model{'porcDis'}=(int)str_replace('%', '', $porcentajeAceptacion[$_POST['Configalarma']['porcDis']])/100.0;
+                        $model{'recibirAlaDistancia'}=$minutosDisponibles[$_POST['Configalarma']['recibirAlaDistancia']]*60;
+                        
+                        $model{'segMuerto'}=$minutosDisponibles[$_POST['Configalarma']['segMuerto']]*60;
+                        $model{'recibirAlaMuerto'}=$minutosDisponibles[$_POST['Configalarma']['recibirAlaMuerto']]*60;
+                        
+                        $model{'tolResponsable'}=$minutosDisponibles[$_POST['Configalarma']['tolResponsable']]*60;
+                        
+                                                
 			if($model->save())
 				 Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Datos actualizados ");   
 		}
+                 $model->segCont=array_search((string)$model{'segCont'}/60,$minutosDisponibles);
+                $model->porcCont=array_search((string)$model{'porcCont'}*100 . "%", $porcentajeAceptacion);
+                $model->recibirAlaContinuo=array_search((string)$model{'recibirAlaContinuo'}/60,$minutosDisponibles);
+                
+                $model->segInt=array_search((string)$model{'segInt'}/60,$minutosDisponibles);
+                $model->porcInt=array_search((string)$model{'porcInt'}*100 . "%", $porcentajeAceptacion);
+                $model->recibirAlaIntermitente=array_search((string)$model{'recibirAlaIntermitente'}/60,$minutosDisponibles);
+                
+                $model->segDis=array_search((string)$model{'segDis'}/60,$minutosDisponibles);
+                $model->porcDis=array_search((string)$model{'porcDis'}*100 . "%", $porcentajeAceptacion);
+                $model->recibirAlaDistancia=array_search((string)$model{'recibirAlaDistancia'}/60,$minutosDisponibles);
+                
+                $model->segMuerto=array_search((string)$model{'segMuerto'}/60,$minutosDisponibles);
+                $model->recibirAlaMuerto=array_search((string)$model{'recibirAlaMuerto'}/60,$minutosDisponibles);
+                
+                $model->tolResponsable=array_search((string)$model{'tolResponsable'}/60,$minutosDisponibles);
 
 		$this->render('create',array(
 			'model'=>$model,
+                        'minutosDisponibles'=>$minutosDisponibles,
+                        'porcentajeAceptacion'=>$porcentajeAceptacion,
 		));
 	}
 

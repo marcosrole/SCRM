@@ -77,15 +77,27 @@ $this->menu=array(
                 ),                                
                 array(
                     'name' => 'fecha',
+                    'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fecha"]))',
                     'header'=>'Fecha'
                 ),                        
                 array(
                     'name' => 'hs',
                     'header'=>'Hora'
-                ),                        
+                ), 
+                array(
+                    'name' => 'id_dis',
+                    'value' => 'CHtml::link($data["id_dis"], Yii::app()
+                                ->createUrl("DetalleDispo/VerDetalle",array("id"=>$data["id_dis"])))',
+                            'type'  => 'raw',
+                    'header'=>'Dispositivo'
+                ), 
                 array(
                     'name' => 'alarma',
                     'header'=>'Descripcion'
+                ), 
+                array(
+                    'name' => 'sucursal',
+                    'header'=>'Sucursal'
                 ), 
                 array(
                     'name' => 'solucionado',

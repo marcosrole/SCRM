@@ -56,10 +56,6 @@
                     'header'=>'Localidad',                                                        
                 ),
                 array(
-                    'name' => 'SMSenviado',
-                    'header'=>'SMS',                                                        
-                ),
-                array(
                     'name' => 'fecha',
                     'header'=>'Fecha',                                                        
                 ),
@@ -94,6 +90,10 @@
                 array(
                     'name' => 'nombre',
                     'header'=>'Nombre y Apellido',                                                        
+                ),
+                array(
+                    'name' => 'usuario',
+                    'header'=>'Usuario',                                                        
                 ),
                 array(
                     'name' => 'sexo',

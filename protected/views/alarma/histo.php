@@ -62,13 +62,11 @@ $this->menu=array(
             'id' => 'dispositivo-grid-list',
             'dataProvider' => $DataProviderAlarma,
             'columns' => array( 
-                array(
-                    'name' => 'id',
-                    'header'=>'#'
-                ),                                
+                                               
                 array(
                     'name' => 'fecha',
-                    'header'=>'Fecha'
+                    'header'=>'Fecha',
+                    'value' => 'Yii::app()->dateFormatter->format("dd/MM/yyyy",strtotime($data["fecha"]))',
                 ),                        
                 array(
                     'name' => 'hs',
@@ -77,6 +75,10 @@ $this->menu=array(
                 array(
                     'name' => 'alarma',
                     'header'=>'Descripcion'
+                ), 
+                array(
+                    'name' => 'sucursal',
+                    'header'=>'Sucursal'
                 ), 
                 array(
                     'name' => 'solucionado',

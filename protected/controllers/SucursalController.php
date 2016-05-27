@@ -155,7 +155,7 @@ class SucursalController extends Controller
                                             $persona->sexo = strtoupper($_POST['Persona']['sexo']);
                                             $persona->email = ($_POST['Persona']['email']);
                                             $persona->telefono = strtoupper($_POST['Persona']['telefono']);
-                                            $persona->celular = "+54" . strtoupper($_POST['Persona']['celular']);
+                                            $persona->celular = strtoupper($_POST['Persona']['celular']);
                                             
                                        
                                             $persona->insert();
@@ -232,7 +232,7 @@ class SucursalController extends Controller
                                         $persona->sexo = strtoupper($_POST['Persona']['sexo']);
                                         $persona->email = strtolower($_POST['Persona']['email']);
                                         $persona->telefono = strtoupper($_POST['Persona']['telefono']);
-                                        $persona->celular = "+54" + strtoupper($_POST['Persona']['celular']);
+                                        $persona->celular = strtoupper($_POST['Persona']['celular']);
                                         $persona->save();
                                         
                                         $transaction->commit();

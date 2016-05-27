@@ -45,6 +45,8 @@ $this->menu=array(
                             'array_rol'=> $array_rol,
                             'rol'=>$rol,
                             'lista_localidades'=>$lista_localidades,
+                            'listZona'=>  CHtml::listData($zona->findAll(), 'id', 'nombre'),
+                            'zona'=>$zona,
                             'update'=>$update,
                             ));
  ?>

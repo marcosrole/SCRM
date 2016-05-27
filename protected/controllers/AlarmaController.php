@@ -31,6 +31,8 @@ class AlarmaController extends Controller
                  $funcionesAxu->obtenerActionsPermitidas(Yii::app()->user->getState("Menu"), Yii::app()->controller->id);
                  
                  $arr =$funcionesAxu->actiones;  // give all access to admin
+                 $arr[]='AsignarInspector';
+                 $arr[]='eliminar';
                  if(count($arr)!=0){
                         return array(                    
                             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -64,14 +66,71 @@ class AlarmaController extends Controller
                  }
                 
 	}
-        
+////        
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
         
+         
+        
+        public function actionAsignarInspector(){
+            //Recorro todas las alarmas hasta el momento y verifico para cada una de ellas si pasó el limite de espera
+            $tiempoEspera=5*60; //300 = 5 minutos
+            $asignarInspector=false;
+            date_default_timezone_set('America/Buenos_Aires');
+            $hoy = getdate();
+            
+             $fechahoy=$hoy['year'] . "-" . $hoy['mon'] . "-" . $hoy['mday'];
+             $hshoy=$hoy['hours'] . ":" . $hoy['minutes'] . ":" . $hoy['seconds']; 
+            $Alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'0', 'preAlarma'=>'0'), array('order'=>'fechahs ASC'));
+            
+            if(count($Alarmas)!=0){
+                foreach($Alarmas as $item=>$alarma){
+                    $fechahs=explode(" ", $alarma['fechahs']);
+                    
+                    //Me fijo si existe una diferencia de al menos un dia. Un dia tiene 86400 segundos 
+                    if(abs(strtotime($fechahs[0])-strtotime($fechahoy))<=86400){ //Pertenece al mismo dia
+                        if(abs($this->actionRestarHoras($fechahs[1], $hshoy))>=(float)$tiempoEspera){
+                            $asignarInspector = TRUE; break;
+                        }else $asignarInspector=FALSE;
+                    }else  $asignarInspector = TRUE; break;
+                }
+                
+                if($asignarInspector){
+                    $transaction = Yii::app()->db->beginTransaction();
+                        $inspector = Inspector::model()->findAllByAttributes(array('ocupado'=>'0'), array('order'=>'fechaDesocupado ASC'));
+                        $inspector=$inspector[0];
+                        $id_ins = $inspector{'id'};
+
+                        $asignarInspectorModelo = new Asignarinspector();
+                        $asignarInspectorModelo->id_ins=$id_ins;
+                        $asignarInspectorModelo->id_ala=$alarma{'id'};
+                        $asignarInspectorModelo->finalizado=0;
+                        $asignarInspectorModelo->fechahsIns=$fechahoy . " " . $hshoy;
+                        $asignarInspectorModelo->insert();
+
+                        $inspector->estoyOcupado($asignarInspectorModelo{'id_ins'},date("Y-m-d H:i:s"));                                
+                        $alarma->setSolucionada($alarma{'id'});
+                        
+                        $usuario = Usuario::model()->findByAttributes(array('id'=>$inspector{'id_usr'}));
+                        $persona =  Persona::model()->findByAttributes(array('dni'=>$usuario{'dni_per'}));
+                        
+                        $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
+                        $histoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
+                        $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsignacion{'id_suc'}));
+                        $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
+                        
+                        $mensaje= "SCRM - Alarma Generada en " . $sucursal{'nombre'} . ", ubicada en " . $direccion{'calle'} . " " . $direccion{'altura'};
+                       
+                        $this->SendSMS($persona{'celular'}, $mensaje);
+                    $transaction->commit();
+                }
+            }
+        }
+        
         public function actionHisto(){
-            $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'1'));
+            $alarmas = Alarma::model()->findAllByAttributes(array('solucionado'=>'1'), ARRAY('order'=> 'fechahs DESC'));
             $rawData=array();  
              if(count($alarmas)!=0){
                 foreach ($alarmas as $item=>$value){                                      
@@ -80,6 +139,9 @@ class AlarmaController extends Controller
                            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
                         $raw['alarma']=$tipoAlarma{'descripcion'};
                         $fechahs=explode(" ", $value['fechahs']);
+                        $HistoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$value{'id_dis'}));
+                            $Sucursal = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
+                        $raw['sucursal']=$Sucursal{'nombre'};  
                         $raw['fecha']=$fechahs[0];  
                         $raw['hs']=$fechahs[1];                          
                         $rawData[]=$raw;                   
@@ -90,7 +152,7 @@ class AlarmaController extends Controller
                     $DataProviderAlarma=new CArrayDataProvider($rawData, array(
                        'id'=>'id',
                        'pagination'=>array(
-                           'pageSize'=>10,
+                           'pageSize'=>20,
                        ),
                      ));
                     
@@ -204,9 +266,7 @@ class AlarmaController extends Controller
             $alarma= Alarma::model()->findByAttributes(array('id'=>$id));            
             
             $alarma->delete();
-            $this->render('admin',array(
-			'model'=>new Alarma(),
-		));
+            $this->redirect(array('alarma/admin'));
 		
 	}
         
@@ -324,6 +384,10 @@ class AlarmaController extends Controller
                            $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$value{'id_tipAla'}));
                         $raw['alarma']=$tipoAlarma{'descripcion'};
                         $fechahs=explode(" ", $value['fechahs']);
+                        $raw['id_dis']=$value{'id_dis'};
+                            $HistoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$value{'id_dis'}));
+                            $Sucursal = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
+                        $raw['sucursal']=$Sucursal{'nombre'};    
                         $raw['fecha']=$fechahs[0];  
                         $raw['hs']=$fechahs[1];                          
                         $rawData[]=$raw;                   
@@ -343,6 +407,10 @@ class AlarmaController extends Controller
                         $raw['alarma']=$tipoAlarma{'descripcion'};                                               
                         $fechahs=explode(" ", $value['fechahs']);
                         $raw['fecha']=$fechahs[0];  
+                        $raw['id_dis']=$value{'id_dis'};
+                            $HistoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$value{'id_dis'}));
+                            $Sucursal = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
+                        $raw['sucursal']=$Sucursal{'nombre'}; 
                         $raw['hs']=$fechahs[1];                          
                         $rawData[]=$raw;                   
                    
@@ -379,7 +447,7 @@ class AlarmaController extends Controller
         
         
         
-    public function actionSendemail($id_alarma){
+    public function Sendemail($id_alarma){
             
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id_alarma));
             $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
@@ -425,6 +493,49 @@ class AlarmaController extends Controller
 
         }
         
+        public function actionRestarHoras($horaini,$horafin)
+        {
+            
+            $horai=explode(":", $horaini)[0];
+            $mini=explode(":", $horaini)[1];
+            $segi=explode(":", $horaini)[2];
+
+            $horaf=explode(":", $horafin)[0];
+            $minf=explode(":", $horafin)[1];
+            $segf=explode(":", $horafin)[2];
+
+            $ini=((($horai*60)*60)+($mini*60)+$segi);
+            $fin=((($horaf*60)*60)+($minf*60)+$segf);
+
+            $dif=$fin-$ini; //diferencia en Segundos
+            return $dif;
+    //	$difh=floor($dif/3600);
+    //	$difm=floor(($dif-($difh*3600))/60);
+    //	$difs=$dif-($difm*60)-($difh*3600);
+    //	return date("H-i-s",mktime($difh,$difm,$difs));
+        }
+        
+        public function SendSMS($numeroDestino, $mensaje){
+            spl_autoload_unregister(array('YiiBase','autoload'));
+            require('Services/Twilio.php');
+            $AccountSid = "ACb82c2f321e995cf545bfb147f0a41696";
+            $AuthToken = "8a00cfd50d0e4fc6f350669fa3d1a625";
+            $client = new Services_Twilio($AccountSid, $AuthToken);
+            $numeroDestino="+54".$numeroDestino;
+
+            spl_autoload_register(array('YiiBase','autoload'));
+
+            try {
+                $sms = $client->account->sms_messages->create(
+                 '+17076391065',
+                 $numeroDestino,
+                 $mensaje
+                 );
+                echo "Sent message {$sms->sid}";
+            } catch (Services_Twilio_RestException $e) {
+                echo $e->getMessage();
+            }
+         }
         
     
     
