@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/usuario.css" media="screen, projection">
 
+
 <?php
 /* @var $this SucursalController */
 /* @var $model Sucursal */
@@ -49,7 +50,7 @@ $(function () {
             ),
         ));
         ?>
-
+ <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
         <div class="form">    
             <?php $form = $this->beginWidget('booster.widgets.TbActiveForm',array(
                 'id' => 'UsuarioForm',
@@ -62,6 +63,7 @@ $(function () {
                             $this->widget('booster.widgets.TbGridView', array(
                                 'id' => 'empresasAsociadas',
                                 'dataProvider' => $empresa->search(),
+                                  'summaryText'=>'Página {page}-{pages} de {count} resultados.',
                                 'columns' => array(                        
                                     array(
                                         'name' => 'cuit',

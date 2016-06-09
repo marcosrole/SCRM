@@ -98,6 +98,7 @@ class UsuarioController extends Controller
 	 */
 	public function actionCreate()
 	{
+            
 		$persona = new Persona();
                 $usuario = new Usuario();
                 $direccion = new Direccion();
@@ -152,7 +153,7 @@ class UsuarioController extends Controller
                                                                                                       
                             /*FK1*/ $usuario->dni_per=$persona{'dni'};                                                        
 //                            $usuario->pass=  md5($_POST['Usuario']['pass']);
-                             $usuario->pass= $_POST['Usuario']['pass'];
+                             $usuario->pass= crypt($_POST['Usuario']['pass']);
                              $usuario->name= strtoupper($_POST['Usuario']['name']);
                             if($usuario->validate()){  
                                 $aux = Usuario::model()->findByAttributes(array('name'=>$usuario{'name'}));                                
@@ -190,8 +191,8 @@ class UsuarioController extends Controller
                                         $usuario->darPermiso($usuario{'id_niv'}, $usuario{'id'});                                    
                                          */
                                         Yii::app()->user->setFlash('success', "<strong>Excelente!</strong> Los datos se han guardado ");                                                
-                                        $transaction->commit();  
-                                        $this->redirect(Yii::app()->createUrl('usuario/view', array('id'=>$usuario{'id'})));
+                                        $transaction->commit();                                          
+                                        $this->redirect(Yii::app()->createUrl('nivelesmenu/create', array('id_usr'=>$usuario{'id'})));
                                     }  else {$transaction->rollback (); Yii::app()->user->setFlash('error', "<strong>Error. Rol de Usuario!</strong> Debe asignarle un rol al Usuario");}
                                     
                                     
@@ -365,7 +366,7 @@ class UsuarioController extends Controller
                 $usuario = Usuario::model()->findByAttributes(array('id'=>$id));
                 $usuario->pass='';
                 if(isset($_POST['Usuario'])){
-                    $usuario->pass=md5($_POST['Usuario']['pass']);
+                    $usuario->pass= md5($_POST['Usuario']['pass']);
                     
                     $usuario->save();
                     

@@ -1,4 +1,5 @@
  <style>
+     
     .modal-header, h4, .close {
         background-color: #19A3FF;
         color:white !important;
@@ -11,8 +12,34 @@
     .modal.in .modal-dialog {
     width: 25%;
     }
+    .boton{
+       margin-left: 60%;
+    margin-top: 25%; 
+    }
+    .subtitulo{
+        margin-left: 50%;
+    }
+    .jumbotron {
+    position: relative;
+    //background: #000 url("jumbotron-bg.png") center center;
+    background: url("images/SCRMTitulo.png") center center;
+    background-position: 50% 50%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 70%;
+    //background-size: cover;
+    overflow: hidden;
+    
+    border-radius: 69px 69px 69px 69px;
+-moz-border-radius: 69px 69px 69px 69px;
+-webkit-border-radius: 69px 69px 69px 69px;
+border: 3px solid #4b6094;
+}
 </style>
 
+
+    
 
 
 
@@ -33,16 +60,15 @@
     ));
 ?>
 
-<?php $this->beginWidget(
-    'booster.widgets.TbJumbotron',
-    array(
-        'heading' => 'Sistema de Control de Ruidos Molestos',
-    )
-); ?>
- 
-    <p>Proyecto Final: Ingenieria en Informatica.</p>
- 
-    <p><?php $this->widget(
+<div class="jumbotron">  
+    <div class="container">
+        
+        
+        <div class="subtitulo">
+            <p>Proyecto Final: Ingenieria en Informatica.</p>
+        </div>
+        <div class="boton">
+            <p><?php $this->widget(
             'booster.widgets.TbButton',
             array(
                 'context' => 'primary',
@@ -55,9 +81,13 @@
                 )
             )
         ); ?></p>
- 
-<?php $this->endWidget(); ?>
-   
+            
+        </div>
+        
+         
+    </div>
+</div>  
+
 
 
 
@@ -65,7 +95,7 @@
 
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
-        <h4> SCRM </h4>
+        <h4> Inicio de Sesión </h4>
     </div>
     <div class="modal-body">
          <?php $this->renderPartial(

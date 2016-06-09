@@ -48,9 +48,12 @@ $this->menu=array(
 <p> <i>Si el dispositivo no se encuentra en la lista, por favor asigne el dispositivo a una sucursal.</i> <a href=<?php echo "http://" . $_SERVER['HTTP_HOST'] . "/SCRM/Histoasignacion/create"?>>Haga clic aquí </a> </p>
 <div class="row">
             <?php 
-                $this->widget('booster.widgets.TbGridView', array(
+                $this->widget('booster.widgets.TbExtendedGridView', array(
                     'id' => 'dispositivo-grid-list',
                     'dataProvider' => $DataProviderCalibracion,
+                    'responsiveTable' => true,
+                    'fixedHeader' => true,
+                     'summaryText'=>'Pagina {start}-{end} de {count} desultados.',
                     'columns' => array(
                         array(
                             'name'  => 'id',
@@ -74,7 +77,7 @@ $this->menu=array(
                         
                         array(
                             'class' => 'booster.widgets.TbButtonColumn',
-                            'htmlOptions' => array('width' => '40'), //ancho de la columna
+                           // 'htmlOptions' => array('width' => '40'), //ancho de la columna
                             'template' => '{calibrar}', // botones a mostrar
                             'buttons'=>array(
                                 "calibrar"=>array(

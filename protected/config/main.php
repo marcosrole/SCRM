@@ -34,6 +34,12 @@ return array(
 
 	// application components
 	'components'=>array(
+                'sms' => array(
+                    'class'=>'ext.LabsMobileSms.LabsMobileSms',
+                    'LMaccount_username'=>'marcosrole@gmail.com',
+                    'LMaccount_password'=>'Vera2834',
+                    'LMaccount_clientapi'=>'',
+                ),
                 
                 'mail' => array(
                     'class' => 'ext.yii-mail.YiiMail',

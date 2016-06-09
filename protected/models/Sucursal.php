@@ -68,7 +68,7 @@ class Sucursal extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
+			'nombre' => 'Nombre de Sucursal',
 			'cuit_emp' => 'Cuit Emp',
 			'id_dir' => 'Id Dir',
 			'id_zon' => 'Id Zon',

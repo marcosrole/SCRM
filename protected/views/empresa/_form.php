@@ -45,7 +45,7 @@ $(function () {
 <div class="form">
  
 
-
+ <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
 <?php $form = $this->beginWidget('booster.widgets.TbActiveForm',array(
                 'id' => 'UsuarioForm',
                 'focus'=>array($empresa,'razonsocial'),

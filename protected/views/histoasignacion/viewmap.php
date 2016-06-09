@@ -104,7 +104,7 @@ and open the template in the editor.
                         $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/fire.png");
                         $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));  
                     }else{
-                        $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/drink.png");                      
+                        $icon = new EGMapMarkerImage("http://" . $_SERVER['HTTP_HOST'] . "/SCRM/images/googlemap/music_classical.png");                      
                     }
                                      
                     

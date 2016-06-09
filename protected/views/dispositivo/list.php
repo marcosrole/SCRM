@@ -31,9 +31,18 @@
 <?php
 
 
-$this->widget('booster.widgets.TbGridView', array(
+$this->widget('booster.widgets.TbExtendedGridView', array(
     'id' => 'dispositivo-grid-list',
+    'fixedHeader' => true,
+        'type' => 'striped bordered',
+        'headerOffset' => 20,
     'dataProvider' => $dispositivos,
+     'responsiveTable' => true,
+    // 'template'=>'{items}{pager}',
+//                'template'=>'{summary}{items}{pager}',
+            // 'enablePagination' => true,
+            'summaryText'=>'Pagina {start}-{end} de {count} desultados.',
+           // 'enableSorting'=>true,
     'columns' => array(
         array(
             'name' => 'id',

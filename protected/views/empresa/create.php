@@ -31,7 +31,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Crear Empresa</h1>
+<h1>Crear nueva Empresa</h1>
 
 <?php $this->renderPartial('_form', array(
                     'empresa' => $empresa,                    

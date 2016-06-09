@@ -19,7 +19,7 @@ $this->widget('booster.widgets.TbAlert', array(
 /* @var $model Usuario */
 /* @var $form CActiveForm */
 ?>
-
+ <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
 <div class="form">
 
 <?php

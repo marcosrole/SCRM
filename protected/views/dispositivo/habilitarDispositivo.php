@@ -35,6 +35,7 @@
 $this->widget('booster.widgets.TbGridView', array(
     'id' => 'dispositivo-grid-list',
     'dataProvider' => $dispositivos,
+     'summaryText'=>'Página {page}-{end} de {count} resultados.',
     'columns' => array(
       array(
             'class' => 'booster.widgets.TbButtonColumn',

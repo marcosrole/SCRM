@@ -21,7 +21,8 @@ $this->menu=array(
 <?php
 $this->widget('booster.widgets.TbGridView', array(
         'type' => 'striped bordered condensed',
-        'dataProvider' => $datos,       
+        'dataProvider' => $datos,  
+         'summaryText'=>'Página {page}-{pages} de {count} resultados.',
         'filter' => $permiso,
          'columns' => array(
                 array(

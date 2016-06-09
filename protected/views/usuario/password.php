@@ -53,7 +53,7 @@ $this->menu=array(
 /* @var $model Usuario */
 /* @var $form CActiveForm */
 ?>
-
+ <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
 <div class="form">
 
 <?php
@@ -87,7 +87,7 @@ $this->menu=array(
             </div>
             
             <div class="pass">
-                <?php echo $form->textFieldGroup($usuario, 'pass', array ('hint' => 'Nueva Contraseña', 'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>
+                <?php echo $form->passwordFieldGroup($usuario, 'pass', array ('hint' => 'Nueva Contraseña', 'wrapperHtmlOptions' =>  array(  'class' => 'col-sm-5'),));?>
                 <?php echo $form->error($usuario, 'pass'); ?>
             </div>            
 
@@ -97,7 +97,7 @@ $this->menu=array(
         
 
         <div class="boton">
-            <?php $this->widget('booster.widgets.TbButton', array('label' => 'Cargar', 'context' => 'success','buttonType' => 'submit',));?>
+            <?php $this->widget('booster.widgets.TbButton', array('label' => 'Cambiar contraseña', 'context' => 'success','buttonType' => 'submit',));?>
         </div>
 
     <?php $this->endWidget(); ?>        

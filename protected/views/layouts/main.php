@@ -72,7 +72,7 @@
     <body>
         <div id="alarma"> </div>
         <div id="PREalarma"> </div>
-        <?php
+        <?php 
 //        $self="http://".$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI']; //obtengo la URL donde estoy
 //        header("refresh:2; url=$self"); //Refrescamos cada 10 segundos
         
@@ -207,10 +207,20 @@
                             'icon'=>'hdd',
                             'url' => '#',
                             'items' => array(
-                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'Dispositivo/create'),
-                                array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'Dispositivo/list'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
+                                array('label' => 'Nuevo dispositivo', 'url' => Yii::app()->homeUrl . 'Dispositivo/create'),
                                 array('label' => 'Calibrar', 'url' => Yii::app()->homeUrl . 'calibracion/create?id_disp'),
+                                array('label' => 'Habilitar Dispositivo', 'url' => Yii::app()->homeUrl . 'Dispositivo/habilitardispositivo'),
+                                array(
+//                                    'visible' => Yii::app()->user->checkAccess('admin'),
+                                    'label' => 'Modificar',
+                                    'url' => '#',
+                                    'items' => array(
+                                        array('label' => 'Listar dispositivos', 'url' => Yii::app()->homeUrl . 'Dispositivo/list'),
+                                        array('label' => 'Modificar valores', 'url' => Yii::app()->homeUrl . 'Dispositivo/admin'),
+                                    )
+                                ),
+                                
+                              
                                
                                 array(
 //                                    'visible' => Yii::app()->user->checkAccess('admin'),
@@ -230,19 +240,32 @@
                             'icon'=>'briefcase',
                             'url' => '#',
                             'items' => array(
+                                array('label' => 'Nueva Empresa', 'url' => Yii::app()->homeUrl . 'empresa/create'),
+                                array('label' => 'Nueva Sucursal', 'url' => Yii::app()->homeUrl . 'sucursal/create'),
+                               
                                 array(
                                     'visible' => !Yii::app()->user->isGuest,
-                                    'label' => 'Sucursal',
+                                    'label' => 'Sucursales',
                                     'url' => '#',
                                     'items' => array(
-                                        array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'sucursal/create'),
-                                        array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'sucursal/admin'),
-                                        array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'sucursal/index'),
+                                        array('label' => 'Listar Sucursales', 'url' => Yii::app()->homeUrl . 'sucursal/index'),
+                                        array('label' => 'Modificar valores', 'url' => Yii::app()->homeUrl . 'sucursal/admin'),
+                                        
                                     )
                                 ),
-                                array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'empresa/create'),
-                                array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'empresa/admin'),
-                                array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'empresa/list'),
+                                
+                                 array(
+                                    'visible' => !Yii::app()->user->isGuest,
+                                    'label' => 'Empresas',
+                                    'url' => '#',
+                                    'items' => array(
+                                        array('label' => 'Listar Empresas', 'url' => Yii::app()->homeUrl . 'empresa/list'),
+                                        array('label' => 'Modificar valores', 'url' => Yii::app()->homeUrl . 'empresa/admin'),                                    
+                                        
+                                    )
+                                ),
+                                
+                                
                                 
                             )
                         ),
@@ -261,7 +284,7 @@
                             'itemOptions'=>array('id' => 'itemAlarma')
                             ),
                         array(
-                            'label' => 'Asignaciones (' . count($asiganciones) . ')',
+                            'label' => 'Alarmas asigandas (' . count($asiganciones) . ')',
                             'icon'=>'download-alt',
                             'url' => Yii::app()->homeUrl . 'asignarinspector/index',
                             'visible' => !Yii::app()->user->isGuest
@@ -283,23 +306,14 @@
                                     )
                                 ),
                                 array(
-                                    'visible' => !Yii::app()->user->isGuest,
-                                    'label' => 'Dispositivo',
-                                    
-                                    'url' => '#',
-                                    'items' => array(
-                                        array('label' => 'Habilitar/Deshabilitar', 'url' => Yii::app()->homeUrl . 'Dispositivo/habilitardispositivo'),
-                                    )
-                                ),
-                                array(
                                     'label' => 'Usuario',
                                     'visible' => !Yii::app()->user->isGuest,
                                     'url' => '#',
                                     'items' => array(
-                                        array('label' => 'Crear', 'url' => Yii::app()->homeUrl . 'usuario/create'),                                
+                                        array('label' => 'Nuevo Usuario', 'url' => Yii::app()->homeUrl . 'usuario/create'),                                
                                         array('label' => 'Generar Permisos', 'url' => Yii::app()->homeUrl . "usuario/index/rol/0"),
-                                        array('label' => 'Listar', 'url' => Yii::app()->homeUrl . 'usuario/index'),
-                                        array('label' => 'Modificar', 'url' => Yii::app()->homeUrl . 'usuario/admin'),
+                                        array('label' => 'Listar Usuario', 'url' => Yii::app()->homeUrl . 'usuario/index'),
+                                        array('label' => 'Modificar valores', 'url' => Yii::app()->homeUrl . 'usuario/admin'),
                                     )
                                 ),
                                 array('label' => 'Niveles de Menu', 'url' => Yii::app()->homeUrl . 'nivelesmenu/admin'),                                
@@ -312,13 +326,14 @@
                             'icon'=>'flag',
                             'items' => array(
                                 array('label' => 'Acerca de', 'url' => array('site/about#openModal')),
-                                array('label' => 'Contáctenos', 'url' => Yii::app()->homeUrl . "site/contact"),                                
+                                array('label' => 'Contáctenos', 'url' => Yii::app()->homeUrl . "site/contact"),  
+                                array('label' => 'Manual del Usuario', 'url' => Yii::app()->homeUrl . "manualusuario.pdf"),
                             )
                         ),
                         
                        
                         array(
-                            'label' => 'Logout (' . Yii::app()->user->name . ')',
+                            'label' => 'Cerrar sesión (' . Yii::app()->user->name . ')',
                              'icon'=>'user',
                             'url' => array('/site/logout'),
                             'visible' => !Yii::app()->user->isGuest),

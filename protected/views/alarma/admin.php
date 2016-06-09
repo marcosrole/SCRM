@@ -111,7 +111,7 @@ $this->menu=array(
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{view} {email} {delete}', // botones a mostrar
+                    'template' => '{view} {delete} ', // botones a mostrar
                     'htmlOptions'=>array('width'=>'10%'),
                     'buttons' => array(
                        
@@ -126,11 +126,7 @@ $this->menu=array(
                                     ),
                                 ),                                    
                             ),
-                        'email' => array(
-                            'label' => 'Enviar E-mail',
-                            'icon'=>'glyphicon glyphicon-envelope',
-                            'url'=> 'Yii::app()->createUrl("alarma/Sendemail", array("id_alarma"=> ' . '$data["id"])) ',
-                        ),
+                        
                         'delete' => array(
                             'label' => 'Eliminar Alarma',                            
                             'click' => 'function(){return confirm("Desea eliminar la empresa?");}',

@@ -4,6 +4,7 @@ header("refresh:10; url=$self"); //Refrescamos cada 10 segundos
     $this->widget('booster.widgets.TbExtendedGridView', array(
     'id' => 'detalledispo_by_pk',
     'dataProvider' => $dataProvider,
+         'summaryText'=>'Página {page}-{pages} de {count} resultados.',
      'responsiveTable' => true,
     'columns' => array(
         array(

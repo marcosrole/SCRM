@@ -28,7 +28,8 @@ class SiteController extends Controller
         
         public function actionVerificarAlarma()
 	{
-            var_dump("Daleee");
+            var_dump(Yii::app()->sms->get_balance());
+            die();
 	}
         
 	public function actionIndex()
@@ -38,12 +39,14 @@ class SiteController extends Controller
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
                 
-                $identity = new UserIdentity(($_POST['Usuario']['name']),($_POST['Usuario']['pass']));
+                $identity = new UserIdentity(($_POST['Usuario']['name']),(md5($_POST['Usuario']['pass'])));
                 
                     if (!$identity->authenticate()){
                         Yii::app()->user->login($identity);                          
                         $this->redirect(Yii::app()->user->returnUrl);
-                        }else $error=true;
+                        }else {
+                            $error=true;
+                        }
                     }            
             $this->render('index', array('usuario'=>$user, 'error'=>$error));
 	}
@@ -93,14 +96,15 @@ class SiteController extends Controller
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
                 
-                $identity = new UserIdentity(($_POST['Usuario']['name']),($_POST['Usuario']['pass']));
-                
+                $identity = new UserIdentity(($_POST['Usuario']['name']),(md5($_POST['Usuario']['pass'])));
+               // var_dump($identity); die();
                     if (!$identity->authenticate()){
                         Yii::app()->user->login($identity);                          
                         $this->redirect(Yii::app()->user->returnUrl);                         
                         }else {
                             $error=true;
                              Yii::app()->user->setFlash('error', "Usuario o contraseña incorrectos "); 
+                             
                         }
                         
                     } 

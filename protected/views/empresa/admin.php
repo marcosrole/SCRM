@@ -37,6 +37,7 @@ Nota:
         $this->widget('booster.widgets.TbGridView', array(
             'id' => 'dispositivo-grid-list',
             'dataProvider' => $model->search(),
+             'summaryText'=>'Página {page}-{pages} de {count} resultados.',
             'filter' => $model,
             'columns' => array(                                                       
                 array(
@@ -52,7 +53,7 @@ Nota:
                 array(
                     'class' => 'booster.widgets.TbButtonColumn',
                    // 'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{view} {update} {delete}', // botones a mostrar
+                    'template' => '{view} {update} ', // botones a mostrar
                     'buttons' => array(
                         'view' => array(
                             'label' => 'Detalles',                                                         

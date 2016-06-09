@@ -33,6 +33,7 @@ class AlarmaController extends Controller
                  $arr =$funcionesAxu->actiones;  // give all access to admin
                  $arr[]='AsignarInspector';
                  $arr[]='eliminar';
+                 $arr[]='SendSMSPick';
                  if(count($arr)!=0){
                         return array(                    
                             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -123,7 +124,7 @@ class AlarmaController extends Controller
                         
                         $mensaje= "SCRM - Alarma Generada en " . $sucursal{'nombre'} . ", ubicada en " . $direccion{'calle'} . " " . $direccion{'altura'};
                        
-                        $this->SendSMS($persona{'celular'}, $mensaje);
+                        //$this->SendSMS($persona{'celular'}, $mensaje);
                     $transaction->commit();
                 }
             }
@@ -447,12 +448,13 @@ class AlarmaController extends Controller
         
         
         
-    public function Sendemail($id_alarma){
+    public function actionSendemail($id_alarma){
             
             $alarma = Alarma::model()->findByAttributes(array('id'=>$id_alarma));
             $dispositivo = Dispositivo::model()->findByAttributes(array('id'=>$alarma{'id_dis'}));
             $histoAsig = Histoasignacion::model()->findByAttributes(array('id_dis'=>$dispositivo{'id'}, 'fechaBaja'=>'1900-01-01'));
             $sucursal = Sucursal::model()->findByAttributes(array('id'=>$histoAsig{'id_suc'}));
+            $persona = Persona::model()->findByAttributes(array('dni'=>$sucursal{'dni_per'}));
             $empresa = Empresa::model()->findByAttributes(array('cuit'=>$sucursal{'cuit_emp'}));
             $direccion = Direccion::model()->findByAttributes(array('id'=>$sucursal{'id_dir'}));
             $tipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$alarma{'id_tipAla'}));
@@ -479,8 +481,10 @@ class AlarmaController extends Controller
             $message->view ='test';//nombre de la vista q conformara el mail            
             $message->setBody(array('datos'=>$datos),'text/html');//codificar el html de la vista
             $message->from =('SCRM@sistema.com'); // alias del q envia
-            $message->setTo('marcosrole@gmail.com'); // a quien se le envia
-
+            $message->setTo($persona{'email'}); // a quien se le envia
+            
+            
+            
             if(Yii::app()->mail->send($message)){
                  Yii::app()->user->setFlash('success', "<strong>Enviado!</strong> Mail enviado correctamente ");
 //                 $this->render('admin');
@@ -489,7 +493,8 @@ class AlarmaController extends Controller
                 
                 
             }
-            $this->redirect(array('alarma/admin')); 
+            
+            $this->redirect(array('alarma/PREadmin')); 
 
         }
         
@@ -516,6 +521,8 @@ class AlarmaController extends Controller
         }
         
         public function SendSMS($numeroDestino, $mensaje){
+            //Yii::app()->sms->send(array('to'=>"54".$numeroDestino, 'message'=>$mensaje));
+            
             spl_autoload_unregister(array('YiiBase','autoload'));
             require('Services/Twilio.php');
             $AccountSid = "ACb82c2f321e995cf545bfb147f0a41696";
@@ -536,6 +543,44 @@ class AlarmaController extends Controller
                 echo $e->getMessage();
             }
          }
+         
+         public function actionSendSMSPick($id_alarma){
+            $Alarma = Alarma::model()->findByAttributes(array('id'=>$id_alarma));
+            $TipoAlarma = Tipoalarma::model()->findByAttributes(array('id'=>$Alarma{'id_tipAla'}));
+            $HistoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$Alarma{'id_dis'}, 'fechaBaja'=>'1900-01-01'));
+            $Sucural = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
+            $Direccion = Direccion::model()->findByAttributes(array('id'=>$Sucural{'id_dir'}));
+            $Empresa = Empresa::model()->findByAttributes(array('cuit'=>$Sucural{'cuit_emp'}));
+            $Persona = Persona::model()->findByAttributes(array('dni'=>$Sucural{'dni_per'}));
+            $mensaje = "SCRM - Sr/Sra., se ha producido un inconveniente en " . $Direccion{'calle'} . " " . $Direccion{'altura'} . ", " . $Sucural{'nombre'} . ", debido a: " . $TipoAlarma{'descripcion'}; 
+            
+            //Yii::app()->sms->send(array('to'=>'543483404260', 'message'=>"Hola"));
+            //$this->redirect(array('alarma/admin'));            
+            
+            spl_autoload_unregister(array('YiiBase','autoload'));
+            require('Services/Twilio.php');
+            $AccountSid = "ACb82c2f321e995cf545bfb147f0a41696";
+            $AuthToken = "8a00cfd50d0e4fc6f350669fa3d1a625";
+            $client = new Services_Twilio($AccountSid, $AuthToken);
+
+            $numeroDestino="+54".$Persona{'celular'};
+            spl_autoload_register(array('YiiBase','autoload'));
+
+            try {
+                $sms = $client->account->sms_messages->create(
+                 '+17076391065',
+                 $numeroDestino,
+                 $mensaje
+                 );
+                echo "Sent message {$sms->sid}";
+            } catch (Services_Twilio_RestException $e) {
+                echo $e->getMessage();
+            }
+            
+            $this->redirect(array('alarma/PREadmin'));
+            
+         }
+    
         
     
     

@@ -234,7 +234,8 @@ class DispositivoController extends Controller {
             $model->setAttribute('modelo', strtoupper($_POST['Dispositivo']['modelo']));
             $model->setAttribute('version', strtoupper($_POST['Dispositivo']['version']));
             $model->setAttribute('funciona', 0);
-            $model->setAttribute('tiempo', $_POST['Dispositivo']['tiempo']);
+            $model->setAttribute('tiempo', 20);
+            //$model->setAttribute('tiempo', $_POST['Dispositivo']['tiempo']);
             
             if ($model->validate()) {                
                 if (Dispositivo::exitsMAC($model->{'mac'})){
@@ -351,9 +352,41 @@ class DispositivoController extends Controller {
     }
 
     public function actionAdmin() {        
-        $this->render('admin', array(
-            'dispositivo' => new Dispositivo(),
-        ));
+        $rawData=array();
+        $Dispositivos = Dispositivo::model()->findAllByAttributes(array('disponible'=>'0'));
+        if(count($Dispositivos)!=0){
+           foreach ($Dispositivos as $key=>$dispositivo){                    
+                $raw['id']=(int)$dispositivo{'id'};
+                $raw['mac']=$dispositivo{'mac'};
+                $raw['modelo']=$dispositivo{'modelo'};
+                $raw['version']=$dispositivo{'version'};
+                $raw['funciona']=$dispositivo{'funciona'}; 
+                $raw['disponible']=$dispositivo{'disponible'};
+                $rawData[]=$raw;                   
+            }
+        }
+        
+        $Dispositivos = Dispositivo::model()->findAllByAttributes(array('disponible'=>'1'));
+        if(count($Dispositivos)!=0){
+           foreach ($Dispositivos as $key=>$dispositivo){                    
+                $raw['id']=(int)$dispositivo{'id'};
+                $raw['mac']=$dispositivo{'mac'};
+                $raw['modelo']=$dispositivo{'modelo'};
+                $raw['version']=$dispositivo{'version'};
+                $raw['funciona']=$dispositivo{'funciona'};  
+                $raw['disponible']=$dispositivo{'disponible'};
+                $rawData[]=$raw;                   
+            }
+        }
+        
+        $DataProviderDispositivos=new CArrayDataProvider($rawData, array(
+           'id'=>'id',
+           'pagination'=>array(
+               'pageSize'=>10,
+           ),
+         ));
+        
+        $this->render('admin', array('dispositivos'=>$DataProviderDispositivos));
     }
 
     public function loadModel($id) {

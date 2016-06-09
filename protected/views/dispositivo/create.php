@@ -46,7 +46,7 @@ $this->menu=array(
 ?>
 
 <h1>Nuevo Dispositivo</h1>
-
+ <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
 <div class="form">    
     <?php $form= $this->beginWidget('booster.widgets.TbActiveForm',array('id' => 'verticalForm',)); ?>
     
@@ -68,7 +68,7 @@ $this->menu=array(
 	</div>
     
         <div class="tiempo">
-		<?php echo $form->textFieldGroup($model,'tiempo',array(	'wrapperHtmlOptions' => array('class' => 'col-sm-5',),'append' => 'minutos')		); ?>
+		<?php //echo $form->textFieldGroup($model,'tiempo',array(	'wrapperHtmlOptions' => array('class' => 'col-sm-5',),'append' => 'minutos')		); ?>
 	</div>
         
     <div class="boton">

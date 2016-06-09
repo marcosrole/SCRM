@@ -10,7 +10,7 @@
             }
         </style>
 
-<?php
+<?php 
         $this->widget('booster.widgets.TbAlert', array(
             'fade' => true,
             'closeText' => '&times;', // false equals no close link
@@ -34,72 +34,78 @@
 <h1>Dispositivos Almacenados</h1>
 
 <?php
-$this->widget('booster.widgets.TbExtendedGridView', array(
-         'id' => 'dispositivo-grid',
-         'dataProvider' => $dispositivo->search(),
-         'filter' => $dispositivo,
-         'columns' => array(
-                array(
+
+
+$this->widget('booster.widgets.TbGridView', array(
+    'id' => 'dispositivo-grid-list',
+    'dataProvider' => $dispositivos,
+    'summaryText'=>'Página {page}-{pages} de {count} resultados.',
+    'columns' => array(
+        array(
             'name' => 'id',
             'header'=>'ID',
-            'htmlOptions'=>array('width'=>'10%px'),            
+          //  'htmlOptions'=>array('width'=>'10%px'),            
         ),
         array(
             'name' => 'mac',
             'header'=>'MAC',
-            'htmlOptions'=>array('width'=>'40%'),
-            
-            
+          //  'htmlOptions'=>array('width'=>'30%'),           
         ),
         array(
             'name' => 'modelo',
             'header'=>'Modelo',
-            'htmlOptions'=>array('width'=>'2O%'),            
-            
+          //  'htmlOptions'=>array('width'=>'1O%'),                      
         ),
         array(
             'name' => 'version',
             'header'=>'Version',
-            'htmlOptions'=>array('width'=>'2O%'),
+           // 'htmlOptions'=>array('width'=>'1O%'),
+        ),   
+        array(
+            'name' => 'disponible',
+            'header'=>'Asignado',
+//            'value'=> '($data->anAttribute > 10) ? "<a href=\"#\";><span class=\"icon-gift\"></span></a>" : "<a href=\"#\";><span class=\"icon-camera\"></span></a>"',
+            'value'=>'$data["disponible"]== 0 ? "Asignado" : "Disponible"', 
+            // 'htmlOptions'=>array('width'=>'5%'),
         ),
-         array(
-            'name' => 'tiempo',
-            'header'=>'tiempo',
-             'htmlOptions'=>array('width'=>'10%'),
-        ),
-             
-                array(
-                    'class' => 'booster.widgets.TbButtonColumn',
-                    'htmlOptions' => array('width' => '10'), //ancho de la columna
-                    'template' => '{delete}{update}', // botones a mostrar
-                    'buttons' => array(
-                        'delete' => array(
+        array(
+            'class' => 'booster.widgets.TbButtonColumn',
+            //'htmlOptions' => array('width' => '40'), //ancho de la columna
+            'template' => '{view}  {update}', // botones a mostrar
+            'buttons'=>array(
+                "view"=>array(
+                    'label'=>'Detalles',                    
+                    'url'=> 'Yii::app()->createUrl("DetalleDispo/VerDetalle", array("id"=> ' . '$data["id"])) ',
+                    ),
+                'delete' => array(
                             'label' => 'Eliminar',                             
                             'click' => 'function(){return confirm("Desea eliminar todos los registro del dispositivo?");}',
-                            'url'=> 'Yii::app()->createUrl("/Dispositivo/Eliminar?id=$data->id")'
+                            'url'=> 'Yii::app()->createUrl("Dispositivo/Eliminar", array("id"=> ' . '$data["id"])) ',
                         ),
-                        'update' => array(
-                            'label'=>'Modificar',
-                            'icon'=>'glyphicon glyphicon-pencil',
-                            'url'=>'Yii::app()->createUrl("dispositivo/modificar", array("id"=>$data->id,"mac"=>$data->mac,"modelo"=>$data->modelo,"version"=>$data->version,"funciona"=>$data->funciona))',
-                            'options'=>array(
-                                'class'=>'btn btn-small',
-                                'ajax'=>array(
-                                    'type'=>'POST',
-                                    'url'=>"js:$(this).attr('href')",
-                                    'success'=>'function(data) { $("#viewModal .modal-body p").html(data); $("#viewModal").modal(); }'
-                                ),
-                            ),
+                'update' => array(
+                    'label'=>'Modificar',
+                    'icon'=>'glyphicon glyphicon-pencil',
+                    'url'=>'Yii::app()->createUrl("dispositivo/modificar", array("id"=>$data["id"],"mac"=>$data["mac"],"modelo"=>$data["modelo"],"version"=>$data["version"],"funciona"=>$data["funciona"]))',
+                    'options'=>array(
+                        //'class'=>'btn btn-small',
+                        'ajax'=>array(
+                            'type'=>'POST',
+                            'url'=>"js:$(this).attr('href')",
+                            'success'=>'function(data) { $("#viewModal .modal-body p").html(data); $("#viewModal").modal(); }'
                         ),
                     ),
-                    'htmlOptions'=>array('style'=>'width: 120px'),
+                
                 ),
-            ),
-    )
-);
+                
+        ),
+    ),
+)));
+?>
 
+
+<?php
 //BOTON ELIMINAR
-$this->widget(
+/*$this->widget(
     'booster.widgets.TbButton',
     array(
         'label' => 'Eliminar todo',
@@ -111,9 +117,8 @@ $this->widget(
             .  ' window.location.href="DeleteAll"}})'
         ),
     )
-);
+);*/
 ?>
-
 
 
             <!-- View Popup  -->

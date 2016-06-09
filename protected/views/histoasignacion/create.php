@@ -32,13 +32,14 @@ $this->menu=array(
                 'htmlOptions' => array('class' => 'well'), )); ?>
             
     
-    <h3>Empresas asociadas:</h3>
-    
+    <h3>Sucursales disponibles:</h3>
+    <p>Seleccione una sucursal a asignar un dispositivo.</p>
     <div class="campo">
         <?php 
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'empresasAsociadas',
-                    'dataProvider' => $DataProviderSucursales,                    
+                    'dataProvider' => $DataProviderSucursales,    
+                    'summaryText'=>'Página {page}-{pages} de {count} resultados.',
                     'columns' => array(                        
                         array(
                                 'name' => 'nombre',
@@ -82,6 +83,7 @@ $this->menu=array(
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
                     'dataProvider' => $dataProviderDispositivo,
+                    'summaryText'=>'Página {page}-{pages} de {count} resultados.',
                     'filter' => $dispositivo,
                     'columns' => array(
                         array(

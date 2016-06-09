@@ -186,9 +186,10 @@ class DetalleDispoController extends Controller
         $HistoAsignacion = Histoasignacion::model()->findByAttributes(array('id_dis'=>$Alarma{'id_dis'}, 'fechaBaja'=>'1900-01-01'));
         $Sucural = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
         $Empresa = Empresa::model()->findByAttributes(array('cuit'=>$Sucural{'cuit_emp'}));
-        $Persona = Persona::model()->findByAttributes(array('dni'=>$Sucural{'dni_per'}));
-        if(1) $this->SendSMS($Persona{'celular'}, $mensaje);               
-        if(1) $this->Sendemail($Alarma{'id'},$Persona{'email'});
+        $Persona = Persona::model()->findByAttributes(array('dni'=>$Sucural{'dni_per'})); 
+        
+        if(0) $this->SendSMS($Persona{'celular'}, $mensaje);               
+        if(0) $this->Sendemail($Alarma{'id'},$Persona{'email'});
     }
 
     public function actionVerDetalle($id){
@@ -563,8 +564,8 @@ class DetalleDispoController extends Controller
                                 $Sucursal = Sucursal::model()->findByAttributes(array('id'=>$HistoAsignacion{'id_suc'}));
                                 $direccion = Direccion::model()->findByAttributes(array('id'=>$Sucursal{'id_dir'}));
                                 $mensaje= "SCRM: Se ha detectado un inconveniente en " . $Sucursal{'nombre'} . ", " . $direccion{'calle'} . " " . $direccion{'altura'} . ", debido a: ";
-                                $mensaje = $mensaje . "Dispositivo desconectado" . ". Por favor solucione el inconveniente.";
-
+                                $mensaje = $mensaje . "Dispositivo desconectado.";
+                                sleep(3);
                                 $this->EnviarSMSEncargado($alarmitas{'id'}, $mensaje);
 
                             }
@@ -696,8 +697,10 @@ public function PermitirGenerarAlarma($id_dis, $id_tipAla, $recibirAlarmaTiempo,
 }
 
 public function SendSMS($numeroDestino, $mensaje){
+    
+    //Yii::app()->sms->send(array('to'=>"54".$numeroDestino, 'message'=>$mensaje));
     spl_autoload_unregister(array('YiiBase','autoload'));
-    require('Services/Twilio.php');
+    require_once('Services/Twilio.php');
     $AccountSid = "ACb82c2f321e995cf545bfb147f0a41696";
     $AuthToken = "8a00cfd50d0e4fc6f350669fa3d1a625";
     $client = new Services_Twilio($AccountSid, $AuthToken);
@@ -716,9 +719,7 @@ public function SendSMS($numeroDestino, $mensaje){
         echo $e->getMessage();
     }
     
-         var_dump($sms);
-         var_dump($sms->sid);
-         
+       
     
 }
 public function Sendemail($id_alarma, $emailDestino){

@@ -39,6 +39,7 @@ $this->menu=array(
                 $this->widget('booster.widgets.TbGridView', array(
                     'id' => 'dispositivo-grid-list',
                     'dataProvider' => $empresa->search(),
+                     'summaryText'=>'Página {page}-{pages} de {count} resultados.',
                     'filter' => $empresa,
                     'columns' => array(                        
                         array(

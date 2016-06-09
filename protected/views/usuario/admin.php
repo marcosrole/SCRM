@@ -55,7 +55,8 @@ $this->menu=array(
 <?php
 $this->widget('booster.widgets.TbGridView', array(
         'type' => 'striped bordered condensed',
-        'dataProvider' => $model->search(),        
+        'dataProvider' => $model->search(),   
+      'summaryText'=>'Página {page}-{pages} de {count} resultados.',
         'filter' => $model,
          'columns' => array(                
                 array(

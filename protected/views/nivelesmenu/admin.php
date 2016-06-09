@@ -92,10 +92,10 @@ Asignar para cada nivel de acceso su correspondiente menu
             $MenuSelecionado ='[' . implode(',',$MenuSelecionado) . ']';
             $this->widget('booster.widgets.TbGridView', array(
             'id' => 'dispositivo-grid-list',
-            'template'=>'{items}{pager}',
+           
 //                'template'=>'{summary}{items}{pager}',
              'enablePagination' => true,
-            'summaryText'=>'Pagina {start}-{end} de {count} desultados.',
+             'summaryText'=>'Página {page}-{pages} de {count} resultados.',
             'enableSorting'=>true,
             'dataProvider' => $ListMenu,
              'columns' => array(                                                

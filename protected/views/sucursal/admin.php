@@ -48,7 +48,7 @@ $('.search-button').click(function(){
         $this->widget('booster.widgets.TbGridView', array(
             'id' => 'sucursal-grid',
             'dataProvider' => $empresa->search(), 
-            
+             'summaryText'=>'Página {page}-{pages} de {count} resultados.',
             'columns' => array(                                                       
                 
                 array(
@@ -84,7 +84,7 @@ if($sucursal_visible){ ?>
         $this->widget('booster.widgets.TbGridView', array(
             'id' => 'sucursal-grid',
             'dataProvider' => $data, 
-            
+             'summaryText'=>'Página {page}-{pages} de {count} resultados.',
             'columns' => array(                                                       
                 array(
                     'name' => 'nombre',
