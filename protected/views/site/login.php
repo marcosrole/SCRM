@@ -1,9 +1,5 @@
 <style>
-    .login{
-        display: inline-block;
-        margin-left: 40%;
-        margin-top: 10%;
-    }
+   
 </style>
 <?php
 /* @var $this SiteController */
@@ -24,23 +20,23 @@ $this->breadcrumbs=array(
     $form = $this->beginWidget('booster.widgets.TbActiveForm',
         array(
             'id' => 'UsuarioForm',
-            'htmlOptions' => array('class' => 'well'), // for inset effect
+            //'htmlOptions' => array('class' => 'well'), // for inset effect
         )
     ); ?>
             
-            <p class="note">Los campos con <span class="required">*</span> son obligatorios.</p>
+            <h5 class="note">Los campos con <span class="required">*</span> son obligatorios.</h5>
             
             <?php echo $form->textFieldGroup($usuario, 'name'); ?>    
             <?php echo $form->passwordFieldGroup($usuario, 'pass'); ?>    
             <?php if($error){ ?>
                 <font color="red">
-                    <p>
+                    <h5>
                         Usuario o contraseña incorrecto.
-                    </p>            
+                    </h5>            
                 </font>           
             <?php }
     
-             $this->widget('booster.widgets.TbButton', array('label' => 'Entrar','context' => 'success','buttonType'=>'submit',)); 
+             $this->widget('booster.widgets.TbButton', array('label' => 'Iniciar Sesion','size' => 'large','context' => 'primary','buttonType'=>'submit',)); 
    
     $this->endWidget();
     ?>

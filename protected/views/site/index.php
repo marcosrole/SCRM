@@ -14,7 +14,7 @@
     }
     .boton{
        margin-left: 60%;
-    margin-top: 25%; 
+    margin-top: 10%; 
     }
     .subtitulo{
         margin-left: 50%;
@@ -23,11 +23,11 @@
     position: relative;
     //background: #000 url("jumbotron-bg.png") center center;
     background: url("images/SCRMTitulo.png") center center;
-    background-position: 50% 50%;
-    background-size: 70%;
+    background-position: 10% 50%;
+    background-size: 50%;
     background-repeat: no-repeat;
     width: 100%;
-    height: 70%;
+    height: 75%;
     //background-size: cover;
     overflow: hidden;
     
@@ -65,10 +65,31 @@ border: 3px solid #4b6094;
         
         
         <div class="subtitulo">
-            <p>Proyecto Final: Ingenieria en Informatica.</p>
+            
         </div>
         <div class="boton">
-            <p><?php $this->widget(
+            <?php if(!$welcome){ ?>
+            <?php $this->renderPartial(
+                        'login',
+                        array(
+                            'usuario'=>$usuario,
+                            'error'=>$error,
+                        )); ?>
+            
+            <?php }else {  ?>
+            <h1>¡Bienvenido! </h1>  
+             <?php }  ?>
+           
+            
+        </div>
+        
+         
+    </div>
+</div>  
+
+
+
+ <p><?php /*$this->widget(
             'booster.widgets.TbButton',
             array(
                 'context' => 'primary',
@@ -80,16 +101,7 @@ border: 3px solid #4b6094;
                     'data-target'=>'#myModal',
                 )
             )
-        ); ?></p>
-            
-        </div>
-        
-         
-    </div>
-</div>  
-
-
-
+        ); */?></p>
 
 <?php $this->beginWidget('booster.widgets.TbModal', array('id'=>'myModal')); ?>
 

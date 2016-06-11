@@ -36,25 +36,34 @@ class SiteController extends Controller
 	{
             $user = new Usuario();
             $error=false;
+            $welcome = false;
             if (isset($_POST['Usuario'])){
                 $user->attributes=$_POST['Usuario'];
                 
                 $identity = new UserIdentity(($_POST['Usuario']['name']),(md5($_POST['Usuario']['pass'])));
                 
                     if (!$identity->authenticate()){
-                        Yii::app()->user->login($identity);                          
-                        $this->redirect(Yii::app()->user->returnUrl);
+                        Yii::app()->user->login($identity); 
+                        $welcome=true;
+                        
+                        //$this->redirect(Yii::app()->user->returnUrl);
                         }else {
                             $error=true;
                         }
                     }            
-            $this->render('index', array('usuario'=>$user, 'error'=>$error));
+            $this->render('index', array('usuario'=>$user, 'error'=>$error, 'welcome'=>$welcome));
 	}
 
 	
 	public function actionAbout()
 	{
 		$this->render('about');
+	}
+        
+        public function actionWelcome()
+	{
+            
+		$this->render('welcome');
 	}
 
 	/**
